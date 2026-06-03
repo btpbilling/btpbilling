@@ -4453,7 +4453,6 @@ async function getNextGSTInvoiceFromServer(){
 
 
 
-/* LOGIN */
 async function login(){
 
   let username =
@@ -4480,19 +4479,6 @@ async function login(){
       localStorage.setItem(
         "user",
         JSON.stringify(data)
-      );
-
-      // ✅ LOGIN LOG SAVE
-      await fetch(
-        WEBAPP + "?api=1",
-        {
-          method:"POST",
-          body:JSON.stringify({
-            type:"login",
-            username:data.username,
-            name:data.name
-          })
-        }
       );
 
       showApp();
