@@ -5185,7 +5185,7 @@ function updateGSTTotals(){
   gstWords.value =
   numberToWords(
     Math.round(taxable)
-  ) + " Rupees Only";
+  ) + "";
 
 }
 
@@ -5201,7 +5201,7 @@ function totalGSTCalc(){
   });
 
   document.getElementById("gstTotal").value = total;
-  document.getElementById("gstWords").value = numberToWords(total) + " Rupees Only";
+  document.getElementById("gstWords").value = numberToWords(total) + "";
 }
 function formatDate(d){
   let date = new Date(d);
@@ -5230,7 +5230,7 @@ function totalCalc(){
     t+=Number(rows[i].querySelectorAll("input")[3].value)||0;
   }
   total.value=t;
-  words.value=numberToWords(t)+" Rupees Only";
+  words.value=numberToWords(t)+"";
 }
 
 /* NUMBER TO WORDS (Indian) */
@@ -5715,7 +5715,7 @@ function calculateGSTTotals(){
   document.getElementById("gstWords").value =
   numberToWords(
     Math.round(finalTotal)
-  ) + " Rupees Only";
+  ) + "";
 
 
   // AUTO VOUCHER SYNC
@@ -6544,12 +6544,12 @@ function generateVoucher(){
     monthlyWords :
     numberToWords(
       Math.round(finalMonthly)
-    ) + " Only",
+    ) + "",
 
     totalWords :
     numberToWords(
       Math.round(total12)
-    ) + " Only",
+    ) + "",
 
     createdBy :
 JSON.parse(
@@ -7887,7 +7887,7 @@ function calculateWithoutGSTTotal(){
         Math.round(total)
       ) +
 
-      " Rupees Only";
+      "";
 
   }
 
