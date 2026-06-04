@@ -3123,7 +3123,6 @@ Renewal Voucher No
 </label>
 
 <input
-type="text"
 id="renewalVoucherNo">
 
 </div>
@@ -3229,7 +3228,39 @@ type="text"
 id="renewalPincode">
 
 </div>
+<div class="grid2">
 
+  <div>
+    <label>Aadhaar Number</label>
+    <input id="aadhaar" maxlength="12">
+  </div>
+
+  <div>
+    <label>PAN Number</label>
+    <input id="pan" style="text-transform:uppercase">
+  </div>
+
+  <div>
+    <label>Bank Name</label>
+    <input id="bankName">
+  </div>
+
+  <div>
+    <label>Branch Name</label>
+    <input id="branch">
+  </div>
+
+  <div>
+    <label>Account Number</label>
+    <input id="accountNo">
+  </div>
+
+  <div>
+    <label>IFSC Code</label>
+    <input id="ifsc" style="text-transform:uppercase">
+  </div>
+
+</div>
 <div>
 
 <label>
@@ -5295,6 +5326,18 @@ function numberToWords(num){
 
 async function generate(){
 
+  if(
+!validateRequiredFields([
+
+{id:"name",name:"Vendor Name"},
+{id:"address",name:"Address"},
+{id:"repurchasePhone",name:"Phone Number"}
+
+])
+){
+return;
+}
+
  const items = [];
 
 document.querySelectorAll(
@@ -5825,6 +5868,114 @@ document.getElementById(
 
 function generateGST(){
 
+  if(
+!validateRequiredFields([
+
+{id:"customerName",name:"Customer Name"},
+{id:"relation",name:"Relation"},
+{id:"village",name:"Village"},
+{id:"district",name:"District"},
+{id:"state",name:"State"},
+{id:"pincode",name:"Pincode"},
+{id:"mobile",name:"Mobile Number"},
+
+{id:"bankName",name:"Bank Name"},
+{id:"branch",name:"Branch"},
+{id:"accountNo",name:"Account Number"},
+{id:"ifsc",name:"IFSC Code"}
+
+])
+){
+return;
+}
+
+const aadhaar =
+document.getElementById(
+"aadhaar"
+)?.value
+?.trim();
+
+if(
+aadhaar &&
+!/^[0-9]{12}$/.test(aadhaar)
+){
+  alert(
+    "Invalid Aadhaar Number"
+  );
+  return;
+}
+
+const pan =
+document.getElementById(
+"pan"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+pan &&
+!/^[A-Z]{5}[0-9]{4}[A-Z]$/
+.test(pan)
+){
+  alert(
+    "Invalid PAN Number"
+  );
+  return;
+}
+
+const ifsc =
+document.getElementById(
+"ifsc"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+ifsc &&
+!/^[A-Z]{4}0[A-Z0-9]{6}$/
+.test(ifsc)
+){
+  alert(
+    "Invalid IFSC Code"
+  );
+  return;
+}
+
+const mobile =
+document.getElementById(
+"mobile"
+)?.value
+?.trim();
+
+if(
+mobile &&
+!/^[6-9][0-9]{9}$/
+.test(mobile)
+){
+  alert(
+    "Invalid Mobile Number"
+  );
+  return;
+}
+
+const pincode =
+document.getElementById(
+"pincode"
+)?.value
+?.trim();
+
+if(
+pincode &&
+!/^[0-9]{6}$/
+.test(pincode)
+){
+  alert(
+    "Invalid Pincode"
+  );
+  return;
+}
+
+
   let rows =
   document.querySelectorAll("#gstTable tbody tr");
 
@@ -6344,6 +6495,108 @@ function calculateVoucher(){
 }
 
 function generateVoucher(){
+
+  if(
+!validateRequiredFields([
+
+{id:"customerName",name:"Customer Name"},
+{id:"relation",name:"Relation"},
+{id:"mobile",name:"Mobile Number"},
+
+{id:"salesRepId",name:"Sales Rep ID"},
+{id:"salesRepName",name:"Sales Rep Name"}
+
+])
+){
+return;
+}
+
+const aadhaar =
+document.getElementById(
+"aadhaar"
+)?.value
+?.trim();
+
+if(
+aadhaar &&
+!/^[0-9]{12}$/.test(aadhaar)
+){
+  alert(
+    "Invalid Aadhaar Number"
+  );
+  return;
+}
+
+const pan =
+document.getElementById(
+"pan"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+pan &&
+!/^[A-Z]{5}[0-9]{4}[A-Z]$/
+.test(pan)
+){
+  alert(
+    "Invalid PAN Number"
+  );
+  return;
+}
+
+const ifsc =
+document.getElementById(
+"ifsc"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+ifsc &&
+!/^[A-Z]{4}0[A-Z0-9]{6}$/
+.test(ifsc)
+){
+  alert(
+    "Invalid IFSC Code"
+  );
+  return;
+}
+
+const mobile =
+document.getElementById(
+"mobile"
+)?.value
+?.trim();
+
+if(
+mobile &&
+!/^[6-9][0-9]{9}$/
+.test(mobile)
+){
+  alert(
+    "Invalid Mobile Number"
+  );
+  return;
+}
+
+const pincode =
+document.getElementById(
+"pincode"
+)?.value
+?.trim();
+
+if(
+pincode &&
+!/^[0-9]{6}$/
+.test(pincode)
+){
+  alert(
+    "Invalid Pincode"
+  );
+  return;
+}
+
 
   // =========================
   // CALCULATE VOUCHER
@@ -6987,6 +7240,111 @@ renewalChecks.forEach(id=>{
 
 async function generateRenewalVoucher(){
 
+  if(
+!validateRequiredFields([
+
+{id:"customerName",name:"Customer Name"},
+{id:"mobile",name:"Mobile Number"},
+
+{id:"aadhaar",name:"Aadhaar Number"},
+{id:"pan",name:"PAN Number"},
+
+{id:"bankName",name:"Bank Name"},
+{id:"branch",name:"Branch"},
+{id:"accountNo",name:"Account Number"},
+{id:"ifsc",name:"IFSC Code"}
+
+])
+){
+return;
+}
+
+ const aadhaar =
+document.getElementById(
+"aadhaar"
+)?.value
+?.trim();
+
+if(
+aadhaar &&
+!/^[0-9]{12}$/.test(aadhaar)
+){
+  alert(
+    "Invalid Aadhaar Number"
+  );
+  return;
+}
+
+const pan =
+document.getElementById(
+"pan"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+pan &&
+!/^[A-Z]{5}[0-9]{4}[A-Z]$/
+.test(pan)
+){
+  alert(
+    "Invalid PAN Number"
+  );
+  return;
+}
+
+const ifsc =
+document.getElementById(
+"ifsc"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+ifsc &&
+!/^[A-Z]{4}0[A-Z0-9]{6}$/
+.test(ifsc)
+){
+  alert(
+    "Invalid IFSC Code"
+  );
+  return;
+}
+
+const mobile =
+document.getElementById(
+"mobile"
+)?.value
+?.trim();
+
+if(
+mobile &&
+!/^[6-9][0-9]{9}$/
+.test(mobile)
+){
+  alert(
+    "Invalid Mobile Number"
+  );
+  return;
+}
+
+const pincode =
+document.getElementById(
+"pincode"
+)?.value
+?.trim();
+
+if(
+pincode &&
+!/^[0-9]{6}$/
+.test(pincode)
+){
+  alert(
+    "Invalid Pincode"
+  );
+  return;
+}
+
   const data = {
 
     type : "renewal",
@@ -7040,6 +7398,29 @@ async function generateRenewalVoucher(){
     document.getElementById(
       "renewalPincode"
     ).value,
+
+    aadhaar : aadhaar,
+
+pan : pan,
+
+bankName :
+document.getElementById(
+"bankName"
+).value,
+
+branch :
+document.getElementById(
+"branch"
+).value,
+
+accountNo :
+String(
+document.getElementById(
+"accountNo"
+).value
+).trim(),
+
+ifsc : ifsc,
 
     email :
     document.getElementById(
@@ -7231,6 +7612,8 @@ async function generateRenewalVoucher(){
     );
 
   }
+
+  
 
 }
 
@@ -7458,6 +7841,114 @@ async function getRenewalSRName(){
 }
 
 async function generateWithoutGSTInvoice(){
+
+  if(
+!validateRequiredFields([
+
+{id:"customerName",name:"Customer Name"},
+{id:"relation",name:"Relation"},
+{id:"village",name:"Village"},
+{id:"district",name:"District"},
+{id:"state",name:"State"},
+{id:"pincode",name:"Pincode"},
+{id:"mobile",name:"Mobile Number"},
+
+{id:"bankName",name:"Bank Name"},
+{id:"branch",name:"Branch"},
+{id:"accountNo",name:"Account Number"},
+{id:"ifsc",name:"IFSC Code"}
+
+])
+){
+return;
+}
+
+const aadhaar =
+document.getElementById(
+"aadhaar"
+)?.value
+?.trim();
+
+if(
+aadhaar &&
+!/^[0-9]{12}$/.test(aadhaar)
+){
+  alert(
+    "Invalid Aadhaar Number"
+  );
+  return;
+}
+
+const pan =
+document.getElementById(
+"pan"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+pan &&
+!/^[A-Z]{5}[0-9]{4}[A-Z]$/
+.test(pan)
+){
+  alert(
+    "Invalid PAN Number"
+  );
+  return;
+}
+
+const ifsc =
+document.getElementById(
+"ifsc"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+ifsc &&
+!/^[A-Z]{4}0[A-Z0-9]{6}$/
+.test(ifsc)
+){
+  alert(
+    "Invalid IFSC Code"
+  );
+  return;
+}
+
+const mobile =
+document.getElementById(
+"mobile"
+)?.value
+?.trim();
+
+if(
+mobile &&
+!/^[6-9][0-9]{9}$/
+.test(mobile)
+){
+  alert(
+    "Invalid Mobile Number"
+  );
+  return;
+}
+
+const pincode =
+document.getElementById(
+"pincode"
+)?.value
+?.trim();
+
+if(
+pincode &&
+!/^[0-9]{6}$/
+.test(pincode)
+){
+  alert(
+    "Invalid Pincode"
+  );
+  return;
+}
+
 
   let rows =
   document.querySelectorAll(
@@ -7944,6 +8435,37 @@ function loadWithoutGSTProduct(el){
   );
 
 }
+
+ function validateRequiredFields(fields){
+
+  for(const field of fields){
+
+    const el =
+    document.getElementById(field.id);
+
+    if(!el) continue;
+
+    if(
+      String(el.value).trim() === ""
+    ){
+
+      alert(
+        field.name +
+        " is required"
+      );
+
+      el.focus();
+
+      return false;
+
+    }
+
+  }
+
+  return true;
+
+}
+
 </script>
 
 </body>
