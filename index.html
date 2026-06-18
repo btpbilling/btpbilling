@@ -9,7 +9,7 @@
 content="BTP Billing System for GST Invoice, Without GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing.">
 
 <meta name="keywords"
-content="BEULAH TRADERS PRVT LMTD, BTP Billing, Beulah Traders, GST Billing, Repurchase Billing, Voucher, Renewal">
+content="BTP Billing, Beulah Traders, GST Billing, Repurchase Billing, Voucher, Renewal">
 <meta name="robots" content="index, follow">
 
 <link rel="canonical"
@@ -3847,7 +3847,7 @@ function openProfile(){
   .style.display = "flex";
 
   let user =
-  JSON.parse(localStorage.getItem("user"));
+  JSON.parse(sessionStorage.getItem("user"));
 
   if(user){
 
@@ -4218,44 +4218,43 @@ function showApp(){
   document.getElementById("loginPage").style.display = "none";
   document.getElementById("app").style.display = "block";
 
-  let user =
-  JSON.parse(localStorage.getItem("user"));
+  const user =
+  JSON.parse(
+    sessionStorage.getItem("user")
+  );
 
-  if(user){
-    console.log(user);
+  if(!user){
 
-    // TOPBAR NAME
-    document.getElementById("usernameDisplay").innerText =
-    user.name;
+    document.getElementById("app").style.display = "none";
+    document.getElementById("loginPage").style.display = "flex";
 
-    // DROPDOWN NAME
-    document.getElementById("dropName").innerText =
-    user.name;
+    return;
 
-    // PROFILE IMAGES
-    document.getElementById("topProfile").src =
-user.photo || "https://i.imgur.com/t9HFQvX.png";
-
-    document.getElementById("dropProfile").src =
-user.photo || "https://i.imgur.com/t9HFQvX.png";
-
-    document.getElementById("profilePopupImg").src =
-user.photo || "https://i.imgur.com/t9HFQvX.png";
-
-    // PROFILE DETAILS
-    document.getElementById("profileUsername").value =
-    user.username;
-
-    document
-.getElementById("profileEmail")
-.value =
-user.email || "";
-
-    document
-.getElementById("profilePhone")
-.value =
-user.phone || "";
   }
+
+  document.getElementById("usernameDisplay").innerText =
+  user.name || "";
+
+  document.getElementById("dropName").innerText =
+  user.name || "";
+
+  document.getElementById("topProfile").src =
+  user.photo || "https://i.imgur.com/t9HFQvX.png";
+
+  document.getElementById("dropProfile").src =
+  user.photo || "https://i.imgur.com/t9HFQvX.png";
+
+  document.getElementById("profilePopupImg").src =
+  user.photo || "https://i.imgur.com/t9HFQvX.png";
+
+  document.getElementById("profileUsername").value =
+  user.username || "";
+
+  document.getElementById("profileEmail").value =
+  user.email || "";
+
+  document.getElementById("profilePhone").value =
+  user.phone || "";
 
   showGST();
 
@@ -4264,6 +4263,7 @@ user.phone || "";
 
   document.querySelector(".menu-item")
   .classList.add("active");
+
 }
 
 window.onload = function(){
@@ -4299,7 +4299,7 @@ for(let i=0;i<25;i++){
   document.getElementById("petalContainer").appendChild(p);
     
 }
-  let user = localStorage.getItem("user");
+  let user = sessionStorage.getItem("user");
 
   if(user){
     showApp();
@@ -4532,13 +4532,22 @@ async function login(){
 }
 
 function logout(){
+
   if(confirm("Are you sure you want to logout?")){
+
     sessionStorage.removeItem("user");
+
+    document.getElementById("app").style.display = "none";
+
+    document.getElementById("loginPage").style.display = "flex";
+
     location.reload();
-    document.getElementById("app").style.display="none";
-document.getElementById("loginPage").style.display="flex";
+
   }
+
 }
+
+ 
 
 async function loadDashboard(){
 
@@ -5413,7 +5422,7 @@ document.getElementById(
   
     createdBy :
 JSON.parse(
-  localStorage.getItem("user") || "{}"
+  sessionStorage.getItem("user") || "{}"
 ).username || ""
 
   };
@@ -6195,7 +6204,7 @@ pincode &&
 
   createdBy :
 JSON.parse(
-  localStorage.getItem("user") || "{}"
+  sessionStorage.getItem("user") || "{}"
 ).username || ""
 
 };
@@ -6805,7 +6814,7 @@ pincode &&
 
     createdBy :
 JSON.parse(
-  localStorage.getItem("user") || "{}"
+  sessionStorage.getItem("user") || "{}"
 ).username || ""
 
   };
@@ -7524,7 +7533,7 @@ ifsc : ifsc,
 
     JSON.parse(
 
-      localStorage.getItem(
+      sessionStorage.getItem(
         "user"
       ) || "{}"
 
@@ -8111,7 +8120,7 @@ pincode &&
     items,
 
     createdBy :
-    localStorage.getItem(
+    sessionStorage.getItem(
       "username"
     ) || ""
 
