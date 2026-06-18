@@ -9,7 +9,7 @@
 content="BTP Billing System for GST Invoice, Without GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing.">
 
 <meta name="keywords"
-content="BTP Billing, Beulah Traders, GST Billing, Repurchase Billing, Voucher, Renewal">
+content="BEULAH TRADERS PRVT LMTD, BTP Billing, Beulah Traders, GST Billing, Repurchase Billing, Voucher, Renewal">
 <meta name="robots" content="index, follow">
 
 <link rel="canonical"
@@ -3926,8 +3926,9 @@ function closePasswordPopup(){
   }
 
   const user =
-  JSON.parse(localStorage.getItem("user"));
-
+JSON.parse(
+  sessionStorage.getItem("user")
+);
   const res = await fetch(WEBAPP + "?api=1",{
     method:"POST",
     body:JSON.stringify({
@@ -4507,10 +4508,10 @@ async function login(){
 
     if(data.status){
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data)
-      );
+      sessionStorage.setItem(
+  "user",
+  JSON.stringify(data)
+);
 
       showApp();
 
@@ -4532,7 +4533,8 @@ async function login(){
 
 function logout(){
   if(confirm("Are you sure you want to logout?")){
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
+    location.reload();
     document.getElementById("app").style.display="none";
 document.getElementById("loginPage").style.display="flex";
   }
