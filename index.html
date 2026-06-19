@@ -644,7 +644,7 @@ border: 1px solid rgba(27, 26, 26, 0.15);
 
   line-height:1.4;
 
-  font-size:14px;
+  font-size:12px;
   font-weight:600;
 
   box-sizing:border-box;
@@ -3093,10 +3093,10 @@ height:80px;
 
 <br><br>
 
-<button onclick="generateVoucher()">
-
+<button
+id="generateVoucherBtn"
+onclick="generateVoucher()">
 Generate Voucher
-
 </button>
 
 </div>
@@ -5338,176 +5338,197 @@ function numberToWords(num){
 async function generate(){
 
   if(
-!validateRequiredFields([
+    !validateRequiredFields([
+      {id:"name",name:"Vendor Name"},
+      {id:"address",name:"Address"},
+      {id:"repurchasePhone",name:"Phone Number"}
+    ])
+  ){
+    return;
+  }
 
-{id:"name",name:"Vendor Name"},
-{id:"address",name:"Address"},
-{id:"repurchasePhone",name:"Phone Number"}
+  try{
 
-])
-){
-return;
-}
+    const btn =
+    document.activeElement;
 
- const items = [];
+    if(btn){
+      btn.disabled = true;
+      btn.innerText = "Generating...";
+    }
 
-document.querySelectorAll(
-"#repurchaseBody tr"
-).forEach(row => {
+    const items = [];
 
-  const desc =
-  row.querySelector(".desc")?.value || "";
+    document
+    .querySelectorAll("#repurchaseBody tr")
+    .forEach(row => {
 
-  const weight =
-  row.querySelector(".weight")?.value || "";
+      const desc =
+      row.querySelector(".desc")?.value?.trim() || "";
 
-  const rate =
-  row.querySelector(".rate")?.value || "";
+      const weight =
+      row.querySelector(".weight")?.value || "";
 
-  const amount =
-  row.querySelector(".amount")?.value || "";
+      const rate =
+      row.querySelector(".rate")?.value || "";
 
-  if(desc){
+      const amount =
+      row.querySelector(".amount")?.value || "";
 
-    items.push({
-      desc,
-      weight,
-      rate,
-      amount
+      if(desc){
+
+        items.push({
+          desc,
+          weight,
+          rate,
+          amount
+        });
+
+      }
+
     });
 
-  }
+    if(items.length === 0){
 
-});
-  const data = {
+      alert("Please add at least one item");
 
-  type : "repurchase",
+      if(btn){
+        btn.disabled = false;
+        btn.innerText = "Generate Repurchase Bill";
+      }
 
-  invoiceNo :
-  document.getElementById(
-    "invoiceNo"
-  ).value,
+      return;
 
-  date :
-  document.getElementById(
-    "date"
-  ).value,
-
-  name :
-  document.getElementById(
-    "name"
-  ).value,
-
-  address :
-  document.getElementById(
-    "address"
-  ).value,
-
-  phone :
-  document.getElementById(
-    "repurchasePhone"
-  ).value,
-
-  total :
-  document.getElementById(
-    "total"
-  ).value,
-  words :
-document.getElementById(
-  "words"
-).value,
-
-  items : items,
-
-  
-    createdBy :
-JSON.parse(
-  sessionStorage.getItem("user") || "{}"
-).username || ""
-
-  };
-
-  const res =
-  await fetch(
-    WEBAPP + "?api=1",
-    {
-      method:"POST",
-      body: JSON.stringify(data)
     }
-  );
 
-  const result =
-  await res.json();
+    const data = {
 
-  console.log(result);
+      type : "repurchase",
 
-  // =========================
-  // SUCCESS
-  // =========================
+      invoiceNo :
+      document.getElementById("invoiceNo").value,
 
-if(result.status){
+      date :
+      document.getElementById("date").value,
 
-  alert(
-    "Repurchase Bill Generated Successfully"
-  );
+      name :
+      document.getElementById("name").value.trim(),
 
-  loadDashboard();
+      address :
+      document.getElementById("address").value.trim(),
 
-  if(result.pdfUrl){
+      phone :
+      document.getElementById("repurchasePhone").value.trim(),
 
-    window.open(
-      result.pdfUrl,
-      "_blank"
+      total :
+      document.getElementById("total").value,
+
+      words :
+      document.getElementById("words").value,
+
+      items : items,
+
+      createdBy :
+      JSON.parse(
+        sessionStorage.getItem("user") || "{}"
+      ).username || ""
+
+    };
+
+    const res =
+    await fetch(
+      WEBAPP + "?api=1",
+      {
+        method:"POST",
+        body:JSON.stringify(data)
+      }
     );
 
-  }
+    const result =
+    await res.json();
 
-  clearRepurchaseForm();
+    console.log(result);
 
-    // WHATSAPP
+    if(result.status){
 
-    const phone =
-    document
-    .getElementById("repurchasePhone")
-    .value
-    .trim();
+      alert(
+        "Repurchase Bill Generated Successfully"
+      );
 
-    const msg =
+      loadDashboard();
+
+      const phone =
+      data.phone.replace(/\D/g,'');
+
+      const msg =
 
 `Hello ${data.name},
 
 Your Repurchase Bill Generated Successfully.
 
-Invoice No: ${result.invoiceNo}
+Invoice No : ${result.invoiceNo}
 
-Amount: ₹${data.total}
+Amount : ₹${data.total}
 
-PDF:
+PDF :
 ${result.pdfUrl}
 
 Thanks,
-BEULAH TRADERS`;
+BEULAH TRADERS PRIVATE LIMITED`;
 
-    const whatsapp =
+      if(result.pdfUrl){
 
-`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`;
+        window.open(
+          result.pdfUrl,
+          "_blank"
+        );
 
-    window.open(
-      whatsapp,
-      "_blank"
-    );
+      }
 
-  }
+      clearRepurchaseForm();
 
-  // =========================
-  // ERROR
-  // =========================
+      if(phone.length === 10){
 
-  else{
+        setTimeout(()=>{
+
+          window.open(
+            `https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`,
+            "_blank"
+          );
+
+        },1000);
+
+      }
+
+    }else{
+
+      alert(
+        result.message ||
+        "Generation Failed"
+      );
+
+    }
+
+  }catch(err){
+
+    console.error(err);
 
     alert(
-      result.message || "Generation Failed"
+      "Server Error. Please try again."
     );
+
+  }finally{
+
+    const btn =
+    document.activeElement;
+
+    if(btn){
+
+      btn.disabled = false;
+      btn.innerText =
+      "Generate Repurchase Bill";
+
+    }
 
   }
 
@@ -6505,395 +6526,520 @@ function calculateVoucher(){
 
 }
 
-function generateVoucher(){
+async function generateVoucher(){
 
   if(
-!validateRequiredFields([
+    !validateRequiredFields([
 
-{id:"customerName",name:"Customer Name"},
-{id:"relation",name:"Relation"},
-{id:"mobile",name:"Mobile Number"},
+      {id:"voucherCustomerName",name:"Customer Name"},
+      {id:"voucherRelation",name:"Relation"},
+      {id:"voucherMobile",name:"Mobile Number"},
+      {id:"salesRepId",name:"Sales Rep ID"},
+      {id:"srName",name:"Sales Rep Name"}
 
-{id:"salesRepId",name:"Sales Rep ID"},
-{id:"salesRepName",name:"Sales Rep Name"}
+    ])
+  ){
+    return;
+  }
 
-])
-){
-return;
-}
-
-const aadhaar =
-document.getElementById(
-"aadhaar"
-)?.value
-?.trim();
-
-if(
-aadhaar &&
-!/^[0-9]{12}$/.test(aadhaar)
-){
-  alert(
-    "Invalid Aadhaar Number"
-  );
-  return;
-}
-
-const pan =
-document.getElementById(
-"pan"
-)?.value
-?.trim()
-?.toUpperCase();
-
-if(
-pan &&
-!/^[A-Z]{5}[0-9]{4}[A-Z]$/
-.test(pan)
-){
-  alert(
-    "Invalid PAN Number"
-  );
-  return;
-}
-
-const ifsc =
-document.getElementById(
-"ifsc"
-)?.value
-?.trim()
-?.toUpperCase();
-
-if(
-ifsc &&
-!/^[A-Z]{4}0[A-Z0-9]{6}$/
-.test(ifsc)
-){
-  alert(
-    "Invalid IFSC Code"
-  );
-  return;
-}
-
-const mobile =
-document.getElementById(
-"mobile"
-)?.value
-?.trim();
-
-if(
-mobile &&
-!/^[6-9][0-9]{9}$/
-.test(mobile)
-){
-  alert(
-    "Invalid Mobile Number"
-  );
-  return;
-}
-
-const pincode =
-document.getElementById(
-"pincode"
-)?.value
-?.trim();
-
-if(
-pincode &&
-!/^[0-9]{6}$/
-.test(pincode)
-){
-  alert(
-    "Invalid Pincode"
-  );
-  return;
-}
-
-
-  // =========================
-  // CALCULATE VOUCHER
-  // =========================
-
-  let kits =
-  Number(
-    document.getElementById("kits").value || 0
+  const btn =
+  document.getElementById(
+    "generateVoucherBtn"
   );
 
-  // TOTAL POINTS
+  if(btn){
 
-  totalPoints =
-  kits * 6000;
-
-  // MONTHLY WITHOUT DEDUCTION
-
-  perMonth =
-  totalPoints / 12;
-
-  // 2% DEDUCTION
-
-  let deduction =
-  perMonth * 0.02;
-
-  // FINAL MONTHLY
-
-  finalMonthly =
-  perMonth - deduction;
-
-  // TOTAL 12 MONTHS
-
-  total12 =
-  finalMonthly * 12;
-
-  // =========================
-  // REDEEM DATE
-  // =========================
-
-  let joinDate =
-  new Date(
-    document.getElementById("joiningDate").value
-  );
-
-  let redeemDate =
-  new Date(joinDate);
-
-  // 1-15 => 15TH
-
-  if(joinDate.getDate() <= 15){
-
-    redeemDate.setMonth(
-      redeemDate.getMonth() + 2
-    );
-
-    redeemDate.setDate(15);
-
-  }else{
-
-    // 16-31 => 30TH
-
-    redeemDate.setMonth(
-      redeemDate.getMonth() + 2
-    );
-
-    redeemDate.setDate(30);
+    btn.disabled = true;
+    btn.innerText = "Generating...";
 
   }
 
-  // FORMAT DATE
+  try{
 
-  let redeemFormatted =
-  redeemDate.toLocaleDateString(
-    "en-GB",
-    {
-      day : "2-digit",
-      month : "short",
-      year : "numeric"
+    const aadhaar =
+    document.getElementById(
+      "voucherAadhaar"
+    )?.value
+    ?.trim();
+
+    if(
+      aadhaar &&
+      !/^[0-9]{12}$/.test(aadhaar)
+    ){
+      alert(
+        "Invalid Aadhaar Number"
+      );
+
+      if(btn){
+
+        btn.disabled = false;
+        btn.innerText =
+        "Generate Voucher";
+
+      }
+
+      return;
     }
-  );
 
-  // =========================
-  // DATA OBJECT
-  // =========================
+    const pan =
+    document.getElementById(
+      "voucherPAN"
+    )?.value
+    ?.trim()
+    ?.toUpperCase();
 
-  const data = {
+    if(
+      pan &&
+      !/^[A-Z]{5}[0-9]{4}[A-Z]$/
+      .test(pan)
+    ){
+      alert(
+        "Invalid PAN Number"
+      );
 
-    type : "voucher",
+      if(btn){
 
-    joiningDate :
-    document.getElementById("joiningDate").value,
+        btn.disabled = false;
+        btn.innerText =
+        "Generate Voucher";
 
-    redeemDate :
-    redeemFormatted,
+      }
 
-    customerName :
-    document.getElementById("voucherCustomerName").value,
+      return;
+    }
 
-    relation :
-    document.getElementById("voucherRelation").value,
+    const ifsc =
+    document.getElementById(
+      "voucherIFSC"
+    )?.value
+    ?.trim()
+    ?.toUpperCase();
 
-    mobile :
-    document.getElementById("voucherMobile").value,
+    if(
+      ifsc &&
+      !/^[A-Z]{4}0[A-Z0-9]{6}$/
+      .test(ifsc)
+    ){
+      alert(
+        "Invalid IFSC Code"
+      );
 
-    village :
-    document.getElementById("voucherVillage").value,
+      if(btn){
 
-    district :
-    document.getElementById("voucherDistrict").value,
+        btn.disabled = false;
+        btn.innerText =
+        "Generate Voucher";
 
-    state :
-    document.getElementById("voucherState").value,
+      }
 
-    pincode :
-    document.getElementById("voucherPincode").value,
+      return;
+    }
 
-    email :
-    document.getElementById("voucherEmail").value,
+    const mobile =
+    document.getElementById(
+      "voucherMobile"
+    )?.value
+    ?.trim();
 
-    aadhaar :
-    document.getElementById("voucherAadhaar").value,
+    if(
+      mobile &&
+      !/^[6-9][0-9]{9}$/
+      .test(mobile)
+    ){
+      alert(
+        "Invalid Mobile Number"
+      );
 
-    pan :
-    document.getElementById("voucherPAN").value,
+      if(btn){
 
-    bankName :
-    document.getElementById("voucherBankName").value,
+        btn.disabled = false;
+        btn.innerText =
+        "Generate Voucher";
 
-    branch :
-    document.getElementById("voucherBranch").value,
+      }
 
-    accountNo :
-    document.getElementById("voucherAccountNo").value,
+      return;
+    }
 
-    ifsc :
-    document.getElementById("voucherIFSC").value,
+    const pincode =
+    document.getElementById(
+      "voucherPincode"
+    )?.value
+    ?.trim();
 
-    salesRepId :
-    document.getElementById("salesRepId").value,
+    if(
+      pincode &&
+      !/^[0-9]{6}$/
+      .test(pincode)
+    ){
+      alert(
+        "Invalid Pincode"
+      );
 
-    salesRepName :
-    document.getElementById("srName").value,
+      if(btn){
 
-    kits :
-    kits,
+        btn.disabled = false;
+        btn.innerText =
+        "Generate Voucher";
 
-    // =========================
-    // KIT TYPES
-    // =========================
+      }
 
-    gold :
-    document.getElementById("gold").checked,
+      return;
+    }
 
-    silver :
-    document.getElementById("silver").checked,
+    const productDetails =
+    document.getElementById(
+      "productDetails"
+    ).value.trim();
 
-    clothesKit :
-    document.getElementById("clothesKit").checked,
+    if(!productDetails){
 
-    herbalKit :
-    document.getElementById("herbalKit").checked,
+      alert(
+        "Product Details Required"
+      );
 
-    homeNeedsKit :
-    document.getElementById("homeNeedsKit").checked,
+      if(btn){
 
-    // =========================
-    // DETAILS
-    // =========================
+        btn.disabled = false;
+        btn.innerText =
+        "Generate Voucher";
 
-    productDetails :
-    document.getElementById("productDetails").value,
+      }
 
-    repurchaseHistory :
-    document.getElementById("repurchaseHistory").value,
+      return;
 
-    remarks :
-    document.getElementById("remarks").value,
+    }
 
-    // =========================
-    // CALCULATIONS
-    // =========================
-
-    rewardPoints :
-    totalPoints.toFixed(2),
-
-    monthlyRedeem :
-    perMonth.toFixed(2),
-
-    monthlywithCoupon :
-    finalMonthly.toFixed(2),
-
-    totalCoupon :
-    total12.toFixed(2),
-
-    monthlyWords :
-    numberToWords(
-      Math.round(finalMonthly)
-    ) + "",
-
-    totalWords :
-    numberToWords(
-      Math.round(total12)
-    ) + "",
-
-    createdBy :
-JSON.parse(
-  sessionStorage.getItem("user") || "{}"
-).username || ""
-
-  };
-
-  console.log(data);
-
-  // =========================
-  // FETCH
-  // =========================
-
-  fetch(WEBAPP + "?api=1",{
-
-  method : "POST",
-
-  body : JSON.stringify(data),
-
-  headers : {
-
-    "Content-Type":
-    "text/plain;charset=utf-8"
-
-  }
-
-})
-
-.then(r => r.json())
-
-.then(res => {
-
-  console.log(res);
-
-  if(res.status){
-
-    alert(
-      "Voucher Generated Successfully : " +
-      res.voucherNo
-    
+    let kits =
+    Number(
+      document.getElementById(
+        "kits"
+      ).value || 0
     );
-         loadDashboard();
-         clearVoucherForm();
-    // PDF
 
-    if(res.pdfUrl){
+    if(kits <= 0){
 
-      window.open(
-        res.pdfUrl,
-        "_blank"
+      alert(
+        "No Of Kits Must Be Greater Than 0"
+      );
+
+      if(btn){
+
+        btn.disabled = false;
+        btn.innerText =
+        "Generate Voucher";
+
+      }
+
+      return;
+
+    }
+
+    const totalPoints =
+    kits * 6000;
+
+    const perMonth =
+    totalPoints / 12;
+
+    const deduction =
+    perMonth * 0.02;
+
+    const finalMonthly =
+    perMonth - deduction;
+
+    const total12 =
+    finalMonthly * 12;
+
+    let joinDate =
+    new Date(
+      document.getElementById(
+        "joiningDate"
+      ).value
+    );
+
+    let redeemDate =
+    new Date(joinDate);
+
+    if(joinDate.getDate() <= 15){
+
+      redeemDate.setMonth(
+        redeemDate.getMonth() + 2
+      );
+
+      redeemDate.setDate(15);
+
+    }else{
+
+      redeemDate.setMonth(
+        redeemDate.getMonth() + 2
+      );
+
+      redeemDate.setDate(30);
+
+    }
+
+    let redeemFormatted =
+    redeemDate.toLocaleDateString(
+      "en-GB",
+      {
+        day:"2-digit",
+        month:"short",
+        year:"numeric"
+      }
+    );
+
+    const data = {
+
+      type : "voucher",
+
+      joiningDate :
+      document.getElementById(
+        "joiningDate"
+      ).value,
+
+      redeemDate :
+      redeemFormatted,
+
+      customerName :
+      document.getElementById(
+        "voucherCustomerName"
+      ).value,
+
+      relation :
+      document.getElementById(
+        "voucherRelation"
+      ).value,
+
+      mobile :
+      document.getElementById(
+        "voucherMobile"
+      ).value,
+
+      village :
+      document.getElementById(
+        "voucherVillage"
+      ).value,
+
+      district :
+      document.getElementById(
+        "voucherDistrict"
+      ).value,
+
+      state :
+      document.getElementById(
+        "voucherState"
+      ).value,
+
+      pincode :
+      document.getElementById(
+        "voucherPincode"
+      ).value,
+
+      email :
+      document.getElementById(
+        "voucherEmail"
+      ).value,
+
+      aadhaar :
+      document.getElementById(
+        "voucherAadhaar"
+      ).value,
+
+      pan :
+      document.getElementById(
+        "voucherPAN"
+      ).value,
+
+      bankName :
+      document.getElementById(
+        "voucherBankName"
+      ).value,
+
+      branch :
+      document.getElementById(
+        "voucherBranch"
+      ).value,
+
+      accountNo :
+      document.getElementById(
+        "voucherAccountNo"
+      ).value,
+
+      ifsc :
+      document.getElementById(
+        "voucherIFSC"
+      ).value,
+
+      salesRepId :
+      document.getElementById(
+        "salesRepId"
+      ).value,
+
+      salesRepName :
+      document.getElementById(
+        "srName"
+      ).value,
+
+      kits : kits,
+
+      gold :
+      document.getElementById(
+        "gold"
+      ).checked,
+
+      silver :
+      document.getElementById(
+        "silver"
+      ).checked,
+
+      clothesKit :
+      document.getElementById(
+        "clothesKit"
+      ).checked,
+
+      herbalKit :
+      document.getElementById(
+        "herbalKit"
+      ).checked,
+
+      homeNeedsKit :
+      document.getElementById(
+        "homeNeedsKit"
+      ).checked,
+
+      productDetails :
+      productDetails,
+
+      repurchaseHistory :
+      document.getElementById(
+        "repurchaseHistory"
+      ).value,
+
+      remarks :
+      document.getElementById(
+        "remarks"
+      ).value,
+
+      rewardPoints :
+      totalPoints.toFixed(2),
+
+      monthlyRedeem :
+      perMonth.toFixed(2),
+
+      monthlywithCoupon :
+      finalMonthly.toFixed(2),
+
+      totalCoupon :
+      total12.toFixed(2),
+
+      monthlyWords :
+      numberToWords(
+        Math.round(
+          finalMonthly
+        )
+      ),
+
+      totalWords :
+      numberToWords(
+        Math.round(
+          total12
+        )
+      ),
+
+      createdBy :
+      JSON.parse(
+        sessionStorage.getItem("user") || "{}"
+      ).username || ""
+
+    };
+
+    const response =
+    await fetch(
+      WEBAPP + "?api=1",
+      {
+
+        method:"POST",
+
+        body:
+        JSON.stringify(data),
+
+        headers:{
+
+          "Content-Type":
+          "text/plain;charset=utf-8"
+
+        }
+
+      }
+    );
+
+    const res =
+    await response.json();
+
+    console.log(res);
+
+    if(res.status){
+
+      alert(
+        "Voucher Generated Successfully : " +
+        res.voucherNo
+      );
+
+      loadDashboard();
+
+      if(res.pdfUrl){
+
+        window.open(
+          res.pdfUrl,
+          "_blank"
+        );
+
+      }
+
+      clearVoucherForm();
+
+      if(res.whatsapp){
+
+        setTimeout(()=>{
+
+          window.open(
+            res.whatsapp,
+            "_blank"
+          );
+
+        },1000);
+
+      }
+
+    }else{
+
+      alert(
+        res.message ||
+        "Voucher Failed"
       );
 
     }
 
-    // WHATSAPP
+  }catch(err){
 
-    if(res.whatsapp){
+    console.error(err);
 
-      window.open(
-        res.whatsapp,
-        "_blank"
-      );
+    alert(
+      "Connection Failed"
+    );
+
+  }finally{
+
+    if(btn){
+
+      btn.disabled = false;
+
+      btn.innerText =
+      "Generate Voucher";
 
     }
 
-  }else{
-
-    alert(
-      res.message || "Voucher Failed"
-    );
-
   }
-
-})
-
-.catch(err => {
-
-  console.log(err);
-
-  alert("Connection Failed");
-
-});
 
 }
 
@@ -7250,31 +7396,41 @@ renewalChecks.forEach(id=>{
 });
 
 async function generateRenewalVoucher(){
+ if(
+    !validateRequiredFields([
 
-  if(
-!validateRequiredFields([
+      {id:"renewalCustomerName",name:"Customer Name"},
+      {id:"renewalMobile",name:"Mobile Number"},
 
-{id:"customerName",name:"Customer Name"},
-{id:"mobile",name:"Mobile Number"},
+      {id:"renewalAadhaar",name:"Aadhaar Number"},
+      {id:"renewalPAN",name:"PAN Number"},
 
-{id:"aadhaar",name:"Aadhaar Number"},
-{id:"pan",name:"PAN Number"},
+      {id:"renewalBankName",name:"Bank Name"},
+      {id:"renewalBranch",name:"Branch"},
+      {id:"renewalAccountNo",name:"Account Number"},
+      {id:"renewalIFSC",name:"IFSC Code"}
 
-{id:"bankName",name:"Bank Name"},
-{id:"branch",name:"Branch"},
-{id:"accountNo",name:"Account Number"},
-{id:"ifsc",name:"IFSC Code"}
+    ])
+  ){
+    return;
+  }
 
-])
-){
-return;
-}
+  const btn =
+  document.getElementById(
+    "generateRenewalBtn"
+  );
 
+  if(btn){
+
+    btn.disabled = true;
+    btn.innerText =
+    "Generating...";
+
+  }
  const aadhaar =
 document.getElementById(
-"aadhaar"
-)?.value
-?.trim();
+"renewalAadhaar"
+)?.value?.trim();
 
 if(
 aadhaar &&
@@ -7283,15 +7439,20 @@ aadhaar &&
   alert(
     "Invalid Aadhaar Number"
   );
+
+  if(btn){
+    btn.disabled = false;
+    btn.innerText =
+    "Generate Renewal Voucher";
+  }
+
   return;
 }
 
 const pan =
 document.getElementById(
-"pan"
-)?.value
-?.trim()
-?.toUpperCase();
+"renewalPAN"
+)?.value?.trim()?.toUpperCase();
 
 if(
 pan &&
@@ -7301,15 +7462,20 @@ pan &&
   alert(
     "Invalid PAN Number"
   );
+
+  if(btn){
+    btn.disabled = false;
+    btn.innerText =
+    "Generate Renewal Voucher";
+  }
+
   return;
 }
 
 const ifsc =
 document.getElementById(
-"ifsc"
-)?.value
-?.trim()
-?.toUpperCase();
+"renewalIFSC"
+)?.value?.trim()?.toUpperCase();
 
 if(
 ifsc &&
@@ -7319,14 +7485,20 @@ ifsc &&
   alert(
     "Invalid IFSC Code"
   );
+
+  if(btn){
+    btn.disabled = false;
+    btn.innerText =
+    "Generate Renewal Voucher";
+  }
+
   return;
 }
 
 const mobile =
 document.getElementById(
-"mobile"
-)?.value
-?.trim();
+"renewalMobile"
+)?.value?.trim();
 
 if(
 mobile &&
@@ -7336,14 +7508,20 @@ mobile &&
   alert(
     "Invalid Mobile Number"
   );
+
+  if(btn){
+    btn.disabled = false;
+    btn.innerText =
+    "Generate Renewal Voucher";
+  }
+
   return;
 }
 
 const pincode =
 document.getElementById(
-"pincode"
-)?.value
-?.trim();
+"renewalPincode"
+)?.value?.trim();
 
 if(
 pincode &&
@@ -7353,6 +7531,13 @@ pincode &&
   alert(
     "Invalid Pincode"
   );
+
+  if(btn){
+    btn.disabled = false;
+    btn.innerText =
+    "Generate Renewal Voucher";
+  }
+
   return;
 }
 
@@ -7416,18 +7601,18 @@ pan : pan,
 
 bankName :
 document.getElementById(
-"bankName"
+"renewalBankName"
 ).value,
 
 branch :
 document.getElementById(
-"branch"
+"renewalBranch"
 ).value,
 
 accountNo :
 String(
 document.getElementById(
-"accountNo"
+"renewalAccountNo"
 ).value
 ).trim(),
 
@@ -7593,12 +7778,16 @@ ifsc : ifsc,
 
       if(result.whatsapp){
 
-        window.open(
-          result.whatsapp,
-          "_blank"
-        );
+  setTimeout(()=>{
 
-      }
+    window.open(
+      result.whatsapp,
+      "_blank"
+    );
+
+  },1000);
+
+}
 
       // Next Renewal No
 
@@ -7616,15 +7805,26 @@ ifsc : ifsc,
 
   catch(err){
 
-    console.log(err);
+  console.error(err);
 
-    alert(
-      "Connection Failed"
-    );
+  alert(
+    "Connection Failed"
+  );
+
+}
+
+  finally{
+
+  if(btn){
+
+    btn.disabled = false;
+
+    btn.innerText =
+    "Generate Renewal Voucher";
 
   }
 
-  
+}
 
 }
 
