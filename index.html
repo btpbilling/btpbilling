@@ -519,7 +519,8 @@ border: 1px solid rgba(27, 26, 26, 0.15);
   z-index:999;
 
   padding:25px 18px;
-
+   display:flex;
+  flex-direction:column;
   background:
   linear-gradient(
     180deg,
@@ -534,8 +535,25 @@ border: 1px solid rgba(27, 26, 26, 0.15);
   box-shadow:
   8px 0 30px rgba(255,182,193,0.15);
 
-  overflow:hidden;
+  overflow-y:auto;   /* ✅ */
+  overflow-x:hidden; /* ✅ */
 
+}
+
+ .sidebar::-webkit-scrollbar{
+  width:6px;
+}
+.sidebar-menu{
+  flex:1;
+  overflow-y:auto;
+}
+.sidebar::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,0.6);
+  border-radius:10px;
+}
+
+.sidebar::-webkit-scrollbar-track{
+  background:transparent;
 }
  
 .sidebar-anim{
@@ -2223,7 +2241,15 @@ color:#2f2f2f;}
     src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx"
     class="company-logo"
   >
+<div class="sidebar-menu">
 
+    <div class="menu-item">GST Invoice</div>
+    <div class="menu-item">Voucher</div>
+    <div class="menu-item">Repurchase</div>
+    <div class="menu-item">Renewal Voucher</div>
+    <div class="menu-item">Without GST Invoice</div>
+
+  </div>
   <h2>
     BEULAH TRADERS
     <span>PRIVATE LIMITED</span>
