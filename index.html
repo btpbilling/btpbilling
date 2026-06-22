@@ -3232,32 +3232,32 @@ id="renewalPincode">
 
   <div>
     <label>Aadhaar Number</label>
-    <input id="aadhaar" maxlength="12">
+    <input id="renewalAadhaar" maxlength="12">
   </div>
 
   <div>
     <label>PAN Number</label>
-    <input id="pan" style="text-transform:uppercase">
+    <input id="renewalPAN" style="text-transform:uppercase">
   </div>
 
   <div>
     <label>Bank Name</label>
-    <input id="bankName">
+    <input id="renewalBankName">
   </div>
 
   <div>
     <label>Branch Name</label>
-    <input id="branch">
+    <input id="renewalBranch">
   </div>
 
   <div>
     <label>Account Number</label>
-    <input id="accountNo">
+    <input id="renewalAccountNo">
   </div>
 
   <div>
     <label>IFSC Code</label>
-    <input id="ifsc" style="text-transform:uppercase">
+    <input id="renewalIFSC" style="text-transform:uppercase">
   </div>
 
 </div>
@@ -3464,11 +3464,10 @@ id="renewalRemarks"
 rows="4"></textarea>
 
 <br><br>
-
 <button
+id="generateRenewalBtn"
 type="button"
-onclick="generateRenewalVoucher()"
->
+onclick="generateRenewalVoucher()">
 Generate Renewal Voucher
 </button>
 </div>
@@ -7540,6 +7539,17 @@ pincode &&
 
   return;
 }
+
+console.log("renewalVoucherNo", document.getElementById("renewalVoucherNo"));
+console.log("renewalJoiningDate", document.getElementById("renewalJoiningDate"));
+console.log("renewalRedeemDate", document.getElementById("renewalRedeemDate"));
+console.log("renewalCustomerName", document.getElementById("renewalCustomerName"));
+console.log("renewalAadhaar", document.getElementById("renewalAadhaar"));
+console.log("renewalPAN", document.getElementById("renewalPAN"));
+console.log("renewalBankName", document.getElementById("renewalBankName"));
+console.log("renewalBranch", document.getElementById("renewalBranch"));
+console.log("renewalAccountNo", document.getElementById("renewalAccountNo"));
+console.log("renewalIFSC", document.getElementById("renewalIFSC"));
 
   const data = {
 
