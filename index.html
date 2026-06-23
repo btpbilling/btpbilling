@@ -845,8 +845,8 @@ border: 1px solid rgba(27, 26, 26, 0.15);
   border:1px solid rgba(255,255,255,0.28);
  position:relative;
   border-radius:24px;
- height:calc(100vh - 20px);
-  overflow:hidden;
+height:auto;
+  overflow:visible;
   box-shadow:
     0 10px 35px rgba(0,0,0,0.08),
     inset 0 0 15px rgba(255,255,255,0.2);
@@ -1196,10 +1196,8 @@ canvas{
 }
 
 /* BETTER LOOK */
-
 #gstPage{
-  overflow-x:auto !important;
-  overflow-y:visible;
+  overflow:visible;
 }
  
 
@@ -2526,7 +2524,7 @@ style="display:none;">
   <!-- ========================= -->
   <!-- ✅ GST -->
   <!-- ========================= -->
-   <div class="tableScroll">
+  
   <div id="gstPage" class="card" style="display:none;">
 
   <h2>BEULAH TRADERS PRIVATE LIMITED<br>Invoice with GST</h2>
@@ -2612,7 +2610,7 @@ style="display:none;">
 <label><input type="checkbox" id="card"> Card</label>
 
 <label><input type="checkbox" id="hypothecation"> Hypothecation</label>
-
+ <div class="tableScroll"> 
   <!-- PRODUCT TABLE -->
   <table id="gstTable">
     <thead>
@@ -2684,7 +2682,7 @@ style="display:none;">
 
 </tfoot>
  </table>
-
+</div>
   <br>
   <button onclick="addGSTRow()">+ Add Row</button>
   
@@ -2744,7 +2742,7 @@ style="display:none;">
   </button>
 
 </div>
-</div>
+
 </div>
 
 <!-- ========================= -->
