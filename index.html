@@ -845,8 +845,8 @@ border: 1px solid rgba(27, 26, 26, 0.15);
   border:1px solid rgba(255,255,255,0.28);
  position:relative;
   border-radius:24px;
-height:auto;
-  overflow:visible;
+ height:calc(100vh - 20px);
+  overflow:hidden;
   box-shadow:
     0 10px 35px rgba(0,0,0,0.08),
     inset 0 0 15px rgba(255,255,255,0.2);
@@ -1196,8 +1196,10 @@ canvas{
 }
 
 /* BETTER LOOK */
+
 #gstPage{
-  overflow:visible;
+  overflow-x:auto !important;
+  overflow-y:visible;
 }
  
 
