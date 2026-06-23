@@ -846,7 +846,7 @@ border: 1px solid rgba(27, 26, 26, 0.15);
   border:1px solid rgba(255,255,255,0.28);
  position:relative;
   border-radius:24px;
- overflow-x:auto;
+ overflow-x:auto !important;
   box-shadow:
     0 10px 35px rgba(0,0,0,0.08),
     inset 0 0 15px rgba(255,255,255,0.2);
@@ -1061,7 +1061,7 @@ input:focus{
   width:100%;
   table-layout:fixed;
   border-collapse:collapse;
- min-width:1600px;
+min-width:2200px !important;
 
 }
 
@@ -1095,8 +1095,8 @@ input:focus{
 
 .main-content,
 .card,
-#gspage{
-  overflow-x:hidden !important;
+#gstPage{
+  overflow-x:auto !important;
 }
 
  
@@ -1198,10 +1198,8 @@ canvas{
 /* BETTER LOOK */
 
 #gstPage{
-
-  overflow-x:auto;
-  width:100%;
-
+  overflow-x:auto !important;
+  overflow-y:visible;
 }
  
 
@@ -1215,7 +1213,10 @@ canvas{
   overflow-x:hidden !important;
 }
 
- 
+ .gst-scroll{
+  width:100%;
+  overflow-x:auto;
+}
 .user{
   position:relative;
   cursor:pointer;
