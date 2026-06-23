@@ -686,10 +686,7 @@ border: 1px solid rgba(27, 26, 26, 0.15);
 .main{
   
   min-height:100vh;
- 
   margin-left:270px; /* sidebar width + gap */
-
-  padding:15px 20px;
   position:relative;
   z-index:5;
   background:
@@ -699,8 +696,16 @@ border: 1px solid rgba(27, 26, 26, 0.15);
       rgba(244,247,251,0.95)
     );
 
-  position:relative;
-  overflow:hidden;
+   min-height:100vh;
+
+  margin-left:270px;
+
+  padding:15px 20px;
+
+  overflow-x:auto;
+  height:100vh;
+
+  overflow-y:scroll;
 }
 
 .main::before{
@@ -766,6 +771,16 @@ border: 1px solid rgba(27, 26, 26, 0.15);
   }
 }
 
+#gstPage,
+#voucherPage,
+#renewalPage,
+#billingPage,
+#withoutGSTPage{
+
+  overflow:auto;
+
+}
+
 /* TOPBAR PROFILE */
 .topbar{
   display:flex;
@@ -829,11 +844,9 @@ border: 1px solid rgba(27, 26, 26, 0.15);
   -webkit-backdrop-filter:blur(18px);
 
   border:1px solid rgba(255,255,255,0.28);
-
-  padding:25px;
-
+ position:relative;
   border-radius:24px;
-
+ overflow-x:auto;
   box-shadow:
     0 10px 35px rgba(0,0,0,0.08),
     inset 0 0 15px rgba(255,255,255,0.2);
@@ -904,12 +917,10 @@ body{
 
   padding:0;
 
-  overflow-x:hidden;
-
   font-family:
   "Segoe UI",
   sans-serif;
-
+overflow-x:auto;
   background:#e9839c;
 
 }
@@ -1050,7 +1061,7 @@ input:focus{
   width:100%;
   table-layout:fixed;
   border-collapse:collapse;
-  min-width:1250px;
+ min-width:1600px;
 
 }
 
@@ -1088,10 +1099,7 @@ input:focus{
   overflow-x:hidden !important;
 }
 
-body{
-  overflow-x:hidden;
-}
-
+ 
 #gstTable tr{
   height:60px;
 }
@@ -1192,6 +1200,7 @@ canvas{
 #gstPage{
 
   overflow-x:auto;
+  width:100%;
 
 }
  
@@ -1787,21 +1796,8 @@ color:#2f2f2f;}
 
 }
 
-.main{
-
-  position:relative;
-
-  z-index:1;
-
-}
-
-.card{
-
-  position:relative;
-
-  z-index:10;
-
-}
+ 
+ 
 
 /* ===================================== */
 /* WITHOUT GST PAGE */
