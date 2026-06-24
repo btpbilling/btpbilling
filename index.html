@@ -1987,29 +1987,38 @@ color:#2f2f2f;}
   height:18px;
 
 }
-
 /* ===================================== */
 /* PRODUCT TABLE */
 /* ===================================== */
+
+.withoutGSTTableWrapper{
+  width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  border:1px solid #ddd;
+  border-radius:12px;
+}
+
 #withoutGSTTable{
   width:100%;
-   min-width:1200px;
-  table-layout:fixed;
-
+  min-width:1200px;
   border-collapse:collapse;
 }
 
-#withoutGSTTable th{
-  padding:12px;
-  text-align:center;
-}
-
+#withoutGSTTable th,
 #withoutGSTTable td{
-  padding:5px;
+  padding:8px;
+  text-align:center;
+  white-space:nowrap;
 }
 
 #withoutGSTTable input{
   width:100%;
+  height:40px;
+  border:none;
+  outline:none;
+  padding:8px;
+  font-size:13px;
   box-sizing:border-box;
 }
 
@@ -2017,65 +2026,47 @@ color:#2f2f2f;}
   font-weight:bold;
 }
 
+/* COLUMN WIDTHS */
+
 #withoutGSTTable th:nth-child(1),
 #withoutGSTTable td:nth-child(1){
-    width:60px;
-    min-width:60px;
-    text-align:center;
+  min-width:60px;
+  width:60px;
+}
+
+#withoutGSTTable th:nth-child(2),
+#withoutGSTTable td:nth-child(2){
+  min-width:250px;
+}
+
+#withoutGSTTable th:nth-child(3),
+#withoutGSTTable td:nth-child(3){
+  min-width:180px;
+}
+
+#withoutGSTTable th:nth-child(4),
+#withoutGSTTable td:nth-child(4){
+  min-width:180px;
 }
 
 #withoutGSTTable th:nth-child(5),
 #withoutGSTTable td:nth-child(5){
-    width:100px;
+  min-width:120px;
 }
 
-
-#withoutGSTTable input{
-
-  width:100%;
-
-  height:40px;
-
-  border:none;
-
-  outline:none;
-
-  padding:8px;
-
-  font-size:13px;
-
-  box-sizing:border-box;
-
+#withoutGSTTable th:nth-child(6),
+#withoutGSTTable td:nth-child(6){
+  min-width:100px;
 }
 
-/* COLUMN WIDTHS */
-
-#withoutGSTTable th:nth-child(1){
-  width:22%;
+#withoutGSTTable th:nth-child(7),
+#withoutGSTTable td:nth-child(7){
+  min-width:120px;
 }
 
-#withoutGSTTable th:nth-child(2){
-  width:15%;
-}
-
-#withoutGSTTable th:nth-child(3){
-  width:15%;
-}
-
-#withoutGSTTable th:nth-child(4){
-  width:12%;
-}
-
-#withoutGSTTable th:nth-child(5){
-  width:10%;
-}
-
-#withoutGSTTable th:nth-child(6){
-  width:13%;
-}
-
-#withoutGSTTable th:nth-child(7){
-  width:13%;
+#withoutGSTTable th:nth-child(8),
+#withoutGSTTable td:nth-child(8){
+  min-width:150px;
 }
 
 /* ===================================== */
@@ -2083,25 +2074,15 @@ color:#2f2f2f;}
 /* ===================================== */
 
 .addProductBtn{
-
   width:100%;
-
   margin-top:15px;
-
   background:#f06277;
-
   color:white;
-
   border:none;
-
   border-radius:10px;
-
   padding:12px;
-
   font-weight:700;
-
   cursor:pointer;
-
 }
 
 /* ===================================== */
@@ -2109,46 +2090,28 @@ color:#2f2f2f;}
 /* ===================================== */
 
 .withoutGSTTotals{
-
   margin-top:30px;
-
   display:grid;
-
-  grid-template-columns:
-  2fr 1fr 1fr;
-
+  grid-template-columns:2fr 1fr 1fr;
   gap:20px;
-
 }
 
 .withoutGSTTotals .field{
-
   display:flex;
-
   flex-direction:column;
-
 }
 
 .withoutGSTTotals label{
-
   font-weight:700;
-
   margin-bottom:6px;
-
 }
 
 .withoutGSTTotals input{
-
   height:45px;
-
   border:1px solid #dcdcdc;
-
   border-radius:10px;
-
   padding:0 12px;
-
   font-size:14px;
-
 }
 
 /* ===================================== */
@@ -2156,33 +2119,20 @@ color:#2f2f2f;}
 /* ===================================== */
 
 .generateBtn{
-
   width:250px;
-
   height:50px;
-
   background:#28a745;
-
   color:white;
-
   border:none;
-
   border-radius:12px;
-
   font-size:16px;
-
   font-weight:700;
-
   cursor:pointer;
-
   margin-top:30px;
-
 }
 
 .generateBtn:hover{
-
   background:#218838;
-
 }
 
 /* ===================================== */
@@ -2192,42 +2142,16 @@ color:#2f2f2f;}
 @media(max-width:900px){
 
   .withoutGSTForm{
-
     grid-template-columns:1fr;
-
   }
 
   .withoutGSTTotals{
-
     grid-template-columns:1fr;
-
   }
-  .withoutGSTTableWrapper{
 
-   width:100%;
-  overflow-x:auto;
-  overflow-y:hidden;
-
-  border:1px solid #ddd;
-
-  border-radius:12px;
-
-}
-
-#withoutGSTTable{
-
-  min-width:1500px !important;
-
-  border-collapse:collapse;
-
-}
-#withoutGSTTable th,
-#withoutGSTTable td{
-
- min-width:180px;
-  white-space:nowrap;
-
-}
+  #withoutGSTTable{
+    min-width:1200px;
+  }
 
 }
 
