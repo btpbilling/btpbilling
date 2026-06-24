@@ -1443,56 +1443,62 @@ color:#2f2f2f;}
   border:4px solid #ff758c;
 }
 
+/* DASHBOARD ROW */
 .dashboardCards{
-    display:flex;
-    gap:20px;
-    margin-bottom:40px !important;
-    height:280px;
-  min-height:280px;
-    align-items:stretch;
+  display:flex;
+  gap:20px;
+  margin-bottom:30px;
+  align-items:stretch;
 }
 
-.stat-card{
-   height:180px !important;
-}
-
-.stat-card,
-.dashboardCards{
-   height:280px;
-  min-height:280px;
-}
-
+/* ALL CARDS */
 .small-card{
-   flex:1 1 33%;
+  flex:1;
   background:#fff;
   border-radius:20px;
   padding:25px;
-  min-height:180px !important;
-    height:180px !important;
+  height:250px;
+  min-height:250px;
   box-shadow:0 5px 15px rgba(0,0,0,0.08);
-  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
 }
 
-.card.small-card{
-    height:180px !important;
-}
-
+/* HEADINGS */
 .small-card h3{
-  font-size:18px;
+  font-size:24px;
+  font-weight:700;
   margin-bottom:20px;
   color:#222;
 }
 
+/* VALUES */
 .small-card p{
-  font-size:34px;
-  font-weight:bold;
+  font-size:48px;
+  font-weight:700;
   color:#ff5c8a;
+  margin-top:15px;
 }
 
+/* GRAPH CARD */
 .small-card canvas{
   width:100% !important;
-  height:220px !important;
-  display:block;
+  height:150px !important;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+
+  .dashboardCards{
+    flex-direction:column;
+  }
+
+  .small-card{
+    height:250px;
+  min-height:250px;
+  }
+
 }
 
 .company-brand{
