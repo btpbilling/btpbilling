@@ -1991,6 +1991,9 @@ color:#2f2f2f;}
 /* ===================================== */
 #withoutGSTTable{
   width:100%;
+   min-width:1200px;
+  table-layout:fixed;
+
   border-collapse:collapse;
 }
 
@@ -2197,6 +2200,31 @@ color:#2f2f2f;}
     grid-template-columns:1fr;
 
   }
+  .withoutGSTTableWrapper{
+
+  width:100%;
+
+  overflow-x:auto;
+
+  border:1px solid #ddd;
+
+  border-radius:12px;
+
+}
+
+#withoutGSTTable{
+
+  min-width:1300px;
+
+  border-collapse:collapse;
+
+}
+#withoutGSTTable th,
+#withoutGSTTable td{
+
+  white-space:nowrap;
+
+}
 
 }
 
@@ -2252,7 +2280,16 @@ color:#2f2f2f;}
 
       <input id="user" placeholder="Username"><br>
       <input id="pass" type="password" placeholder="Password"><br>
+      <input
+id="otp"
+placeholder="Enter OTP">
 
+<button
+onclick="sendOTP()">
+
+Send OTP
+
+</button>
       <button onclick="login()">Login</button>
 
       <div class="login-options">
@@ -3660,7 +3697,7 @@ Net Banking
 <!-- ========================= -->
 <!-- PRODUCTS TABLE -->
 <!-- ========================= -->
-<div class="tableScroll"> 
+<div class="withoutGSTTableWrapper">
 <table id="withoutGSTTable" class="invoiceTable">
 
   <thead>
@@ -4141,6 +4178,47 @@ document.getElementById(
 
 }
 
+async function sendOTP(){
+
+  const username =
+  document.getElementById(
+    "user"
+  ).value;
+
+  const res =
+  await fetch(
+
+    WEBAPP +
+
+    "?api=1&sendOTP=1" +
+
+    "&username=" +
+
+    encodeURIComponent(
+      username
+    )
+
+  );
+
+  const data =
+  await res.json();
+
+  if(data.status){
+
+    alert(
+      "OTP Sent To Email"
+    );
+
+  }else{
+
+    alert(
+      data.message
+    );
+
+  }
+
+}
+
 function hideAll(){
 
   document.getElementById("billingPage").style.display="none";
@@ -4546,31 +4624,67 @@ async function login(){
   let password =
   document.getElementById("pass").value;
 
+  let otp =
+  document.getElementById("otp").value;
+
   try{
 
-    const res = await fetch(
+    // OTP VERIFY
+
+    const otpRes =
+    await fetch(
 
       WEBAPP +
-      "?api=1&login=1" +
-      "&username=" + encodeURIComponent(username) +
-      "&password=" + encodeURIComponent(password)
+      "?api=1&verifyOTP=1" +
+      "&username=" +
+      encodeURIComponent(username) +
+      "&otp=" +
+      encodeURIComponent(otp)
 
     );
 
-    const data = await res.json();
+    const otpData =
+    await otpRes.json();
+
+    if(!otpData.status){
+
+      alert("Invalid OTP");
+
+      return;
+
+    }
+
+    // LOGIN
+
+    const res =
+    await fetch(
+
+      WEBAPP +
+      "?api=1&login=1" +
+      "&username=" +
+      encodeURIComponent(username) +
+      "&password=" +
+      encodeURIComponent(password)
+
+    );
+
+    const data =
+    await res.json();
 
     if(data.status){
 
       sessionStorage.setItem(
-  "user",
-  JSON.stringify(data)
-);
+        "user",
+        JSON.stringify(data)
+      );
 
       showApp();
 
     }else{
 
-      alert("Invalid Login");
+      alert(
+        "Invalid Username or Password"
+      );
 
     }
 
@@ -4676,17 +4790,15 @@ async function loadDashboard(){
 
   }
 
-  document.getElementById(
-  "withoutGSTCount"
+document.getElementById(
+  "withoutGSTBillCount"
 ).innerText =
-data.withoutGSTCount || 0;
+data.withoutGSTBills || 0;
 
 document.getElementById(
   "withoutGSTAmount"
 ).innerText =
-"₹" + (
-  data.withoutGSTAmount || 0
-);
+"₹" + (data.withoutGSTAmount || 0);
 
 }
 
@@ -5508,7 +5620,7 @@ async function generate(){
         "Repurchase Bill Generated Successfully"
       );
 
-      loadDashboard();
+        await loadDashboard();
 
       const phone =
       data.phone.replace(/\D/g,'');
@@ -6313,7 +6425,8 @@ JSON.parse(
       alert(
         "Invoice Generated Successfully"
       );
-      loadDashboard();
+
+       loadDashboard();
 
       // PDF
       if(res.pdfUrl){
@@ -7038,7 +7151,7 @@ async function generateVoucher(){
         res.voucherNo
       );
 
-      loadDashboard();
+       await loadDashboard();
 
       if(res.pdfUrl){
 
@@ -7824,7 +7937,7 @@ ifsc : ifsc,
 
       // Dashboard Refresh
 
-      loadDashboard();
+       await loadDashboard();
       clearRenewalForm();
 
       // Open PDF
@@ -8437,7 +8550,7 @@ pincode &&
 
       loadWithoutGSTNo();
 
-      loadDashboard();
+       await loadDashboard();
       clearWithoutGSTForm();
 
     }
