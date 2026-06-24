@@ -683,24 +683,36 @@ border: 1px solid rgba(27, 26, 26, 0.15);
 
  
 .main{
-  
-  min-height:100vh;
-  margin-left:260px;
-  width:calc(100% - 260px);
-  box-sizing:border-box;
-  padding:0 15px;
-  position:relative;
-  z-index:5;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255,245,247,0.95),
-      rgba(244,247,251,0.95)
-    );
+
+  position:fixed;
+
+  top:0;
+
+  left:260px;
+
+  right:0;
+
+  bottom:0;
+
+  width:auto;
+
+  margin-left:0;
+
+  padding:15px;
+
   overflow-y:auto;
+
   overflow-x:hidden;
-  height:100vh;
-     
+
+  box-sizing:border-box;
+
+  background:
+  linear-gradient(
+    135deg,
+    rgba(255,245,247,0.95),
+    rgba(244,247,251,0.95)
+  );
+
 }
 
 .main::before{
@@ -1185,6 +1197,8 @@ canvas{
 
 #gstPage table{
 
+  width:100%;
+
   table-layout:auto;
 
 }
@@ -1193,15 +1207,22 @@ canvas{
 
 #gstPage td{
 
-  vertical-align:middle;
+  padding:8px;
+
+  white-space:nowrap;
 
 }
 
 /* BETTER LOOK */
 
 #gstPage{
+
   width:100%;
+
+  max-width:100%;
+
   box-sizing:border-box;
+
   overflow-x:auto !important;
   overflow-y:visible;
 }
@@ -1412,7 +1433,7 @@ color:#2f2f2f;}
   display:flex;
   gap:20px;
   margin-bottom:25px;
-  
+   min-height:auto !important;
   flex-wrap:nowrap;
  
 }
