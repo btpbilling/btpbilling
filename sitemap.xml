@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <!-- Main Root Page -->
   <url>
     <loc>https://btpbilling.github.io/btpbilling/</loc>
-    <lastmod>2026-06-03</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
+  <!-- Invoice Page -->
   <url>
-    <loc>https://btpbilling.github.io/btpbilling/index.html</loc>
-    <lastmod>2026-06-03</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
+    <loc>https://btpbilling.github.io/btpbilling/invoice.html</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Repurchase Billing Page -->
+  <url>
+    <loc>https://btpbilling.github.io/btpbilling/REPURCHASE_BILLING.html</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 
 </urlset>
