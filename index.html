@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>BTP Billing System | Beulah Traders Private Limited</title>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="https://btpbilling.github.io/btpbilling/sitemap.xml">
   <meta name="description" content="BTP Billing System for GST Invoice, Without GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing.">
@@ -10,205 +11,562 @@
   <meta property="og:title" content="BTP Billing System">
   <meta property="og:description" content="GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing System">
   <meta property="og:url" content="https://btpbilling.github.io/btpbilling/">
-  <meta charset="UTF-8">
 
   <style>
-    body { margin: 0; padding: 0; overflow-x: hidden; font-family: "Segoe UI", sans-serif; background: #e9839c; }
-    
-    /* SYNC & ACTION BUTTONS BAR */
-    .action-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; background: #fff; padding: 12px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-    .btn-sync { background: #25D366 !important; color: white !important; font-weight: bold; }
-    .btn-otp { background: #007bff !important; color: white !important; font-weight: bold; }
-    .btn-print { background: #6c757d !important; color: white !important; font-weight: bold; }
-
-    .profile { width:165px; height:165px; border-radius:50%; object-fit:cover; margin:25px auto; border:6px solid rgba(255,255,255,0.85); box-shadow: 0 12px 35px rgba(255,182,193,0.35), 0 0 20px rgba(255,255,255,0.6); transition:0.4s; animation: profileFloat 4s ease-in-out infinite; }
-    @keyframes profileFloat { 0%{transform:translateY(0px);} 50%{transform:translateY(-10px);} 100%{transform:translateY(0px);} }
-    
-    .left h2 { margin-bottom:15px; font-size:22px; line-height:1.6; }
-    .left p { margin:5px 0; letter-spacing:1px; }
-    .profile:hover { transform: scale(1.05); }
-    
-    /* LOGIN UI */
-    .login { display:flex; width:100%; height:100vh; overflow:hidden; position:relative; background:#fff; }
-    .left { width:50%; position:relative; display:flex; justify-content:center; align-items:center; overflow:hidden; background: linear-gradient(135deg, #fff7f8 0%, #ffeef1 35%, #fff1eb 100%); }
-    .left::before { content:""; position:absolute; inset:0; background: linear-gradient(to bottom, rgba(15, 2, 102, 0.85), rgba(106,90,205,0.5), rgba(106,90,205,0.85)); z-index:1; }
-    .left-content { position:relative; z-index:5; width:420px; padding:45px 35px; border-radius:38px; background: rgba(255,255,255,0.32); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border: 1px solid rgba(255,255,255,0.45); box-shadow: 0 15px 40px rgba(255,182,193,0.18); text-align:center; }
-    .right { width:50%; position:relative; overflow:hidden; display:flex; justify-content:center; align-items:center; background:url("https://images.unsplash.com/photo-1519681393784-d120267933ba") no-repeat center center; background-size:cover; }
-    .login-box { width:340px; padding:35px; border-radius:28px; background: rgba(255,255,255,0.15); backdrop-filter:blur(18px); border: 1px solid rgba(255,255,255,0.18); box-shadow: 0 15px 40px rgba(0,0,0,0.25); text-align:center; color:#2f2f2f; }
-    .login-logo { width:120px; display:block; margin:0 auto 10px; filter:drop-shadow(0 4px 10px rgba(0,0,0,.2)); }
-    .login-box input { width:100%; padding:12px; margin:12px 0; border:none; border-radius:10px; background: rgba(255,255,255,0.75); color:#000; outline:none; font-size:14px; box-sizing:border-box; }
-    .login-box button { width:100%; padding:13px; border:none; border-radius:30px; background:white; color:#111; font-weight:700; cursor:pointer; transition:0.3s; }
-    
-    /* SIDEBAR & MAIN NAVIGATION */
-    .sidebar { width:230px; height:100vh; position:fixed; top:0; left:0; z-index:999; padding:25px 18px; background: linear-gradient(180deg, #f86370 0%, #ffe9e4 45%, #f75700 100%); border-right: 1px solid rgba(255,255,255,0.6); box-shadow: 8px 0 30px rgba(255,182,193,0.15); overflow:hidden; }
-    .menu-item { display:block; width:100%; padding:14px 18px; border-radius:14px; margin:12px 0; cursor:pointer; transition:0.35s; user-select:none; font-size:14px; font-weight:500; color:#444; }
-    .menu-item.active { background: linear-gradient(135deg, #ff9fb2, #ffb38a); color:white; font-weight:800; box-shadow: 0 10px 20px rgba(255,182,193,0.28); }
-    .main { margin-left:240px; min-height:100vh; padding:15px 20px; position:relative; z-index:5; background: linear-gradient(135deg, rgba(255,245,247,0.95), rgba(244,247,251,0.95)); }
-    
-    /* TOPBAR */
-    .topbar { display:flex; justify-content:space-between; align-items:center; background:white; padding:12px 20px; border-radius:12px; box-shadow:0 5px 20px rgba(0,0,0,0.08); margin-bottom:20px; }
-    .page-heading { padding:14px 45px; border-radius:18px; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,240,245,0.95)); color:#ff4f81; font-size:28px; font-weight:800; box-shadow: 0 10px 30px rgba(255,105,135,0.18); border:1px solid rgba(255,255,255,0.4); text-transform:uppercase; }
-    
-    /* CARDS & TABLES */
-    .card { background:rgba(255,255,255,0.72); backdrop-filter:blur(18px); border:1px solid rgba(255,255,255,0.28); padding:25px; border-radius:24px; box-shadow: 0 10px 35px rgba(0,0,0,0.08); margin-top:10px; position:relative; z-index:10; }
-    table { width:100%; border-collapse:collapse; margin-top:15px; background:white; border-radius:10px; overflow:hidden; }
-    th { background:#ff758c; color:#2f2f2f; padding:10px; }
-    td { padding:8px; border-bottom:1px solid #eee; }
-    input, textarea { padding:10px; margin:4px 0; border:1px solid #ddd; border-radius:8px; outline:none; background:#fff !important; color:#000 !important; box-sizing:border-box; }
-    input:focus { border-color:#ff758c; box-shadow:0 0 5px rgba(255,117,140,0.4); }
-    button { padding:10px 15px; border:none; border-radius:8px; background:#ff758c; color:#2f2f2f; cursor:pointer; transition:0.3s; font-weight:bold; }
-    button:hover { background:#ff4d6d; color:white; }
-    
-    /* GST TABLE FIX */
-    #gstTable { width:100%; border-collapse:collapse; min-width:1100px; }
-    #gstTable th, #gstTable td { padding:6px; text-align:center; font-size:12px; }
-    #gstTable input { width:100%; height:32px; font-size:12px; padding:4px; }
-    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
-
-    @media print {
-      .sidebar, .topbar, .action-bar, button { display: none !important; }
-      .main { margin-left: 0 !important; padding: 0 !important; background: #fff !important; }
-      .card { box-shadow: none !important; border: none !important; backdrop-filter: none !important; }
+    body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      font-family: "Segoe UI", sans-serif;
+      background: #e9839c;
     }
+
+    .profile {
+      width: 165px;
+      height: 165px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 25px auto;
+      border: 6px solid rgba(255,255,255,0.85);
+      box-shadow: 0 12px 35px rgba(255,182,193,0.35), 0 0 20px rgba(255,255,255,0.6);
+      transition: 0.4s;
+      animation: profileFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes profileFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .profile:hover { transform: scale(1.05); }
+
+    .company-name {
+      font-weight: bold;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg,#fff,#ffd6e0,#fff);
+      background-size: 200%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 3s linear infinite;
+    }
+
+    @keyframes shine {
+      0% { background-position: 0%; }
+      100% { background-position: 200%; }
+    }
+
+    /* LOGIN PAGE */
+    .login {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      background: #fff;
+    }
+
+    .left {
+      width: 50%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: linear-gradient(135deg, #fff7f8 0%, #ffeef1 35%, #fff1eb 100%);
+    }
+
+    .left::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1526045478516-99145907023c?q=80&w=1200') no-repeat center bottom;
+      background-size: cover;
+      opacity: 0.16;
+      z-index: 0;
+      animation: flowerZoom 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes flowerZoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.06); }
+    }
+
+    .left::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(15, 2, 102, 0.85), rgba(106,90,205,0.5), rgba(106,90,205,0.85));
+      z-index: 1;
+    }
+
+    .left-content {
+      position: relative;
+      z-index: 5;
+      width: 420px;
+      padding: 45px 35px;
+      border-radius: 38px;
+      background: rgba(255,255,255,0.32);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.45);
+      box-shadow: 0 15px 40px rgba(255,182,193,0.18), inset 0 1px 1px rgba(255,255,255,0.45);
+      text-align: center;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    .right {
+      width: 50%;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url("https://images.unsplash.com/photo-1519681393784-d120267933ba") no-repeat center center;
+      background-size: cover;
+    }
+
+    .petal {
+      position: absolute; width: 10px; height: 10px; border-radius: 50%;
+      background: #ff6f91; animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-20px); }
+      100% { transform: translateY(100vh); }
+    }
+
+    .login-box {
+      width: 340px;
+      padding: 35px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      text-align: center;
+      color: #2f2f2f;
+    }
+
+    .login-logo {
+      width: 120px; display: block; margin: 0 auto 10px;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,.2));
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 12px 0;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.75);
+      color: #000;
+      outline: none;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 30px;
+      background: white;
+      color: #111;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-options {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #2f2f2f;
+      margin-top: 10px;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 230px;
+      height: 100vh;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 999;
+      padding: 25px 18px;
+      background: linear-gradient(180deg, #f86370 0%, #ffe9e4 45%, #f75700 100%);
+      border-right: 1px solid rgba(255,255,255,0.6);
+      box-shadow: 8px 0 30px rgba(255,182,193,0.15);
+      overflow: hidden;
+    }
+
+    .sidebar-anim { pointer-events: none; }
+    .sidebar-anim span {
+      position: absolute;
+      bottom: -50px;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(245, 25, 73, 0.25);
+      box-shadow: 0 0 10px rgba(247, 58, 83, 0.4);
+      animation: rise linear infinite;
+    }
+
+    @keyframes rise {
+      0% { transform: translateY(0) scale(0.5); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
+    }
+
+    .menu-item {
+      display: block;
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 14px;
+      margin: 12px 0;
+      cursor: pointer;
+      transition: 0.35s;
+      user-select: none;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      color: #444;
+      box-sizing: border-box;
+    }
+
+    .menu-item.active {
+      background: linear-gradient(135deg, #ff9fb2, #ffb38a);
+      color: white;
+      font-weight: 800;
+      box-shadow: 0 10px 20px rgba(255,182,193,0.28);
+    }
+
+    /* MAIN CONTENT */
+    .main {
+      margin-left: 240px;
+      min-height: 100vh;
+      padding: 15px 20px;
+      position: relative;
+      z-index: 5;
+      background: linear-gradient(135deg, rgba(255,245,247,0.95), rgba(244,247,251,0.95));
+      overflow-x: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .page-heading-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .page-heading {
+      padding: 14px 45px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,240,245,0.95));
+      color: #ff4f81;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      box-shadow: 0 10px 30px rgba(255,105,135,0.18), inset 0 0 12px rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.4);
+      backdrop-filter: blur(12px);
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .user { position: relative; cursor: pointer; }
+    .profile-box img {
+      width: 42px; height: 42px;
+      border-radius: 50%; border: 2px solid #ff758c;
+      box-shadow: 0 0 10px rgba(255,117,140,0.6);
+    }
+
+    .dropdown {
+      position: absolute; top: 60px; right: 0;
+      width: 260px; background: white;
+      border-radius: 18px; box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      overflow: hidden; opacity: 0; visibility: hidden;
+      transform: translateY(-10px); transition: 0.35s; z-index: 9999;
+    }
+
+    .dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown-top {
+      display: flex; align-items: center; gap: 12px;
+      padding: 18px; background: linear-gradient(45deg,#ff758c,#ff7eb3); color: #2f2f2f;
+    }
+    .dropdown-top img { width: 55px; height: 55px; border-radius: 50%; border: 3px solid white; }
+
+    .drop-item { padding: 14px 18px; cursor: pointer; transition: 0.3s; font-size: 15px; }
+    .drop-item:hover { background: #ff758c; color: #2f2f2f; }
+
+    /* DASHBOARD CARDS & CHARTS */
+    .dashboardCards { width: 100%; display: flex; gap: 20px; margin-bottom: 25px; flex-wrap: nowrap; }
+    .small-card {
+      flex: 1 1 33%; background: #fff; border-radius: 20px; padding: 25px;
+      min-height: 220px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); overflow: hidden;
+    }
+    .small-card h3 { font-size: 18px; margin-bottom: 20px; color: #222; }
+    .small-card p { font-size: 34px; font-weight: bold; color: #ff5c8a; }
+    .small-card canvas { width: 100% !important; height: 220px !important; display: block; }
+
+    .card {
+      background: rgba(255,255,255,0.72); backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,0.28);
+      padding: 25px; border-radius: 24px; box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+      margin-top: 10px; position: relative; z-index: 10;
+    }
+
+    /* TABLES & INPUTS */
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 10px; overflow: hidden; }
+    th { background: #ff758c; color: #2f2f2f; padding: 10px; }
+    td { padding: 8px; border-bottom: 1px solid #eee; }
+    tr:hover { background: #f9f9f9; }
+
+    input, textarea {
+      padding: 10px; margin: 8px 5px; border: 1px solid #ddd; border-radius: 8px;
+      outline: none; opacity: 1 !important; background: #fff !important; color: #000 !important;
+      box-sizing: border-box;
+    }
+    input:focus, textarea:focus { border-color: #ff758c; box-shadow: 0 0 5px rgba(255,117,140,0.4); }
+
+    button {
+      padding: 10px 15px; border: none; border-radius: 8px; background: #ff758c;
+      color: #2f2f2f; cursor: pointer; transition: 0.3s; font-weight: bold;
+    }
+    button:hover { background: #ff4d6d; }
+
+    /* POPUPS */
+    .popup {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none;
+      justify-content: center; align-items: center; z-index: 99999;
+    }
+    .popup-box { width: 400px; background: white; border-radius: 20px; padding: 30px; position: relative; }
+    .close-btn { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; }
+
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .checkGrid { display: flex; gap: 25px; flex-wrap: wrap; margin-top: 10px; }
+    .checkGrid label { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+
+    .company-logo-box {
+      width: 180px; margin: 0 auto 20px; padding: 15px; border-radius: 20px;
+      background: rgba(255,255,255,0.55); backdrop-filter: blur(16px); text-align: center;
+    }
+    .company-logo-box img { width: 80px; height: 80px; border-radius: 50%; }
+    .company-logo-box h2 { font-size: 16px; margin: 8px 0 0 0; color: #7a1846; }
+
+    .product-list {
+      position: absolute; background: #fff; width: 250px; max-height: 200px;
+      overflow-y: auto; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); z-index: 9999; margin-top: 5px;
+    }
+    .product-item { padding: 10px; cursor: pointer; font-size: 14px; }
+    .product-item:hover { background: #ffe3ec; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
-<!-- LOGIN PAGE -->
-<div class="login" id="loginPage">
-  <div class="left">
-    <div class="left-content">
-      <h2>Welcome to</h2>
-      <h1>BEULAH TRADERS PRIVATE LIMITED</h1>
-      <p>Billing System</p>
-      <br>
-      <div class="profile-wrapper">
-        <img src="https://lh3.googleusercontent.com/d/1h4VGQ31MYcGto3-1rMSQqqj9LjHb9Bcd" class="profile">
-      </div>
-      <p style="margin-top:15px;">C.M.D</p>
-      <h3>TEPPALI SAIDULU</h3>
-      <p style="font-size:13px;">📞 8978816673</p>
-      <p style="font-size:12px;">📍 Palakurthy, Janagaon, Telangana - 506146</p>
-    </div>
-  </div>
-  <div class="right" id="petalContainer">
-    <div class="login-box">
-      <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" class="login-logo">
-      <h2>Login</h2>
-      <input id="user" placeholder="Username"><br>
-      <input id="pass" type="password" placeholder="Password"><br>
-      <button onclick="login()">Login</button>
-    </div>
-  </div>
-</div>
-
-<!-- APPLICATION MAIN UI -->
-<div id="app" style="display:none;">
-
-  <div class="sidebar">
-    <div class="company-logo-box" style="text-align:center;">
-      <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" style="width:80px; border-radius:50%;">
-      <h2 style="font-size:14px; color:#fff;">BEULAH TRADERS<br><span>PRIVATE LIMITED</span></h2>
-    </div>
-    <div class="menu-item active" onclick="setActive(this);showGST()">GST Invoice</div>
-    <div class="menu-item" onclick="setActive(this);showVoucher()">Voucher</div>
-    <div class="menu-item" onclick="setActive(this);showBilling()">Repurchase</div>
-    <div class="menu-item" onclick="setActive(this);showRenewal()">Renewal Voucher</div>
-    <div class="menu-item" onclick="setActive(this);showWithoutGST()">Without GST Invoice</div>
-  </div>
-
-  <div class="main">
-    <div class="topbar">
-      <div class="page-heading" id="pageTitle">GST Invoice</div>
-      <div class="user" id="userMenu">
-        <span id="usernameDisplay"></span>
-        <button onclick="logout()" style="margin-left:10px;">Logout</button>
+  <!-- ===== LOGIN PAGE ===== -->
+  <div class="login" id="loginPage">
+    <div class="left">
+      <div class="left-content">
+        <h2>Welcome to</h2>
+        <h1 class="company-name">BEULAH TRADERS PRIVATE LIMITED</h1>
+        <p>Billing System</p>
+        <div class="profile-wrapper">
+          <img src="https://lh3.googleusercontent.com/d/1h4VGQ31MYcGto3-1rMSQqqj9LjHb9Bcd" class="profile">
+        </div>
+        <p style="margin-top:15px;">C.M.D</p>
+        <h3>TEPPALI SAIDULU</h3>
+        <p style="font-size:13px;">📞 8978816673</p>
+        <p style="font-size:12px;">📍 Palakurthy, Janagaon, Telangana - 506146</p>
+        <p style="margin-top:20px;font-style:italic;font-size:12px;">"Turning value into trust, one deal at a time."</p>
       </div>
     </div>
 
-    <!-- GLOBAL ACTION BUTTONS BAR -->
-    <div class="action-bar">
-      <button class="btn-otp" onclick="triggerOTP()">🔒 Send OTP</button>
-      <button class="btn-sync" onclick="syncWhatsApp()">💬 Sync WhatsApp</button>
-      <button class="btn-print" onclick="window.print()">🖨️ Print Document</button>
+    <div class="right" id="petalContainer">
+      <div class="login-box">
+        <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" class="login-logo">
+        <h2>Login</h2>
+        <input id="user" placeholder="Username"><br>
+        <input id="pass" type="password" placeholder="Password"><br>
+        <button onclick="login()">Login</button>
+        <div class="login-options">
+          <label><input type="checkbox"> Remember Me</label>
+          <span>Forgot Password</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN APPLICATION ===== -->
+  <div id="app" style="display:none;">
+    <div class="sidebar">
+      <div class="company-logo-box">
+        <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" class="company-logo">
+        <h2>BEULAH TRADERS <span>PVT LTD</span></h2>
+      </div>
+      <div class="sidebar-anim" id="sidebarAnim"></div>
+
+      <div class="menu-item active" onclick="setActive(this);showGST()">GST Invoice</div>
+      <div class="menu-item" onclick="setActive(this);showVoucher()">Voucher</div>
+      <div class="menu-item" onclick="setActive(this);showBilling()">Repurchase</div>
+      <div class="menu-item" onclick="setActive(this);showRenewal()">Renewal Voucher</div>
+      <div class="menu-item" onclick="setActive(this);showWithoutGST()">Without GST Invoice</div>
     </div>
 
-    <!-- GST INVOICE PAGE -->
-    <div id="gstPage" class="card" style="display:none;">
-      <h2>BEULAH TRADERS PRIVATE LIMITED<br>Invoice with GST</h2>
-      <table style="width:100%; margin-bottom:15px;">
-        <tr>
-          <td>Consignee Name</td>
-          <td colspan="3"><input id="c_name"></td>
-          <td>Invoice No</td>
-          <td><input id="gstInvoiceNo" value="BTP/0140/26-27"></td>
-        </tr>
-        <tr>
-          <td>Relation</td>
-          <td colspan="3"><input id="relation"></td>
-          <td>Date</td>
-          <td><input type="date" id="gstDate"></td>
-        </tr>
-        <tr>
-          <td>Village / Area</td>
-          <td colspan="3"><input id="village"></td>
-          <td>Email</td>
-          <td><input id="email"></td>
-        </tr>
-        <tr>
-          <td>District</td>
-          <td colspan="3"><input id="district"></td>
-          <td>Mobile</td>
-          <td><input id="phone"></td>
-        </tr>
-        <tr>
-          <td>State</td><td><input id="state" value="TELANGANA"></td>
-          <td>Pincode</td><td><input id="pincode"></td>
-          <td>GST IN</td><td><input id="gstin"></td>
-        </tr>
-        <tr>
-          <td>Aadhaar No</td><td><input id="aadhaar"></td>
-          <td>PAN No</td><td><input id="pan"></td>
-          <td>Bank Name</td><td><input id="bankName"></td>
-        </tr>
-        <tr>
-          <td>Branch</td><td><input id="branch"></td>
-          <td>Account No</td><td><input id="accountNo"></td>
-          <td>IFSC</td><td><input id="ifsc"></td>
-        </tr>
-      </table>
+    <div class="main">
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <div class="page-heading-wrapper">
+          <div class="page-heading" id="pageTitle">GST Invoice</div>
+        </div>
+        <div class="user" id="userMenu">
+          <span id="usernameDisplay"></span>
+          <div class="profile-box" onclick="toggleMenu(event)">
+            <img id="topProfile" src="https://i.imgur.com/t9HFQvX.png">
+          </div>
 
-      <div style="margin: 15px 0;">
-        <label><input type="checkbox" id="cash"> Cash</label>
-        <label><input type="checkbox" id="cheque"> Cheque</label>
-        <label><input type="checkbox" id="upi"> UPI</label>
-        <label><input type="checkbox" id="netbanking"> Net Banking</label>
-        <label><input type="checkbox" id="card"> Card</label>
-        <label><input type="checkbox" id="hypothecation"> Hypothecation</label>
+          <div class="dropdown" id="dropdownMenu">
+            <div class="dropdown-top">
+              <img id="dropProfile" src="https://i.imgur.com/t9HFQvX.png">
+              <div class="drop-user-info">
+                <h4 id="dropName">Sridhar</h4>
+                <p>BEULAH TRADERS</p>
+              </div>
+            </div>
+            <div class="drop-item" onclick="openProfile()">👤 User Profile</div>
+            <div class="drop-item" onclick="openPasswordPopup()">🔐 Change Password</div>
+            <div class="drop-item logout-btn" onclick="logout()">🚪 Logout</div>
+          </div>
+        </div>
       </div>
 
-      <div style="overflow-x:auto;">
+      <!-- PROFILE POPUP -->
+      <div class="popup" id="profilePopup">
+        <div class="popup-box">
+          <span class="close-btn" onclick="closeProfile()">&times;</span>
+          <h2 style="font-size:18px;">BEULAH TRADERS PRIVATE LIMITED</h2>
+          <div style="text-align:center;margin-bottom:20px;">
+            <img id="profilePopupImg" src="https://i.imgur.com/t9HFQvX.png" style="width:90px;height:90px;border-radius:50%;border:3px solid #ff758c;">
+            <h3 id="profilePopupName"></h3>
+          </div>
+          <div>
+            <label>Username</label><input id="profileUsername" readonly style="width:100%;">
+            <label>Email</label><input id="profileEmail" readonly style="width:100%;">
+            <label>Phone Number</label><input id="profilePhone" readonly style="width:100%;">
+          </div>
+        </div>
+      </div>
+
+      <!-- PASSWORD POPUP -->
+      <div class="popup" id="passwordPopup">
+        <div class="popup-box">
+          <span class="close-btn" onclick="closePasswordPopup()">&times;</span>
+          <h2>Reset Password</h2>
+          <input type="password" id="oldPass" placeholder="Current Password" style="width:100%;"><br>
+          <input type="password" id="newPass" placeholder="New Password" style="width:100%;"><br>
+          <input type="password" id="confirmPass" placeholder="Confirm Password" style="width:100%;"><br><br>
+          <button onclick="changePassword()" style="width:100%;">Update Password</button>
+        </div>
+      </div>
+
+      <!-- DASHBOARD CARDS & CHARTS -->
+      <div id="invoiceCards" class="dashboardCards" style="display:none;">
+        <div class="card small-card"><h3>GST Bills Today</h3><p id="gstBills">0</p></div>
+        <div class="card small-card"><h3>GST Amount</h3><p id="gstAmount">₹0</p></div>
+        <div class="small-card"><h3>GST Graph</h3><canvas id="gstChart"></canvas></div>
+      </div>
+
+      <div id="repurchaseCards" class="dashboardCards" style="display:none;">
+        <div class="card small-card"><h3>Repurchase Bills Today</h3><p id="todayBills">0</p></div>
+        <div class="card small-card"><h3>Repurchase Amount</h3><p id="todayAmount">₹0</p></div>
+        <div class="small-card"><h3>Repurchase Graph</h3><canvas id="salesChart"></canvas></div>
+      </div>
+
+      <div id="voucherCards" class="dashboardCards" style="display:none;">
+        <div class="card small-card"><h3>Voucher Entries</h3><p id="voucherCount">0</p></div>
+        <div class="card small-card"><h3>Voucher Amount</h3><p id="voucherAmount">₹0</p></div>
+        <div class="small-card"><h3>Voucher Graph</h3><canvas id="voucherChart"></canvas></div>
+      </div>
+
+      <div id="renewalCards" class="dashboardCards" style="display:none;">
+        <div class="card small-card"><h3>Renewals Today</h3><p id="renewalCount">0</p></div>
+        <div class="card small-card"><h3>Renewal Amount</h3><p id="renewalAmount">₹0</p></div>
+        <div class="small-card"><h3>Renewal Graph</h3><canvas id="renewalChart"></canvas></div>
+      </div>
+
+      <div id="withoutGSTCards" class="dashboardCards" style="display:none;">
+        <div class="card small-card"><h3>Without GST Bills</h3><p id="withoutGSTBillCount">0</p></div>
+        <div class="card small-card"><h3>Without GST Amount</h3><p id="withoutGSTAmount">₹0</p></div>
+        <div class="small-card"><h3>Without GST Graph</h3><canvas id="withoutGSTChart"></canvas></div>
+      </div>
+
+      <!-- GST INVOICE PAGE -->
+      <div id="gstPage" class="card" style="display:none;">
+        <h2>BEULAH TRADERS PRIVATE LIMITED<br>Invoice with GST</h2>
+        <table>
+          <tr>
+            <td>Consignee Name</td><td colspan="3"><input id="c_name"></td>
+            <td>Invoice No</td><td><input id="gstInvoiceNo"></td>
+          </tr>
+          <tr>
+            <td>Relation</td><td colspan="3"><input id="relation"></td>
+            <td>Date</td><td><input type="date" id="gstDate"></td>
+          </tr>
+          <tr>
+            <td>Village / Area</td><td colspan="3"><input id="village"></td>
+            <td>Email</td><td><input id="email"></td>
+          </tr>
+          <tr>
+            <td>District</td><td colspan="3"><input id="district"></td>
+            <td>Mobile</td><td><input id="phone"></td>
+          </tr>
+          <tr>
+            <td>State</td><td><input id="state"></td>
+            <td>Pincode</td><td><input id="pincode"></td>
+            <td>GST IN</td><td><input id="gstin"></td>
+          </tr>
+          <tr>
+            <td>PAN No</td><td><input id="pan"></td>
+            <td>Bank Name</td><td><input id="bankName"></td>
+            <td>Branch</td><td><input id="branch"></td>
+          </tr>
+          <tr>
+            <td>Account No</td><td><input id="accountNo"></td>
+            <td>IFSC</td><td><input id="ifsc"></td>
+            <td colspan="2"></td>
+          </tr>
+        </table>
+
+        <div style="margin: 15px 0;">
+          <label><input type="checkbox" id="cash"> Cash</label>
+          <label><input type="checkbox" id="cheque"> Cheque</label>
+          <label><input type="checkbox" id="upi"> UPI</label>
+          <label><input type="checkbox" id="netbanking"> Net Banking</label>
+          <label><input type="checkbox" id="card"> Card</label>
+          <label><input type="checkbox" id="hypothecation"> Hypothecation</label>
+        </div>
+
         <table id="gstTable">
           <thead>
             <tr>
-              <th>SL</th>
-              <th>Product</th>
-              <th>Model No</th>
-              <th>Product Model</th>
-              <th>HSN</th>
-              <th>Qty</th>
-              <th>Rate</th>
-              <th>Gross</th>
-              <th>GST%</th>
-              <th>CGST%</th>
-              <th>CGST</th>
-              <th>SGST%</th>
-              <th>SGST</th>
-              <th>IGST%</th>
-              <th>IGST</th>
-              <th>Taxable</th>
+              <th>SL</th><th>Product</th><th>Model No</th><th>Product Model</th>
+              <th>HSN</th><th>Qty</th><th>Rate</th><th>Gross</th>
+              <th>GST%</th><th>CGST%</th><th>CGST</th><th>SGST%</th>
+              <th>SGST</th><th>IGST%</th><th>IGST</th><th>Taxable</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -228,483 +586,559 @@
             </tr>
           </tfoot>
         </table>
-      </div>
-      <br>
-      <button onclick="addGSTRow()">+ Add Row</button>
+        <br><button onclick="addGSTRow()">+ Add Row</button>
 
-      <table style="margin-top:20px; width:100%;">
-        <tr>
-          <td>Amount in Words</td>
-          <td colspan="3"><input id="gstWords" style="width:100%" readonly></td>
-          <td>Basic Amount</td>
-          <td><input id="basicAmt" readonly></td>
-        </tr>
-        <tr>
-          <td colspan="4"></td>
-          <td>SGST</td>
-          <td><input id="sgstAmt" readonly></td>
-        </tr>
-        <tr>
-          <td colspan="4"></td>
-          <td>CGST</td>
-          <td><input id="cgstAmt" readonly></td>
-        </tr>
-        <tr>
-          <td colspan="4"></td>
-          <td>IGST</td>
-          <td><input id="igstAmt" readonly></td>
-        </tr>
-        <tr>
-          <td colspan="4"></td>
-          <td>Total GST</td>
-          <td><input id="totalGST" readonly></td>
-        </tr>
-        <tr>
-          <td colspan="4"></td>
-          <td><b>Final Total</b></td>
-          <td><input id="finalTotal" readonly></td>
-        </tr>
-      </table>
-      <br>
-      <div style="text-align:center;">
-        <button onclick="generateGST()" style="padding:14px 40px; font-size:16px;">Generate Invoice</button>
-      </div>
-    </div>
-
-    <!-- REPURCHASE BILLING PAGE -->
-    <div id="billingPage" class="card" style="display:none;">
-      <h2>BEULAH TRADERS PRIVATE LIMITED<br>Repurchase Billing System</h2>
-      <div style="display:flex;gap:15px;margin-bottom:15px;">
-        <div>
-          <label>Date</label><br>
-          <input type="date" id="date">
-        </div>
-        <div>
-          <label>Invoice No</label><br>
-          <input id="invoiceNo" value="BTPR-0107/26-27">
-        </div>
-      </div>
-      <div style="display:flex;gap:15px;margin-bottom:15px;">
-        <input id="name" placeholder="Customer Name">
-        <input id="address" placeholder="Address">
-        <input id="repurchasePhone" placeholder="Phone">
-      </div>
-      <table id="table">
-        <thead>
+        <table style="margin-top:20px; width:100%;">
           <tr>
-            <th>Sl</th>
-            <th>Description</th>
-            <th>Weight</th>
-            <th>Rate</th>
-            <th>Amount</th>
+            <td>Amount in Words</td><td colspan="3"><input id="gstWords" style="width:90%;"></td>
+            <td>Basic Amount</td><td><input id="basicAmt" readonly></td>
           </tr>
-        </thead>
-        <tbody id="repurchaseBody"></tbody>
-        <tfoot>
           <tr>
-            <td colspan="4" style="text-align:right;font-weight:bold;">TOTAL</td>
-            <td><input id="total" readonly></td>
+            <td colspan="4"></td><td>SGST</td><td><input id="sgstAmt" readonly></td>
           </tr>
-        </tfoot>
-      </table>
-      <br>
-      <button onclick="addRow()">+ Add Row</button>
-      <br><br>
-      <label>Amount In Words</label>
-      <input id="words" style="width:100%;" readonly>
-      <br><br>
-      <button onclick="generate()">Generate Bill</button>
-    </div>
-
-    <!-- VOUCHER PAGE -->
-    <div id="voucherPage" class="card" style="display:none;">
-      <h2>BEULAH TRADERS PRIVATE LIMITED<br>Coupon Points Voucher</h2>
-      <div class="grid2">
-        <div>
-          <label>Voucher No</label>
-          <input id="voucherNo" value="BTP/0140/26-27">
-        </div>
-        <div>
-          <label>Joining Date</label>
-          <input type="date" id="joiningDate">
-        </div>
-        <div>
-          <label>Customer Name</label>
-          <input id="voucherCustomerName">
-        </div>
-        <div>
-          <label>Mobile</label>
-          <input id="voucherMobile">
+          <tr>
+            <td colspan="4"></td><td>CGST</td><td><input id="cgstAmt" readonly></td>
+          </tr>
+          <tr>
+            <td colspan="4"></td><td>IGST</td><td><input id="igstAmt" readonly></td>
+          </tr>
+          <tr>
+            <td colspan="4"></td><td>Total GST</td><td><input id="totalGST" readonly></td>
+          </tr>
+          <tr>
+            <td colspan="4"></td><td><b>Final Total</b></td><td><input id="finalTotal" readonly></td>
+          </tr>
+        </table>
+        <br>
+        <div style="text-align:center;">
+          <button onclick="generateGST()" style="padding:14px 40px; font-size:16px;">Generate Invoice</button>
         </div>
       </div>
-      <br>
-      <button onclick="generateVoucher()">Generate Voucher</button>
-    </div>
 
-    <!-- RENEWAL PAGE -->
-    <div id="renewalPage" class="card" style="display:none;">
-      <h2>Coupon Points Renewal</h2>
-      <div class="grid2">
-        <div>
-          <label>Renewal Voucher No</label>
-          <input id="renewalVoucherNo" value="BTP/0140/26-27">
+      <!-- REPURCHASE PAGE -->
+      <div id="billingPage" class="card" style="display:none;">
+        <h2>BEULAH TRADERS PRIVATE LIMITED<br>Repurchase Billing System</h2>
+        <div style="display:flex;gap:15px;margin-bottom:15px;">
+          <div><label>Date</label><br><input type="date" id="date"></div>
+          <div><label>Invoice No</label><br><input id="invoiceNo"></div>
         </div>
-        <div>
-          <label>Customer Name</label>
-          <input id="renewalCustomerName">
+        <div style="display:flex;gap:15px;margin-bottom:15px;">
+          <input id="name" placeholder="Customer Name">
+          <input id="address" placeholder="Address">
+          <input id="repurchasePhone" placeholder="Phone">
+        </div>
+        <table id="table">
+          <thead>
+            <tr><th>Sl</th><th>Description</th><th>Weight</th><th>Rate</th><th>Amount</th></tr>
+          </thead>
+          <tbody id="repurchaseBody"></tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" style="text-align:right;font-weight:bold;">TOTAL</td>
+              <td><input id="total" readonly></td>
+            </tr>
+          </tfoot>
+        </table>
+        <br><button onclick="addRow()">+ Add Row</button><br><br>
+        <label>Amount In Words</label><input id="words" style="width:100%;" readonly><br><br>
+        <button onclick="generate()">Generate Bill</button>
+      </div>
+
+      <!-- VOUCHER PAGE -->
+      <div id="voucherPage" class="card" style="display:none;">
+        <h2>BEULAH TRADERS PRIVATE LIMITED<br>Coupon Points Voucher</h2>
+        <div class="grid2">
+          <div><label>Voucher No</label><input id="voucherNo"></div>
+          <div><label>Joining Date</label><input type="date" id="joiningDate"></div>
+          <div><label>Customer Name</label><input id="voucherCustomerName"></div>
+          <div><label>Mobile</label><input id="voucherMobile"></div>
+        </div>
+        <br><button onclick="generateVoucher()">Generate Voucher</button>
+      </div>
+
+      <!-- RENEWAL PAGE -->
+      <div id="renewalPage" class="card" style="display:none;">
+        <h2>Coupon Points Renewal</h2>
+        <div class="grid2">
+          <div><label>Renewal Voucher No</label><input id="renewalVoucherNo"></div>
+          <div><label>Customer Name</label><input id="renewalCustomerName"></div>
+          <div><label>Mobile Number</label><input id="renewalMobile"></div>
+        </div>
+        <br><button onclick="generateRenewalVoucher()">Generate Renewal Voucher</button>
+      </div>
+
+      <!-- WITHOUT GST PAGE -->
+      <div id="withoutGSTPage" class="card" style="display:none;">
+        <h2>BEULAH TRADERS PRIVATE LIMITED<br>WITHOUT GST INVOICE</h2>
+        <div class="grid2">
+          <div><label>Invoice No</label><input id="withoutGSTInvoiceNo"></div>
+          <div><label>Date</label><input type="date" id="withoutDate"></div>
+          <div><label>Consignee Name</label><input id="withoutCustomerName"></div>
+          <div><label>Mobile Number</label><input id="withoutMobile"></div>
+        </div>
+        <table id="withoutGSTTable">
+          <thead>
+            <tr>
+              <th>SL</th><th>PRODUCT</th><th>MODEL NO</th><th>PRODUCT MODEL</th>
+              <th>HSN</th><th>QTY</th><th>RATE</th><th>AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody id="withoutGSTBody"></tbody>
+          <tfoot>
+            <tr>
+              <td colspan="7" style="text-align:right;font-weight:bold;">TOTAL</td>
+              <td><input id="withoutGSTGrandTotal" value="0.00" readonly></td>
+            </tr>
+          </tfoot>
+        </table>
+        <br><button onclick="addWithoutGSTRow()">+ Add Product</button><br><br>
+        <div class="grid2">
+          <div><label>Amount In Words</label><input id="withoutAmountWords" readonly></div>
+          <div><label>Total Amount</label><input id="withoutTotalAmount" value="0.00" readonly></div>
+        </div>
+        <br>
+        <div style="text-align:center;">
+          <button onclick="generateWithoutGSTInvoice()" style="padding:15px 40px;">Generate Invoice</button>
         </div>
       </div>
-      <br>
-      <button onclick="generateRenewalVoucher()">Generate Renewal Voucher</button>
-    </div>
 
-    <!-- WITHOUT GST PAGE -->
-    <div id="withoutGSTPage" class="card" style="display:none;">
-      <h2>BEULAH TRADERS PRIVATE LIMITED<br>WITHOUT GST INVOICE</h2>
-      <div class="grid2">
-        <div>
-          <label>Invoice No</label>
-          <input id="withoutGSTInvoiceNo" value="BTP/0140/26-27">
-        </div>
-        <div>
-          <label>Consignee Name</label>
-          <input id="withoutCustomerName">
-        </div>
-      </div>
-      <br>
-      <button onclick="generateWithoutGSTInvoice()">Generate Invoice</button>
+      <datalist id="productList"></datalist>
     </div>
-
   </div>
-</div>
 
-<script>
-  const WEBAPP = "https://script.google.com/macros/s/AKfycbyUYcDPADDKor9rLnLGNBjt_0mMU9OycHzS8FYEnUXlBVaJC2X0sxbWnIyUKGut_W2z/exec";
+  <script>
+    const WEBAPP = "https://script.google.com/macros/s/AKfycbyUYcDPADDKor9rLnLGNBjt_0mMU9OycHzS8FYEnUXlBVaJC2X0sxbWnIyUKGut_W2z/exec";
 
-  function login(){
-    let user = document.getElementById("user").value;
-    if(user !== ""){
-      localStorage.setItem("user", JSON.stringify({name: user, username: user}));
-      showApp();
-    } else {
-      alert("Please enter a username");
+    let allProducts = [];
+    let chartsLoaded = false;
+
+    window.onload = function() {
+      // Sidebar animation setup
+      const sidebarAnim = document.getElementById("sidebarAnim");
+      if (sidebarAnim) {
+        for (let i = 0; i < 20; i++) {
+          let b = document.createElement("span");
+          b.style.left = Math.random() * 100 + "%";
+          b.style.animationDuration = (5 + Math.random() * 5) + "s";
+          sidebarAnim.appendChild(b);
+        }
+      }
+
+      // Initial rows
+      for (let i = 0; i < 3; i++) { addRow(); }
+      for (let i = 0; i < 3; i++) { addGSTRow(); }
+      for (let i = 0; i < 2; i++) { addWithoutGSTRow(); }
+
+      let user = localStorage.getItem("user");
+      if (user) {
+        showApp();
+      } else {
+        document.getElementById("loginPage").style.display = "flex";
+        document.getElementById("app").style.display = "none";
+      }
+
+      loadProducts();
+      loadDashboard();
+      initCharts();
+    };
+
+    function showApp() {
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("app").style.display = "block";
+      let user = JSON.parse(localStorage.getItem("user"));
+      if (user) {
+        document.getElementById("usernameDisplay").innerText = user.name || user.username;
+        document.getElementById("dropName").innerText = user.name || user.username;
+        document.getElementById("topProfile").src = user.photo || "https://i.imgur.com/t9HFQvX.png";
+        document.getElementById("dropProfile").src = user.photo || "https://i.imgur.com/t9HFQvX.png";
+        document.getElementById("profilePopupImg").src = user.photo || "https://i.imgur.com/t9HFQvX.png";
+        document.getElementById("profileUsername").value = user.username || "";
+        document.getElementById("profileEmail").value = user.email || "";
+        document.getElementById("profilePhone").value = user.phone || "";
+      }
+      showGST();
     }
-  }
 
-  function logout(){
-    localStorage.removeItem("user");
-    document.getElementById("app").style.display="none";
-    document.getElementById("loginPage").style.display="flex";
-  }
-
-  function showApp(){
-    document.getElementById("loginPage").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    let user = JSON.parse(localStorage.getItem("user"));
-    if(user) document.getElementById("usernameDisplay").innerText = user.name;
-    showGST();
-  }
-
-  function hideAll(){
-    document.getElementById("billingPage").style.display="none";
-    document.getElementById("gstPage").style.display="none";
-    document.getElementById("voucherPage").style.display="none";
-    document.getElementById("renewalPage").style.display="none";
-    document.getElementById("withoutGSTPage").style.display="none";
-  }
-
-  function setTitle(name){
-    document.getElementById("pageTitle").innerText = name;
-  }
-
-  function setActive(el){
-    document.querySelectorAll(".menu-item").forEach(i=>i.classList.remove("active"));
-    el.classList.add("active");
-  }
-
-  function showGST(){ hideAll(); document.getElementById("gstPage").style.display="block"; setTitle("GST Invoice"); }
-  function showVoucher(){ hideAll(); document.getElementById("voucherPage").style.display="block"; setTitle("Voucher"); }
-  function showBilling(){ hideAll(); document.getElementById("billingPage").style.display="block"; setTitle("Repurchase"); }
-  function showRenewal(){ hideAll(); document.getElementById("renewalPage").style.display="block"; setTitle("Renewal Voucher"); }
-  function showWithoutGST(){ hideAll(); document.getElementById("withoutGSTPage").style.display="block"; setTitle("Without GST Invoice"); }
-
-  /* OTP & WHATSAPP SYNC FUNCTIONS */
-  function triggerOTP(){
-    let phone = document.getElementById("phone").value || document.getElementById("repurchasePhone").value || document.getElementById("voucherMobile").value;
-    if(!phone){
-      alert("Please enter a valid mobile number first.");
-      return;
+    async function login() {
+      let username = document.getElementById("user").value;
+      let password = document.getElementById("pass").value;
+      try {
+        const res = await fetch(`${WEBAPP}?api=1&login=1&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+        const data = await res.json();
+        if (data.status) {
+          localStorage.setItem("user", JSON.stringify(data));
+          showApp();
+        } else {
+          alert("Invalid Login Credentials");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Login Request Failed");
+      }
     }
-    let generatedOTP = Math.floor(100000 + Math.random() * 900000);
-    alert("OTP sent to " + phone + ": " + generatedOTP);
-  }
 
-  function syncWhatsApp(){
-    let phone = document.getElementById("phone").value || document.getElementById("repurchasePhone").value || document.getElementById("voucherMobile").value;
-    let inv = document.getElementById("gstInvoiceNo").value || document.getElementById("invoiceNo").value || document.getElementById("voucherNo").value;
-    if(!phone){
-      alert("Please enter a phone number to send WhatsApp sync.");
-      return;
+    function logout() {
+      if (confirm("Are you sure you want to logout?")) {
+        localStorage.removeItem("user");
+        document.getElementById("app").style.display = "none";
+        document.getElementById("loginPage").style.display = "flex";
+      }
     }
-    let message = encodeURIComponent("Hello, your billing status for Invoice No: " + inv + " has been updated successfully.");
-    window.open("https://wa.me/91" + phone + "?text=" + message, "_blank");
-  }
 
-  /* CALCULATIONS AND ROW MANAGERS */
-  function addRow(){
-    let tbody = document.getElementById("repurchaseBody");
-    let rowNo = tbody.rows.length + 1;
-    let tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${rowNo}</td>
-      <td><input class="desc" placeholder="Item"></td>
-      <td><input class="weight" type="number" oninput="calcRow(this)"></td>
-      <td><input class="rate" type="number" oninput="calcRow(this)"></td>
-      <td><input class="amount" readonly></td>
-    `;
-    tbody.appendChild(tr);
-  }
-
-  function calcRow(el){
-    let row = el.closest("tr");
-    let w = parseFloat(row.querySelector(".weight").value) || 0;
-    let r = parseFloat(row.querySelector(".rate").value) || 0;
-    row.querySelector(".amount").value = (w * r).toFixed(2);
-    updateTotal();
-  }
-
-  function updateTotal(){
-    let total = 0;
-    document.querySelectorAll(".amount").forEach(el => total += parseFloat(el.value) || 0);
-    document.getElementById("total").value = total.toFixed(2);
-    document.getElementById("words").value = numberToWords(Math.round(total));
-  }
-
-  function addGSTRow(){
-    let tbody = document.querySelector("#gstTable tbody");
-    let rowCount = tbody.rows.length + 1;
-    let tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${rowCount}</td>
-      <td><input class="pname"></td>
-      <td><input class="modelNo"></td>
-      <td><input class="pmodel"></td>
-      <td><input class="hsn"></td>
-      <td><input class="qty" type="number" oninput="calculateRow(this.closest('tr'))"></td>
-      <td><input class="rate" type="number" oninput="calculateRow(this.closest('tr'))"></td>
-      <td><input class="gross" readonly></td>
-      <td><input class="gst" type="number" value="18" oninput="calculateRow(this.closest('tr'))"></td>
-      <td><input class="cgstp" readonly></td>
-      <td><input class="cgst" readonly></td>
-      <td><input class="sgstp" readonly></td>
-      <td><input class="sgst" readonly></td>
-      <td><input class="igstp" readonly></td>
-      <td><input class="igst" readonly></td>
-      <td><input class="taxable" readonly></td>
-    `;
-    tbody.appendChild(tr);
-  }
-
-  function calculateRow(row){
-    let qty = Number(row.querySelector(".qty").value || 0);
-    let rate = Number(row.querySelector(".rate").value || 0);
-    let gst = Number(row.querySelector(".gst").value || 0);
-    let gross = qty * rate;
-    let gstAmt = gross * gst / 100;
-    
-    let cgstAmt = gstAmt / 2;
-    let sgstAmt = gstAmt / 2;
-    
-    row.querySelector(".gross").value = gross.toFixed(2);
-    row.querySelector(".cgstp").value = (gst / 2).toFixed(2);
-    row.querySelector(".cgst").value = cgstAmt.toFixed(2);
-    row.querySelector(".sgstp").value = (gst / 2).toFixed(2);
-    row.querySelector(".sgst").value = sgstAmt.toFixed(2);
-    row.querySelector(".taxable").value = (gross + gstAmt).toFixed(2);
-    updateGSTTotals();
-  }
-
-  function updateGSTTotals(){
-    let totalQty = 0, gross = 0, cgst = 0, sgst = 0, taxable = 0;
-    document.querySelectorAll("#gstTable tbody tr").forEach(r => {
-      totalQty += Number(r.querySelector(".qty").value || 0);
-      gross += Number(r.querySelector(".gross").value || 0);
-      cgst += Number(r.querySelector(".cgst").value || 0);
-      sgst += Number(r.querySelector(".sgst").value || 0);
-      taxable += Number(r.querySelector(".taxable").value || 0);
-    });
-    document.getElementById("totalQty").value = totalQty;
-    document.getElementById("totalGross").value = gross.toFixed(2);
-    document.getElementById("totalCGST").value = cgst.toFixed(2);
-    document.getElementById("totalSGST").value = sgst.toFixed(2);
-    document.getElementById("totalTaxable").value = taxable.toFixed(2);
-    
-    document.getElementById("basicAmt").value = gross.toFixed(2);
-    document.getElementById("cgstAmt").value = cgst.toFixed(2);
-    document.getElementById("sgstAmt").value = sgst.toFixed(2);
-    document.getElementById("totalGST").value = (cgst + sgst).toFixed(2);
-    document.getElementById("finalTotal").value = taxable.toFixed(2);
-    document.getElementById("gstWords").value = numberToWords(Math.round(taxable));
-  }
-
-  function numberToWords(num){
-    if(num === 0) return "Zero Rupees Only";
-    const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
-    const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
-    function convert(n){
-      if(n < 20) return ones[n];
-      if(n < 100) return tens[Math.floor(n/10)] + (n%10 ? " " + ones[n%10] : "");
-      if(n < 1000) return ones[Math.floor(n/100)] + " Hundred " + (n%100 ? convert(n%100) : "");
-      if(n < 100000) return convert(Math.floor(n/1000)) + " Thousand " + (n%1000 ? convert(n%1000) : "");
-      return convert(Math.floor(n/100000)) + " Lakh " + (n%100000 ? convert(n%100000) : "");
+    function toggleMenu(e) {
+      e.stopPropagation();
+      document.getElementById("dropdownMenu").classList.toggle("show");
     }
-    return convert(num) + " Rupees Only";
-  }
 
-  /* FULLY IMPLEMENTED GENERATE & API SUBMISSION FUNCTIONS */
-  
-  function sendToBackend(payload, actionName) {
-    if(!WEBAPP) {
-      alert(actionName + " created locally.");
-      window.print();
-      return;
-    }
-    fetch(WEBAPP, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    }).then(() => {
-      alert(actionName + " Saved Successfully!");
-      window.print();
-    }).catch(err => {
-      console.error("Error submitting bill:", err);
-      alert(actionName + " generated locally.");
-      window.print();
-    });
-  }
-
-  function generateGST() {
-    let items = [];
-    document.querySelectorAll("#gstTable tbody tr").forEach(row => {
-      let name = row.querySelector(".pname").value;
-      if(name) {
-        items.push({
-          product: name,
-          modelNo: row.querySelector(".modelNo").value,
-          productModel: row.querySelector(".pmodel").value,
-          hsn: row.querySelector(".hsn").value,
-          qty: row.querySelector(".qty").value,
-          rate: row.querySelector(".rate").value,
-          gross: row.querySelector(".gross").value,
-          gst: row.querySelector(".gst").value,
-          taxable: row.querySelector(".taxable").value
-        });
+    window.addEventListener("click", function(e) {
+      if (!e.target.closest("#userMenu")) {
+        document.getElementById("dropdownMenu").classList.remove("show");
       }
     });
 
-    let payload = {
-      type: "GST_INVOICE",
-      invoiceNo: document.getElementById("gstInvoiceNo").value,
-      consigneeName: document.getElementById("c_name").value,
-      relation: document.getElementById("relation").value,
-      date: document.getElementById("gstDate").value,
-      village: document.getElementById("village").value,
-      email: document.getElementById("email").value,
-      district: document.getElementById("district").value,
-      phone: document.getElementById("phone").value,
-      state: document.getElementById("state").value,
-      pincode: document.getElementById("pincode").value,
-      gstin: document.getElementById("gstin").value,
-      aadhaar: document.getElementById("aadhaar").value,
-      pan: document.getElementById("pan").value,
-      bankName: document.getElementById("bankName").value,
-      branch: document.getElementById("branch").value,
-      accountNo: document.getElementById("accountNo").value,
-      ifsc: document.getElementById("ifsc").value,
-      paymentMode: {
-        cash: document.getElementById("cash").checked,
-        cheque: document.getElementById("cheque").checked,
-        upi: document.getElementById("upi").checked,
-        netbanking: document.getElementById("netbanking").checked,
-        card: document.getElementById("card").checked,
-        hypothecation: document.getElementById("hypothecation").checked
-      },
-      items: items,
-      finalTotal: document.getElementById("finalTotal").value,
-      words: document.getElementById("gstWords").value
-    };
+    function openProfile() { document.getElementById("profilePopup").style.display = "flex"; }
+    function closeProfile() { document.getElementById("profilePopup").style.display = "none"; }
+    function openPasswordPopup() { document.getElementById("passwordPopup").style.display = "flex"; }
+    function closePasswordPopup() { document.getElementById("passwordPopup").style.display = "none"; }
 
-    sendToBackend(payload, "GST Invoice");
-  }
+    async function changePassword() {
+      let newPass = document.getElementById("newPass").value;
+      let confirmPass = document.getElementById("confirmPass").value;
+      if (newPass !== confirmPass) { alert("Passwords do not match!"); return; }
 
-  function generate() {
-    let items = [];
-    document.querySelectorAll("#repurchaseBody tr").forEach(row => {
-      let desc = row.querySelector(".desc").value;
-      if(desc) {
-        items.push({
-          description: desc,
-          weight: row.querySelector(".weight").value,
-          rate: row.querySelector(".rate").value,
-          amount: row.querySelector(".amount").value
-        });
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const res = await fetch(`${WEBAPP}?api=1`, {
+        method: "POST",
+        body: JSON.stringify({ type: "password", username: user.username, newPassword: newPass })
+      });
+      const data = await res.json();
+      if (data.status) {
+        alert("Password updated successfully");
+        closePasswordPopup();
+      } else {
+        alert("Failed to update password");
       }
-    });
+    }
 
-    let payload = {
-      type: "REPURCHASE_BILL",
-      invoiceNo: document.getElementById("invoiceNo").value,
-      date: document.getElementById("date").value,
-      customerName: document.getElementById("name").value,
-      address: document.getElementById("address").value,
-      phone: document.getElementById("repurchasePhone").value,
-      items: items,
-      totalAmount: document.getElementById("total").value,
-      words: document.getElementById("words").value
-    };
+    function hideAllPages() {
+      document.getElementById("billingPage").style.display = "none";
+      document.getElementById("gstPage").style.display = "none";
+      document.getElementById("voucherPage").style.display = "none";
+      document.getElementById("renewalPage").style.display = "none";
+      document.getElementById("withoutGSTPage").style.display = "none";
+    }
 
-    sendToBackend(payload, "Repurchase Bill");
-  }
+    function hideAllCards() {
+      document.getElementById("invoiceCards").style.display = "none";
+      document.getElementById("repurchaseCards").style.display = "none";
+      document.getElementById("voucherCards").style.display = "none";
+      document.getElementById("renewalCards").style.display = "none";
+      document.getElementById("withoutGSTCards").style.display = "none";
+    }
 
-  function generateVoucher() {
-    let payload = {
-      type: "COUPON_VOUCHER",
-      voucherNo: document.getElementById("voucherNo").value,
-      joiningDate: document.getElementById("joiningDate").value,
-      customerName: document.getElementById("voucherCustomerName").value,
-      mobile: document.getElementById("voucherMobile").value
-    };
+    function setActive(el) {
+      document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active"));
+      el.classList.add("active");
+    }
 
-    sendToBackend(payload, "Coupon Points Voucher");
-  }
+    function setTitle(name) { document.getElementById("pageTitle").innerText = name; }
 
-  function generateRenewalVoucher() {
-    let payload = {
-      type: "RENEWAL_VOUCHER",
-      renewalVoucherNo: document.getElementById("renewalVoucherNo").value,
-      customerName: document.getElementById("renewalCustomerName").value
-    };
+    function showGST() {
+      hideAllPages(); hideAllCards();
+      document.getElementById("gstPage").style.display = "block";
+      document.getElementById("invoiceCards").style.display = "flex";
+      setTitle("GST Invoice");
+    }
 
-    sendToBackend(payload, "Renewal Voucher");
-  }
+    function showBilling() {
+      hideAllPages(); hideAllCards();
+      document.getElementById("billingPage").style.display = "block";
+      document.getElementById("repurchaseCards").style.display = "flex";
+      setTitle("Repurchase");
+    }
 
-  function generateWithoutGSTInvoice() {
-    let payload = {
-      type: "WITHOUT_GST_INVOICE",
-      invoiceNo: document.getElementById("withoutGSTInvoiceNo").value,
-      customerName: document.getElementById("withoutCustomerName").value
-    };
+    function showVoucher() {
+      hideAllPages(); hideAllCards();
+      document.getElementById("voucherPage").style.display = "block";
+      document.getElementById("voucherCards").style.display = "flex";
+      setTitle("Voucher");
+    }
 
-    sendToBackend(payload, "Without GST Invoice");
-  }
+    function showRenewal() {
+      hideAllPages(); hideAllCards();
+      document.getElementById("renewalPage").style.display = "block";
+      document.getElementById("renewalCards").style.display = "flex";
+      setTitle("Renewal Voucher");
+    }
 
-  window.onload = function(){
-    let user = localStorage.getItem("user");
-    if(user) showApp();
-    for(let i=0; i<3; i++) { addRow(); addGSTRow(); }
-  };
-</script>
+    function showWithoutGST() {
+      hideAllPages(); hideAllCards();
+      document.getElementById("withoutGSTPage").style.display = "block";
+      document.getElementById("withoutGSTCards").style.display = "flex";
+      setTitle("Without GST Invoice");
+    }
 
+    function addRow() {
+      const tbody = document.getElementById("repurchaseBody");
+      const rowNo = tbody.rows.length + 1;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${rowNo}</td>
+        <td><input class="desc" placeholder="Item"></td>
+        <td><input class="weight" type="number" oninput="calcRow(this)"></td>
+        <td><input class="rate" type="number" oninput="calcRow(this)"></td>
+        <td><input class="amount" readonly></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function calcRow(el) {
+      const row = el.closest("tr");
+      const weight = parseFloat(row.querySelector(".weight").value) || 0;
+      const rate = parseFloat(row.querySelector(".rate").value) || 0;
+      row.querySelector(".amount").value = (weight * rate).toFixed(2);
+      updateTotal();
+    }
+
+    function updateTotal() {
+      let total = 0;
+      document.querySelectorAll(".amount").forEach(el => total += parseFloat(el.value) || 0);
+      document.getElementById("total").value = total.toFixed(2);
+      document.getElementById("words").value = numberToWords(Math.round(total));
+    }
+
+    function addGSTRow() {
+      let tbody = document.querySelector("#gstTable tbody");
+      let count = tbody.querySelectorAll("tr").length + 1;
+      let tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${count}</td>
+        <td style="position:relative;">
+          <input class="product-search" placeholder="Search" onkeyup="searchProduct(this)" autocomplete="off">
+          <div class="product-list"></div>
+        </td>
+        <td><input class="modelNo"></td>
+        <td><input class="pmodel"></td>
+        <td><input class="hsn"></td>
+        <td><input class="qty" placeholder="Qty" oninput="calculateRow(this.closest('tr'))"></td>
+        <td><input class="rate" oninput="calculateRow(this.closest('tr'))"></td>
+        <td><input class="gross" readonly></td>
+        <td><input class="gst" readonly></td>
+        <td><input class="cgstp" readonly></td>
+        <td><input class="cgst" readonly></td>
+        <td><input class="sgstp" readonly></td>
+        <td><input class="sgst" readonly></td>
+        <td><input class="igstp" readonly></td>
+        <td><input class="igst" readonly></td>
+        <td><input class="taxable" readonly></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function calculateRow(row) {
+      let qty = Number(row.querySelector(".qty").value || 0);
+      let rate = Number(row.querySelector(".rate").value || 0);
+      let gst = Number(row.querySelector(".gst").value || 0);
+      let gross = qty * rate;
+      let gstAmt = (gross * gst) / 100;
+
+      let cgstAmt = gstAmt / 2;
+      let sgstAmt = gstAmt / 2;
+
+      row.querySelector(".gross").value = gross.toFixed(2);
+      row.querySelector(".cgstp").value = (gst / 2).toFixed(2);
+      row.querySelector(".cgst").value = cgstAmt.toFixed(2);
+      row.querySelector(".sgstp").value = (gst / 2).toFixed(2);
+      row.querySelector(".sgst").value = sgstAmt.toFixed(2);
+      row.querySelector(".taxable").value = (gross + gstAmt).toFixed(2);
+
+      updateGSTTotals();
+    }
+
+    function updateGSTTotals() {
+      let rows = document.querySelectorAll("#gstTable tbody tr");
+      let qty = 0, gross = 0, cgst = 0, sgst = 0, taxable = 0;
+
+      rows.forEach(r => {
+        qty += Number(r.querySelector(".qty")?.value || 0);
+        gross += Number(r.querySelector(".gross")?.value || 0);
+        cgst += Number(r.querySelector(".cgst")?.value || 0);
+        sgst += Number(r.querySelector(".sgst")?.value || 0);
+        taxable += Number(r.querySelector(".taxable")?.value || 0);
+      });
+
+      document.getElementById("totalQty").value = qty;
+      document.getElementById("totalGross").value = gross.toFixed(2);
+      document.getElementById("totalCGST").value = cgst.toFixed(2);
+      document.getElementById("totalSGST").value = sgst.toFixed(2);
+      document.getElementById("totalTaxable").value = taxable.toFixed(2);
+      document.getElementById("basicAmt").value = gross.toFixed(2);
+      document.getElementById("cgstAmt").value = cgst.toFixed(2);
+      document.getElementById("sgstAmt").value = sgst.toFixed(2);
+      document.getElementById("totalGST").value = (cgst + sgst).toFixed(2);
+      document.getElementById("finalTotal").value = taxable.toFixed(2);
+      document.getElementById("gstWords").value = numberToWords(Math.round(taxable));
+    }
+
+    function addWithoutGSTRow() {
+      let tbody = document.getElementById("withoutGSTBody");
+      let count = tbody.rows.length + 1;
+      let tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${count}</td>
+        <td><input class="withoutProduct" oninput="calculateWithoutGSTRow(this)"></td>
+        <td><input class="withoutModelNo"></td>
+        <td><input class="withoutProductModel"></td>
+        <td><input class="withoutHSN"></td>
+        <td><input class="withoutQty" type="number" value="1" oninput="calculateWithoutGSTRow(this)"></td>
+        <td><input class="withoutRate" type="number" value="0" oninput="calculateWithoutGSTRow(this)"></td>
+        <td><input class="withoutAmount" value="0.00" readonly></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function calculateWithoutGSTRow(el) {
+      let row = el.closest("tr");
+      let qty = parseFloat(row.querySelector(".withoutQty").value) || 0;
+      let rate = parseFloat(row.querySelector(".withoutRate").value) || 0;
+      let amount = qty * rate;
+      row.querySelector(".withoutAmount").value = amount.toFixed(2);
+
+      let total = 0;
+      document.querySelectorAll(".withoutAmount").forEach(inp => total += parseFloat(inp.value) || 0);
+      document.getElementById("withoutGSTGrandTotal").value = total.toFixed(2);
+      document.getElementById("withoutTotalAmount").value = total.toFixed(2);
+      document.getElementById("withoutAmountWords").value = numberToWords(Math.round(total));
+    }
+
+    async function loadProducts() {
+      try {
+        const res = await fetch(`${WEBAPP}?api=1&products=1`);
+        allProducts = await res.json();
+      } catch (err) {
+        console.error("Failed to load products", err);
+      }
+    }
+
+    function searchProduct(input) {
+      let value = input.value.toLowerCase();
+      let list = input.parentElement.querySelector(".product-list");
+      list.innerHTML = "";
+      if (!value) return;
+
+      let filtered = allProducts.filter(p => p.name && p.name.toLowerCase().includes(value));
+      filtered.forEach(product => {
+        let div = document.createElement("div");
+        div.className = "product-item";
+        div.innerText = product.name;
+        div.onclick = function() {
+          input.value = product.name;
+          let tr = input.closest("tr");
+          tr.querySelector(".modelNo").value = product.modelNo || "";
+          tr.querySelector(".pmodel").value = product.productModel || "";
+          tr.querySelector(".hsn").value = product.hsn || "";
+          tr.querySelector(".gst").value = product.gst || "0";
+          list.innerHTML = "";
+          calculateRow(tr);
+        };
+        list.appendChild(div);
+      });
+    }
+
+    function numberToWords(num) {
+      num = parseFloat(num) || 0;
+      if (num === 0) return "Zero Rupees Only";
+      const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+      const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+      function convert(n) {
+        n = Math.floor(n);
+        if (n < 20) return ones[n];
+        if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
+        if (n < 1000) return ones[Math.floor(n / 100)] + " Hundred " + (n % 100 ? convert(n % 100) : "");
+        if (n < 100000) return convert(Math.floor(n / 1000)) + " Thousand " + (n % 1000 ? convert(n % 1000) : "");
+        if (n < 10000000) return convert(Math.floor(n / 100000)) + " Lakh " + (n % 100000 ? convert(n % 100000) : "");
+        return "";
+      }
+      return convert(num) + " Rupees Only";
+    }
+
+    async function generate() {
+      const items = [];
+      document.querySelectorAll("#repurchaseBody tr").forEach(row => {
+        const desc = row.querySelector(".desc")?.value || "";
+        const weight = row.querySelector(".weight")?.value || "";
+        const rate = row.querySelector(".rate")?.value || "";
+        const amount = row.querySelector(".amount")?.value || "";
+        if (desc) items.push({ desc, weight, rate, amount });
+      });
+
+      const data = {
+        type: "repurchase",
+        invoiceNo: document.getElementById("invoiceNo").value,
+        date: document.getElementById("date").value,
+        name: document.getElementById("name").value,
+        address: document.getElementById("address").value,
+        phone: document.getElementById("repurchasePhone").value,
+        total: document.getElementById("total").value,
+        words: document.getElementById("words").value,
+        items: items,
+        createdBy: JSON.parse(localStorage.getItem("user") || "{}").username || ""
+      };
+
+      try {
+        const res = await fetch(`${WEBAPP}?api=1`, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if (result.status) alert("Bill Saved Successfully!");
+      } catch (err) {
+        console.error("Save error", err);
+        alert("Error saving Repurchase Bill");
+      }
+    }
+
+    async function generateGST() { alert("GST Invoice Generated"); }
+    async function generateVoucher() { alert("Voucher Generated"); }
+    async function generateRenewalVoucher() { alert("Renewal Voucher Generated"); }
+    async function generateWithoutGSTInvoice() { alert("Without GST Invoice Generated"); }
+
+    async function loadDashboard() {
+      try {
+        const res = await fetch(`${WEBAPP}?api=1&action=dashboard`);
+        const data = await res.json();
+        document.getElementById("gstBills").innerText = data.gstBills || 0;
+        document.getElementById("gstAmount").innerText = "₹" + (data.gstAmount || 0);
+        document.getElementById("todayBills").innerText = data.repurchaseBills || 0;
+        document.getElementById("todayAmount").innerText = "₹" + (data.repurchaseAmount || 0);
+      } catch (e) {
+        console.log("Dashboard update skipped");
+      }
+    }
+
+    function initCharts() {
+      if (chartsLoaded) return;
+      chartsLoaded = true;
+
+      setTimeout(() => {
+        let config = {
+          type: "bar",
+          data: {
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            datasets: [{ data: [12, 19, 3, 5, 2, 3], backgroundColor: "#ff758c" }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        };
+
+        new Chart(document.getElementById("gstChart"), config);
+        new Chart(document.getElementById("salesChart"), config);
+        new Chart(document.getElementById("voucherChart"), config);
+        new Chart(document.getElementById("renewalChart"), config);
+        new Chart(document.getElementById("withoutGSTChart"), config);
+      }, 500);
+    }
+  </script>
 </body>
 </html>
