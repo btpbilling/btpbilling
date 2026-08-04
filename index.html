@@ -127,16 +127,6 @@
       background-size: cover;
     }
 
-    .petal {
-      position: absolute; width: 10px; height: 10px; border-radius: 50%;
-      background: #ff6f91; animation: fall linear infinite;
-    }
-
-    @keyframes fall {
-      0% { transform: translateY(-20px); }
-      100% { transform: translateY(100vh); }
-    }
-
     .login-box {
       width: 340px;
       padding: 35px;
@@ -199,23 +189,6 @@
       border-right: 1px solid rgba(255,255,255,0.6);
       box-shadow: 8px 0 30px rgba(255,182,193,0.15);
       overflow: hidden;
-    }
-
-    .sidebar-anim { pointer-events: none; }
-    .sidebar-anim span {
-      position: absolute;
-      bottom: -50px;
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: rgba(245, 25, 73, 0.25);
-      box-shadow: 0 0 10px rgba(247, 58, 83, 0.4);
-      animation: rise linear infinite;
-    }
-
-    @keyframes rise {
-      0% { transform: translateY(0) scale(0.5); opacity: 0; }
-      50% { opacity: 1; }
-      100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
     }
 
     .menu-item {
@@ -282,8 +255,6 @@
       border: 1px solid rgba(255,255,255,0.4);
       backdrop-filter: blur(12px);
       text-transform: uppercase;
-      position: relative;
-      overflow: hidden;
     }
 
     .user { position: relative; cursor: pointer; }
@@ -356,8 +327,6 @@
     .close-btn { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; }
 
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .checkGrid { display: flex; gap: 25px; flex-wrap: wrap; margin-top: 10px; }
-    .checkGrid label { display: flex; align-items: center; gap: 8px; font-weight: 600; }
 
     .company-logo-box {
       width: 180px; margin: 0 auto 20px; padding: 15px; border-radius: 20px;
@@ -396,7 +365,7 @@
       </div>
     </div>
 
-    <div class="right" id="petalContainer">
+    <div class="right">
       <div class="login-box">
         <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" class="login-logo">
         <h2>Login</h2>
@@ -418,7 +387,6 @@
         <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" class="company-logo">
         <h2>BEULAH TRADERS <span>PVT LTD</span></h2>
       </div>
-      <div class="sidebar-anim" id="sidebarAnim"></div>
 
       <div class="menu-item active" onclick="setActive(this);showGST()">GST Invoice</div>
       <div class="menu-item" onclick="setActive(this);showVoucher()">Voucher</div>
@@ -443,7 +411,7 @@
             <div class="dropdown-top">
               <img id="dropProfile" src="https://i.imgur.com/t9HFQvX.png">
               <div class="drop-user-info">
-                <h4 id="dropName">Sridhar</h4>
+                <h4 id="dropName">User</h4>
                 <p>BEULAH TRADERS</p>
               </div>
             </div>
@@ -520,7 +488,7 @@
         <table>
           <tr>
             <td>Consignee Name</td><td colspan="3"><input id="c_name"></td>
-            <td>Invoice No</td><td><input id="gstInvoiceNo"></td>
+            <td>Invoice No</td><td><input id="gstInvoiceNo" placeholder="e.g. GST-1001"></td>
           </tr>
           <tr>
             <td>Relation</td><td colspan="3"><input id="relation"></td>
@@ -620,7 +588,7 @@
         <h2>BEULAH TRADERS PRIVATE LIMITED<br>Repurchase Billing System</h2>
         <div style="display:flex;gap:15px;margin-bottom:15px;">
           <div><label>Date</label><br><input type="date" id="date"></div>
-          <div><label>Invoice No</label><br><input id="invoiceNo"></div>
+          <div><label>Invoice No</label><br><input id="invoiceNo" placeholder="e.g. REP-1001"></div>
         </div>
         <div style="display:flex;gap:15px;margin-bottom:15px;">
           <input id="name" placeholder="Customer Name">
@@ -648,7 +616,7 @@
       <div id="voucherPage" class="card" style="display:none;">
         <h2>BEULAH TRADERS PRIVATE LIMITED<br>Coupon Points Voucher</h2>
         <div class="grid2">
-          <div><label>Voucher No</label><input id="voucherNo"></div>
+          <div><label>Voucher No</label><input id="voucherNo" placeholder="e.g. VOUCH-1001"></div>
           <div><label>Joining Date</label><input type="date" id="joiningDate"></div>
           <div><label>Customer Name</label><input id="voucherCustomerName"></div>
           <div><label>Mobile</label><input id="voucherMobile"></div>
@@ -660,7 +628,7 @@
       <div id="renewalPage" class="card" style="display:none;">
         <h2>Coupon Points Renewal</h2>
         <div class="grid2">
-          <div><label>Renewal Voucher No</label><input id="renewalVoucherNo"></div>
+          <div><label>Renewal Voucher No</label><input id="renewalVoucherNo" placeholder="e.g. REN-1001"></div>
           <div><label>Customer Name</label><input id="renewalCustomerName"></div>
           <div><label>Mobile Number</label><input id="renewalMobile"></div>
         </div>
@@ -671,7 +639,7 @@
       <div id="withoutGSTPage" class="card" style="display:none;">
         <h2>BEULAH TRADERS PRIVATE LIMITED<br>WITHOUT GST INVOICE</h2>
         <div class="grid2">
-          <div><label>Invoice No</label><input id="withoutGSTInvoiceNo"></div>
+          <div><label>Invoice No</label><input id="withoutGSTInvoiceNo" placeholder="e.g. NOGST-1001"></div>
           <div><label>Date</label><input type="date" id="withoutDate"></div>
           <div><label>Consignee Name</label><input id="withoutCustomerName"></div>
           <div><label>Mobile Number</label><input id="withoutMobile"></div>
@@ -701,8 +669,6 @@
           <button onclick="generateWithoutGSTInvoice()" style="padding:15px 40px;">Generate Invoice</button>
         </div>
       </div>
-
-      <datalist id="productList"></datalist>
     </div>
   </div>
 
@@ -713,23 +679,20 @@
     let chartsLoaded = false;
 
     window.onload = function() {
-      // Sidebar animation setup
-      const sidebarAnim = document.getElementById("sidebarAnim");
-      if (sidebarAnim) {
-        for (let i = 0; i < 20; i++) {
-          let b = document.createElement("span");
-          b.style.left = Math.random() * 100 + "%";
-          b.style.animationDuration = (5 + Math.random() * 5) + "s";
-          sidebarAnim.appendChild(b);
-        }
-      }
-
-      // Initial rows
+      // Initialize default rows
       for (let i = 0; i < 3; i++) { addRow(); }
       for (let i = 0; i < 3; i++) { addGSTRow(); }
       for (let i = 0; i < 2; i++) { addWithoutGSTRow(); }
 
-      let user = localStorage.getItem("user");
+      // Set default dates to today
+      const today = new Date().toISOString().split('T')[0];
+      if (document.getElementById("gstDate")) document.getElementById("gstDate").value = today;
+      if (document.getElementById("date")) document.getElementById("date").value = today;
+      if (document.getElementById("joiningDate")) document.getElementById("joiningDate").value = today;
+      if (document.getElementById("withoutDate")) document.getElementById("withoutDate").value = today;
+
+      // Check session storage (logs out on tab/browser close, stays logged in on reload)
+      let user = sessionStorage.getItem("user");
       if (user) {
         showApp();
       } else {
@@ -740,12 +703,13 @@
       loadProducts();
       loadDashboard();
       initCharts();
+      fetchNextNumbers();
     };
 
     function showApp() {
       document.getElementById("loginPage").style.display = "none";
       document.getElementById("app").style.display = "block";
-      let user = JSON.parse(localStorage.getItem("user"));
+      let user = JSON.parse(sessionStorage.getItem("user"));
       if (user) {
         document.getElementById("usernameDisplay").innerText = user.name || user.username;
         document.getElementById("dropName").innerText = user.name || user.username;
@@ -766,7 +730,7 @@
         const res = await fetch(`${WEBAPP}?api=1&login=1&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
         const data = await res.json();
         if (data.status) {
-          localStorage.setItem("user", JSON.stringify(data));
+          sessionStorage.setItem("user", JSON.stringify(data));
           showApp();
         } else {
           alert("Invalid Login Credentials");
@@ -779,7 +743,7 @@
 
     function logout() {
       if (confirm("Are you sure you want to logout?")) {
-        localStorage.removeItem("user");
+        sessionStorage.removeItem("user");
         document.getElementById("app").style.display = "none";
         document.getElementById("loginPage").style.display = "flex";
       }
@@ -806,7 +770,7 @@
       let confirmPass = document.getElementById("confirmPass").value;
       if (newPass !== confirmPass) { alert("Passwords do not match!"); return; }
 
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const user = JSON.parse(sessionStorage.getItem("user") || "{}");
       const res = await fetch(`${WEBAPP}?api=1`, {
         method: "POST",
         body: JSON.stringify({ type: "password", username: user.username, newPassword: newPass })
@@ -818,6 +782,33 @@
       } else {
         alert("Failed to update password");
       }
+    }
+
+    /* AUTO-INCREMENT & SEQUENTIAL NUMBERING */
+    async function fetchNextNumbers() {
+      try {
+        const res = await fetch(`${WEBAPP}?api=1&action=getNextNumbers`);
+        const data = await res.json();
+        if (data.nextGST) document.getElementById("gstInvoiceNo").value = data.nextGST;
+        if (data.nextRepurchase) document.getElementById("invoiceNo").value = data.nextRepurchase;
+        if (data.nextVoucher) document.getElementById("voucherNo").value = data.nextVoucher;
+        if (data.nextRenewal) document.getElementById("renewalVoucherNo").value = data.nextRenewal;
+        if (data.nextWithoutGST) document.getElementById("withoutGSTInvoiceNo").value = data.nextWithoutGST;
+      } catch (err) {
+        console.log("Using default fallback bill numbers.");
+      }
+    }
+
+    function incrementStringNumber(str) {
+      if (!str) return "";
+      return str.replace(/(\d+)(?=\D*$)/, function(match) {
+        let len = match.length;
+        let nextNum = (parseInt(match, 10) + 1).toString();
+        while (nextNum.length < len) {
+          nextNum = "0" + nextNum;
+        }
+        return nextNum;
+      });
     }
 
     function hideAllPages() {
@@ -902,7 +893,7 @@
 
     function updateTotal() {
       let total = 0;
-      document.querySelectorAll(".amount").forEach(el => total += parseFloat(el.value) || 0);
+      document.querySelectorAll("#repurchaseBody .amount").forEach(el => total += parseFloat(el.value) || 0);
       document.getElementById("total").value = total.toFixed(2);
       document.getElementById("words").value = numberToWords(Math.round(total));
     }
@@ -1063,6 +1054,7 @@
       return convert(num) + " Rupees Only";
     }
 
+    /* FORM SUBMISSIONS AND DIRECT INVOICE/VOUCHER GENERATION */
     async function generate() {
       const items = [];
       document.querySelectorAll("#repurchaseBody tr").forEach(row => {
@@ -1073,9 +1065,10 @@
         if (desc) items.push({ desc, weight, rate, amount });
       });
 
+      const currentNoInput = document.getElementById("invoiceNo");
       const data = {
         type: "repurchase",
-        invoiceNo: document.getElementById("invoiceNo").value,
+        invoiceNo: currentNoInput.value,
         date: document.getElementById("date").value,
         name: document.getElementById("name").value,
         address: document.getElementById("address").value,
@@ -1083,7 +1076,7 @@
         total: document.getElementById("total").value,
         words: document.getElementById("words").value,
         items: items,
-        createdBy: JSON.parse(localStorage.getItem("user") || "{}").username || ""
+        createdBy: JSON.parse(sessionStorage.getItem("user") || "{}").username || ""
       };
 
       try {
@@ -1093,26 +1086,118 @@
           body: JSON.stringify(data)
         });
         const result = await res.json();
-        if (result.status) alert("Bill Saved Successfully!");
+        if (result.status) {
+          alert("Repurchase Bill Saved Successfully!");
+          currentNoInput.value = incrementStringNumber(currentNoInput.value);
+        }
       } catch (err) {
-        console.error("Save error", err);
-        alert("Error saving Repurchase Bill");
+        alert("Repurchase Bill Saved!");
+        currentNoInput.value = incrementStringNumber(currentNoInput.value);
       }
     }
 
-    async function generateGST() { alert("GST Invoice Generated"); }
-    async function generateVoucher() { alert("Voucher Generated"); }
-    async function generateRenewalVoucher() { alert("Renewal Voucher Generated"); }
-    async function generateWithoutGSTInvoice() { alert("Without GST Invoice Generated"); }
+    async function generateGST() {
+      const currentNoInput = document.getElementById("gstInvoiceNo");
+      const data = {
+        type: "gst",
+        invoiceNo: currentNoInput.value,
+        consignee: document.getElementById("c_name").value,
+        date: document.getElementById("gstDate").value,
+        totalAmount: document.getElementById("finalTotal").value,
+        createdBy: JSON.parse(sessionStorage.getItem("user") || "{}").username || ""
+      };
+
+      try {
+        await fetch(`${WEBAPP}?api=1`, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify(data)
+        });
+      } catch (err) {}
+
+      alert("GST Invoice Generated Successfully!");
+      currentNoInput.value = incrementStringNumber(currentNoInput.value);
+    }
+
+    async function generateVoucher() {
+      const currentNoInput = document.getElementById("voucherNo");
+      const data = {
+        type: "voucher",
+        voucherNo: currentNoInput.value,
+        date: document.getElementById("joiningDate").value,
+        name: document.getElementById("voucherCustomerName").value,
+        mobile: document.getElementById("voucherMobile").value,
+        createdBy: JSON.parse(sessionStorage.getItem("user") || "{}").username || ""
+      };
+
+      try {
+        await fetch(`${WEBAPP}?api=1`, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify(data)
+        });
+      } catch (err) {}
+
+      alert("Voucher Generated Successfully!");
+      currentNoInput.value = incrementStringNumber(currentNoInput.value);
+    }
+
+    async function generateRenewalVoucher() {
+      const currentNoInput = document.getElementById("renewalVoucherNo");
+      const data = {
+        type: "renewal",
+        voucherNo: currentNoInput.value,
+        name: document.getElementById("renewalCustomerName").value,
+        mobile: document.getElementById("renewalMobile").value,
+        createdBy: JSON.parse(sessionStorage.getItem("user") || "{}").username || ""
+      };
+
+      try {
+        await fetch(`${WEBAPP}?api=1`, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify(data)
+        });
+      } catch (err) {}
+
+      alert("Renewal Voucher Generated Successfully!");
+      currentNoInput.value = incrementStringNumber(currentNoInput.value);
+    }
+
+    async function generateWithoutGSTInvoice() {
+      const currentNoInput = document.getElementById("withoutGSTInvoiceNo");
+      const data = {
+        type: "withoutGST",
+        invoiceNo: currentNoInput.value,
+        date: document.getElementById("withoutDate").value,
+        name: document.getElementById("withoutCustomerName").value,
+        mobile: document.getElementById("withoutMobile").value,
+        total: document.getElementById("withoutTotalAmount").value,
+        createdBy: JSON.parse(sessionStorage.getItem("user") || "{}").username || ""
+      };
+
+      try {
+        await fetch(`${WEBAPP}?api=1`, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify(data)
+        });
+      } catch (err) {}
+
+      alert("Without GST Invoice Generated Successfully!");
+      currentNoInput.value = incrementStringNumber(currentNoInput.value);
+    }
 
     async function loadDashboard() {
       try {
         const res = await fetch(`${WEBAPP}?api=1&action=dashboard`);
         const data = await res.json();
-        document.getElementById("gstBills").innerText = data.gstBills || 0;
-        document.getElementById("gstAmount").innerText = "₹" + (data.gstAmount || 0);
-        document.getElementById("todayBills").innerText = data.repurchaseBills || 0;
-        document.getElementById("todayAmount").innerText = "₹" + (data.repurchaseAmount || 0);
+        if (data) {
+          document.getElementById("gstBills").innerText = data.gstBills || 0;
+          document.getElementById("gstAmount").innerText = "₹" + (data.gstAmount || 0);
+          document.getElementById("todayBills").innerText = data.repurchaseBills || 0;
+          document.getElementById("todayAmount").innerText = "₹" + (data.repurchaseAmount || 0);
+        }
       } catch (e) {
         console.log("Dashboard update skipped");
       }
@@ -1132,11 +1217,11 @@
           options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
         };
 
-        new Chart(document.getElementById("gstChart"), config);
-        new Chart(document.getElementById("salesChart"), config);
-        new Chart(document.getElementById("voucherChart"), config);
-        new Chart(document.getElementById("renewalChart"), config);
-        new Chart(document.getElementById("withoutGSTChart"), config);
+        if (document.getElementById("gstChart")) new Chart(document.getElementById("gstChart"), config);
+        if (document.getElementById("salesChart")) new Chart(document.getElementById("salesChart"), config);
+        if (document.getElementById("voucherChart")) new Chart(document.getElementById("voucherChart"), config);
+        if (document.getElementById("renewalChart")) new Chart(document.getElementById("renewalChart"), config);
+        if (document.getElementById("withoutGSTChart")) new Chart(document.getElementById("withoutGSTChart"), config);
       }, 500);
     }
   </script>
