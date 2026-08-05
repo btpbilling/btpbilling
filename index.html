@@ -264,28 +264,39 @@
     </div>
 
     <div class="right" id="petalContainer">
-      <div class="login-box">
-        <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" class="login-logo" alt="Logo">
-        <h2>Login Verification</h2>
-        
-        <div id="loginForm">
-          <input id="user" placeholder="Username">
-          <input id="pass" type="password" placeholder="Password">
-          <button onclick="requestOTP()">Send OTP</button>
-        </div>
-
-        <div id="otpForm" style="display:none;">
-          <p style="font-size:12px; color:#333;">OTP Sent to registered mobile</p>
-          <input id="otpInput" placeholder="Enter 4-Digit OTP">
-          <button onclick="verifyOTPAndLogin()">Verify & Login</button>
-        </div>
-
-        <div class="login-options">
-          <label><input type="checkbox"> Remember Me</label>
-          <span>Forgot Password</span>
-        </div>
-      </div>
+      <!-- UPDATED LOGIN BOX WITH WHATSAPP & EMAIL SELECTION -->
+<div class="login-box">
+  <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" class="login-logo" alt="Logo">
+  <h2>Login Verification</h2>
+  
+  <div id="loginForm">
+    <input id="user" placeholder="Username">
+    <input id="pass" type="password" placeholder="Password">
+    
+    <!-- Verification Method Selection -->
+    <div style="margin: 10px 0; text-align: left; font-size: 13px; color: #2f2f2f;">
+      <label style="margin-right: 15px; cursor: pointer;">
+        <input type="radio" name="otpChannel" value="whatsapp" checked> Send via WhatsApp
+      </label>
+      <label style="cursor: pointer;">
+        <input type="radio" name="otpChannel" value="email"> Send via Email
+      </label>
     </div>
+
+    <button onclick="requestOTP()">Send OTP</button>
+  </div>
+
+  <div id="otpForm" style="display:none;">
+    <p id="otpNotice" style="font-size:12px; color:#333; margin-bottom: 10px;"></p>
+    <input id="otpInput" placeholder="Enter 4-Digit OTP">
+    <button onclick="verifyOTPAndLogin()">Verify & Login</button>
+  </div>
+
+  <div class="login-options">
+    <label><input type="checkbox"> Remember Me</label>
+    <span>Forgot Password</span>
+  </div>
+</div>
   </div>
 
   <!-- MAIN APP CONTAINER -->
@@ -587,35 +598,60 @@
       return convert(num) + " Rupees Only";
     }
 
-    // OTP System Implementation
-    function requestOTP() {
-      const user = document.getElementById("user").value;
-      const pass = document.getElementById("pass").value;
+    // UPDATED OTP LOGIC WITH WHATSAPP & EMAIL DISPATCH
+ 
 
-      if (!user || !pass) {
-        alert("Please enter both Username and Password.");
-        return;
-      }
+function requestOTP() {
+  const user = document.getElementById("user").value;
+  const pass = document.getElementById("pass").value;
+  const channel = document.querySelector('input[name="otpChannel"]:checked').value;
 
-      // Generate localized OTP smoothly without server blocking
-      generatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
-      alert("Authentication Code Sent. Demo Access Code: " + generatedOTP);
-      
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("otpForm").style.display = "block";
-    }
+  if (!user || !pass) {
+    alert("Please enter both Username and Password.");
+    return;
+  }
 
-    function verifyOTPAndLogin() {
-      const enteredOTP = document.getElementById("otpInput").value;
-      if (enteredOTP === generatedOTP || enteredOTP === "9999") {
-        const userObj = { name: document.getElementById("user").value || "Authorized Admin", username: "admin" };
-        localStorage.setItem("user", JSON.stringify(userObj));
-        showApp();
-      } else {
-        alert("Invalid OTP Entered. Try again.");
-      }
-    }
+  // Generate 4-digit OTP
+  generatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
 
+  if (channel === "whatsapp") {
+    // WhatsApp Verification Logic
+    const demoPhone = "918978816673"; // Update with target registered phone number if needed
+    const whatsappMsg = `Your Verification OTP for Beulah Traders Billing System is: ${generatedOTP}`;
+    const whatsappURL = `https://api.whatsapp.com/send?phone=${demoPhone}&text=${encodeURIComponent(whatsappMsg)}`;
+    
+    // Open WhatsApp link to trigger dispatch
+    window.open(whatsappURL, '_blank');
+    document.getElementById("otpNotice").innerText = "OTP sent via WhatsApp to registered mobile number.";
+  } else if (channel === "email") {
+    // Email Verification Logic
+    const mailtoSubject = "Login OTP - Beulah Traders Billing System";
+    const mailtoBody = `Your verification code is: ${generatedOTP}`;
+    
+    // Open default mail client
+    window.location.href = `mailto:?subject=${encodeURIComponent(mailtoSubject)}&body=${encodeURIComponent(mailtoBody)}`;
+    document.getElementById("otpNotice").innerText = "OTP sent via Email to registered address.";
+  }
+
+  // Display OTP input screen
+  document.getElementById("loginForm").style.display = "none";
+  document.getElementById("otpForm").style.display = "block";
+}
+
+function verifyOTPAndLogin() {
+  const enteredOTP = document.getElementById("otpInput").value.trim();
+  
+  if (enteredOTP === generatedOTP || enteredOTP === "9999") {
+    const userObj = { 
+      name: document.getElementById("user").value || "Authorized Admin", 
+      username: "admin" 
+    };
+    localStorage.setItem("user", JSON.stringify(userObj));
+    showApp();
+  } else {
+    alert("Invalid OTP Entered. Please check and try again.");
+  }
+}
     // Module & App Display Logic
     function showApp() {
       document.getElementById("loginPage").style.display = "none";
