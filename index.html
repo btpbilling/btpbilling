@@ -2211,6 +2211,11 @@ color:#2f2f2f;}
 
   </div>
 
+  <input id="otp" placeholder="Enter OTP" style="display:none;">
+<button id="verifyBtn" onclick="verifyOTP()" style="display:none;">
+Verify OTP
+</button>
+
 </div>
 <!-- ===== APP ===== -->
 <div id="app" style="display:none;">
@@ -4507,12 +4512,28 @@ async function login(){
 
     if(data.status){
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data)
-      );
+  const otpRes = await fetch(
+WEBAPP +
+"?api=1&sendOTP=1&username=" +
+encodeURIComponent(username)
+);
 
-      showApp();
+const otpData = await otpRes.json();
+
+if(otpData.status){
+
+window.loginUser = data;
+
+document.getElementById("otp").style.display="block";
+document.getElementById("verifyBtn").style.display="block";
+
+alert("OTP Sent");
+
+}else{
+
+alert(otpData.message);
+
+}
 
     }else{
 
@@ -4527,6 +4548,42 @@ async function login(){
     alert("Login Failed");
 
   }
+
+}
+
+async function verifyOTP(){
+
+const otp =
+document.getElementById("otp").value;
+
+const username =
+document.getElementById("user").value;
+
+const res = await fetch(
+
+WEBAPP +
+"?api=1&verifyOTP=1" +
+"&username=" + encodeURIComponent(username) +
+"&otp=" + encodeURIComponent(otp)
+
+);
+
+const data = await res.json();
+
+if(data.status){
+
+localStorage.setItem(
+"user",
+JSON.stringify(window.loginUser)
+);
+
+showApp();
+
+}else{
+
+alert("Invalid OTP");
+
+}
 
 }
 
