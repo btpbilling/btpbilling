@@ -2188,55 +2188,61 @@ color:#2f2f2f;}
 
 </div>
 
-  <!-- RIGHT -->
-  <div class="right" id="petalContainer">
+<div class="login-box">
 
-    <div class="login-box">
+  <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx"
+       class="login-logo">
 
-      <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" class="login-logo">
+  <h2>Login</h2>
 
-      <h2>Login</h2>
+  <!-- Username -->
+  <input
+      id="user"
+      type="text"
+      placeholder="Username"
+      autocomplete="username">
 
-      <input id="user" placeholder="Username"><br>
-      <input id="pass" type="password" placeholder="Password"><br>
-      <input id="user" placeholder="Username">
+  <!-- Password -->
+  <input
+      id="pass"
+      type="password"
+      placeholder="Password"
+      autocomplete="current-password">
 
-<input id="pass"
-type="password"
-placeholder="Password">
+  <!-- OTP (Hidden Initially) -->
+  <input
+      id="otp"
+      type="text"
+      maxlength="6"
+      placeholder="Enter Email OTP"
+      style="display:none;">
 
-<input
-id="otp"
-type="text"
-maxlength="6"
-placeholder="Enter Email OTP"
-style="display:none">
+  <!-- Verify OTP Button (Hidden Initially) -->
+  <button
+      id="verifyBtn"
+      onclick="verifyOTP()"
+      style="display:none;background:#28a745;color:#fff;margin-top:10px;">
+      Verify OTP
+  </button>
 
-<button
-id="verifyBtn"
-style="display:none"
-onclick="verifyOTP()">
-Verify OTP
-</button>
+  <!-- Login Button -->
+  <button
+      id="loginBtn"
+      onclick="login()">
+      Login
+  </button>
 
-<button
-id="loginBtn"
-onclick="login()">
-Login
-</button>
+  <!-- Login Options -->
+  <div class="login-options">
+      <label>
+          <input type="checkbox">
+          Remember Me
+      </label>
 
-      <button onclick="login()">Login</button>
-
-      <div class="login-options">
-        <label><input type="checkbox"> Remember Me</label>
-        <span>Forgot Password</span>
-      </div>
-
-    </div>
-
+      <span style="cursor:pointer;">
+          Forgot Password
+      </span>
   </div>
-
-
 
 </div>
 <!-- ===== APP ===== -->
@@ -4542,22 +4548,29 @@ encodeURIComponent(username)
 
 const otpData = await otpRes.json();
 
-if(otpData.status){
+if (otpData.status) {
 
-window.loginUser = data;
+    window.loginUser = data;
 
-document.getElementById("otp").style.display="block";
-document.getElementById("verifyBtn").style.display="block";
+    // Show OTP field
+    document.getElementById("otp").style.display = "block";
 
-alert("OTP Sent");
+    // Show Verify OTP button
+    document.getElementById("verifyBtn").style.display = "block";
 
-}else{
+    // Hide Login button
+    document.getElementById("loginBtn").style.display = "none";
 
-alert(otpData.message);
+    // Focus on OTP input
+    document.getElementById("otp").focus();
 
-}
+    alert("OTP Sent. Please check your email.");
 
-    }else{
+} else {
+
+    alert(otpData.message);
+
+}}else{
 
       alert("Invalid Login");
 
@@ -4575,8 +4588,13 @@ alert(otpData.message);
 
 async function verifyOTP(){
 
-const otp =
-document.getElementById("otp").value;
+  const otp = document.getElementById("otp").value.trim();
+
+if (otp === "") {
+  alert("Please enter the OTP.");
+  return;
+}
+ 
 
 const username =
 document.getElementById("user").value;
@@ -4592,18 +4610,22 @@ WEBAPP +
 
 const data = await res.json();
 
-if(data.status){
+if (data.status) {
 
-localStorage.setItem(
-"user",
-JSON.stringify(window.loginUser)
-);
+    localStorage.setItem(
+        "user",
+        JSON.stringify(window.loginUser)
+    );
 
-showApp();
+    document.getElementById("otp").style.display = "none";
+    document.getElementById("verifyBtn").style.display = "none";
+    document.getElementById("loginBtn").style.display = "block";
 
-}else{
+    showApp();
 
-alert("Invalid OTP");
+} else {
+
+    alert(data.message || "Invalid OTP");
 
 }
 
