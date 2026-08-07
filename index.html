@@ -2211,10 +2211,24 @@ color:#2f2f2f;}
 
   </div>
 
-  <input id="otp" placeholder="Enter OTP" style="display:none;">
-<button id="verifyBtn" onclick="verifyOTP()" style="display:none;">
-Verify OTP
-</button>
+<div class="login-box">
+
+  <input id="user">
+  <input id="pass">
+
+  <input id="otp" style="display:none;" placeholder="Enter OTP">
+
+  <button id="verifyBtn"
+          style="display:none;"
+          onclick="verifyOTP()">
+    Verify OTP
+  </button>
+
+  <button onclick="login()">
+    Login
+  </button>
+
+</div>
 
 </div>
 <!-- ===== APP ===== -->
