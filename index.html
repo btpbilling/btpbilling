@@ -2199,6 +2199,31 @@ color:#2f2f2f;}
 
       <input id="user" placeholder="Username"><br>
       <input id="pass" type="password" placeholder="Password"><br>
+      <input id="user" placeholder="Username">
+
+<input id="pass"
+type="password"
+placeholder="Password">
+
+<input
+id="otp"
+type="text"
+maxlength="6"
+placeholder="Enter Email OTP"
+style="display:none">
+
+<button
+id="verifyBtn"
+style="display:none"
+onclick="verifyOTP()">
+Verify OTP
+</button>
+
+<button
+id="loginBtn"
+onclick="login()">
+Login
+</button>
 
       <button onclick="login()">Login</button>
 
@@ -2211,24 +2236,7 @@ color:#2f2f2f;}
 
   </div>
 
-<div class="login-box">
 
-  <input id="user">
-  <input id="pass">
-
-  <input id="otp" style="display:none;" placeholder="Enter OTP">
-
-  <button id="verifyBtn"
-          style="display:none;"
-          onclick="verifyOTP()">
-    Verify OTP
-  </button>
-
-  <button onclick="login()">
-    Login
-  </button>
-
-</div>
 
 </div>
 <!-- ===== APP ===== -->
