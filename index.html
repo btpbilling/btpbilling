@@ -547,25 +547,36 @@
     initCharts();
   };
 
-  // OTP VERIFICATION FLOW
-  async function requestOTP() {
-    let username = document.getElementById("user").value;
-    let password = document.getElementById("pass").value;
-    if (!username || !password) { alert("Please enter both username and password."); return; }
+async function requestOTP() {
+  const username = document.getElementById("usernameInput").value.trim();
+  const password = document.getElementById("passwordInput").value.trim();
 
-    try {
-      const res = await fetch(`${WEBAPP}?api=1&requestOTP=1&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
-      const data = await res.json();
-      if (data.status) {
-        currentOTPUsername = username;
-        document.getElementById("stepCredentials").style.display = "none";
-        document.getElementById("stepOTP").style.display = "block";
-        alert("OTP sent to registered email!");
-      } else {
-        alert(data.message || "Invalid credentials!");
-      }
-    } catch (err) { alert("Error requesting OTP."); }
+  if (!username || !password) {
+    alert("Please enter both username and password.");
+    return;
   }
+
+  // Ensure this URL is your deployed Apps Script Web App ending in /exec
+  const scriptUrl = "YOUR_APPS_SCRIPT_WEBAPP_URL_HERE"; 
+  
+  const targetUrl = `${scriptUrl}?api=1&requestOTP=1&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+
+  try {
+    const response = await fetch(targetUrl, { method: "GET" });
+    const result = await response.json();
+
+    if (result.status) {
+      alert(result.message);
+      // Show OTP Input field & Hide Password field
+      document.getElementById("otpSection").style.display = "block";
+    } else {
+      alert(result.message || "Invalid credentials or email not found.");
+    }
+  } catch (error) {
+    console.error("OTP Error:", error);
+    alert("Error requesting OTP. Ensure Web App deployment access is set to 'Anyone'.");
+  }
+}
 
   async function verifyOTPAndLogin() {
     let otp = document.getElementById("otpInput").value;
