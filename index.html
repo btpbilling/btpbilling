@@ -573,7 +573,7 @@
 const WEBAPP = "https://script.google.com/macros/s/AKfycbyUYcDPADDKor9rLnLGNBjt_0mMU9OycHzS8FYEnUXlBVaJC2X0sxbWnIyUKGut_W2z/exec";
 let currentOTPUsername = "";
 let chartInstances = {};
-let productList = []; // Global store for PRODUCT_MASTER data
+let productList = []; // Global master product array
 
 window.onload = function() {
   const sessionToken = sessionStorage.getItem("active_session");
@@ -591,7 +591,7 @@ window.onload = function() {
     }
   }
 
-  // Fetch product master data and initialize table rows
+  // Fetch product list and initialize dynamic table rows
   fetchProducts().then(() => {
     for (let i = 0; i < 3; i++) { addRow(); }
     for (let i = 0; i < 3; i++) { addGSTRow(); }
@@ -601,55 +601,62 @@ window.onload = function() {
 };
 
 // =====================================================
-// PRODUCT MASTER AUTOCOMPLETE & SEARCH LOGIC
+// DYNAMIC SEARCH & AUTOCOMPLETE FILTERING LOGIC
 // =====================================================
 
 async function fetchProducts() {
   try {
     let res = await fetch(`${WEBAPP}?api=1&products=1`);
     productList = await res.json();
-    populateDatalist();
   } catch(e) { 
     console.error("Error fetching product master:", e); 
   }
 }
 
-function populateDatalist() {
-  let datalist = document.getElementById("productListOptions");
-  if (!datalist) {
-    datalist = document.createElement("datalist");
-    datalist.id = "productListOptions";
-    document.body.appendChild(datalist);
-  }
-  
+// Dynamically updates the dropdown options based on character typing
+function handleProductSearch(input) {
+  let query = input.value.trim().toLowerCase();
+  let datalistId = input.getAttribute("list");
+  let datalist = document.getElementById(datalistId);
+
+  if (!datalist) return;
+
+  // Filter items matching input query
+  let filtered = productList.filter(p => {
+    let pName = String(p.name || "").toLowerCase();
+    return pName.includes(query);
+  });
+
+  // Re-render datalist with matching items
   datalist.innerHTML = "";
-  productList.forEach(item => {
+  filtered.forEach(item => {
     let option = document.createElement("option");
     option.value = item.name;
     datalist.appendChild(option);
   });
+
+  // If exact match chosen or clicked, select product details
+  onProductSelect(input);
 }
 
 function onProductSelect(input) {
   let selectedName = input.value.trim().toLowerCase();
   if (!selectedName) return;
 
-  // Search against PRODUCT_MASTER global array
-  let item = productList.find(p => String(p.name).trim().toLowerCase() === selectedName) ||
-             productList.find(p => String(p.name).trim().toLowerCase().includes(selectedName));
+  // Find exact product match from master list
+  let item = productList.find(p => String(p.name).trim().toLowerCase() === selectedName);
 
   if (item) {
     let row = input.closest("tr");
     
-    // Auto-fill form fields from PRODUCT_MASTER
-    row.querySelector(".product-search").value = item.name;
+    // Fill row fields automatically
     row.querySelector(".modelNo").value = item.modelNo || "";
     row.querySelector(".pmodel").value = item.productModel || "";
     row.querySelector(".hsn").value = item.hsn || "";
     row.querySelector(".gst").value = item.gst || 0;
     row.querySelector(".rate").value = item.rate || 0;
     
-    // Recalculate row amounts
+    // Auto-calculate totals
     calculateGSTRow(input);
   }
 }
@@ -665,7 +672,6 @@ function calculateGSTRow(elem) {
   let gross = qty * rate;
   row.querySelector(".gross").value = gross.toFixed(2);
 
-  // Telangana intra-state GST vs Inter-state IGST rule
   let isTelangana = (state === "telangana" || state === "");
   if (isTelangana) {
     let half = gstPct / 2;
@@ -930,11 +936,18 @@ function syncGSTToRenewal() {
 function addGSTRow() {
   let tbody = document.querySelector("#gstTable tbody");
   let rowCount = tbody.querySelectorAll("tr").length + 1;
+  let datalistId = "productListOptions_" + rowCount;
+  
+  // Create unique datalist for each row
+  let datalist = document.createElement("datalist");
+  datalist.id = datalistId;
+  document.body.appendChild(datalist);
+
   let tr = document.createElement("tr");
   tr.innerHTML = `
     <td>${rowCount}</td>
     <td>
-      <input class="product-search" list="productListOptions" placeholder="Search product..." oninput="onProductSelect(this)">
+      <input class="product-search" list="${datalistId}" placeholder="Search product..." oninput="handleProductSearch(this)">
     </td>
     <td><input class="modelNo" style="width:60px;"></td>
     <td><input class="pmodel" style="width:60px;"></td>
