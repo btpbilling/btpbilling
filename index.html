@@ -548,17 +548,23 @@
   };
 
 async function requestOTP() {
-  const username = document.getElementById("usernameInput").value.trim();
-  const password = document.getElementById("passwordInput").value.trim();
+  const userInputEl = document.getElementById("usernameInput") || document.getElementById("username");
+  const passInputEl = document.getElementById("passwordInput") || document.getElementById("password");
+
+  if (!userInputEl || !passInputEl) {
+    alert("HTML Error: Could not find username or password input elements. Please check input IDs in index.html.");
+    return;
+  }
+
+  const username = userInputEl.value.trim();
+  const password = passInputEl.value.trim();
 
   if (!username || !password) {
     alert("Please enter both username and password.");
     return;
   }
 
-  // Ensure this URL is your deployed Apps Script Web App ending in /exec
   const scriptUrl = "YOUR_APPS_SCRIPT_WEBAPP_URL_HERE"; 
-  
   const targetUrl = `${scriptUrl}?api=1&requestOTP=1&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
   try {
@@ -567,14 +573,14 @@ async function requestOTP() {
 
     if (result.status) {
       alert(result.message);
-      // Show OTP Input field & Hide Password field
-      document.getElementById("otpSection").style.display = "block";
+      const otpContainer = document.getElementById("otpSection") || document.getElementById("otpContainer");
+      if (otpContainer) otpContainer.style.display = "block";
     } else {
-      alert(result.message || "Invalid credentials or email not found.");
+      alert(result.message || "Invalid credentials or user not found.");
     }
   } catch (error) {
     console.error("OTP Error:", error);
-    alert("Error requesting OTP. Ensure Web App deployment access is set to 'Anyone'.");
+    alert("Error requesting OTP. Check browser console for details.");
   }
 }
 
