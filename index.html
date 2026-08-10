@@ -548,44 +548,34 @@
   };
 
 async function requestOTP() {
-  // Updated element lookup to match 'user' and 'pass'
-  const userInputEl = document.getElementById("user") || document.getElementById("usernameInput") || document.getElementById("username");
-  const passInputEl = document.getElementById("pass") || document.getElementById("passwordInput") || document.getElementById("password");
-
-  if (!userInputEl || !passInputEl) {
-    alert("HTML Error: Could not find username or password input elements. Please check input IDs in index.html.");
-    return;
-  }
+  const userInputEl = document.getElementById("user") || document.getElementById("username");
+  const passInputEl = document.getElementById("pass") || document.getElementById("password");
 
   const username = userInputEl.value.trim();
   const password = passInputEl.value.trim();
 
-  if (!username || !password) {
-    alert("Please enter both username and password.");
-    return;
-  }
-
-  // Update with your actual Google Apps Script Web App URL
-  const scriptUrl = WEBAPP; 
+  // Replace with your Google Apps Script URL
+  const scriptUrl = "YOUR_APPS_SCRIPT_WEB_APP_URL"; 
   const targetUrl = `${scriptUrl}?api=1&requestOTP=1&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
   try {
-    const response = await fetch(targetUrl, { method: "GET" });
+    const response = await fetch(targetUrl, {
+      method: "GET",
+      redirect: "follow" // Follow Google Script deployment redirects
+    });
+
     const result = await response.json();
 
     if (result.status) {
-      currentOTPUsername = username; // Store for OTP verification step
       alert(result.message || "OTP sent successfully!");
-      
-      // Hide login credentials step and show OTP input step
       document.getElementById("stepCredentials").style.display = "none";
       document.getElementById("stepOTP").style.display = "block";
     } else {
-      alert(result.message || "Invalid credentials or user not found.");
+      alert(result.message || "Invalid credentials.");
     }
   } catch (error) {
     console.error("OTP Error:", error);
-    alert("Error requesting OTP. Check browser console for details.");
+    alert("CORS or Network Error while requesting OTP.");
   }
 }
 
