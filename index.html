@@ -1,759 +1,5571 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>BTP Billing System | Beulah Traders Private Limited</title>
-  
   <link rel="sitemap" type="application/xml" title="Sitemap" href="https://btpbilling.github.io/btpbilling/sitemap.xml">
-  <meta name="description" content="BTP Billing System for GST Invoice, Without GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing.">
-  <meta name="keywords" content="BTP Billing, Beulah Traders, GST Billing, Repurchase Billing, Voucher, Renewal">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://btpbilling.github.io/btpbilling/">
 
-  <!-- Chart.js and html2pdf.js for Charts and PDF Generation -->
+<meta name="description"
+content="BTP Billing System for GST Invoice, Without GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing.">
+
+<meta name="keywords"
+content="BTP Billing, Beulah Traders, GST Billing, Repurchase Billing, Voucher, Renewal">
+<meta name="robots" content="index, follow">
+
+<link rel="canonical"
+href="https://btpbilling.github.io/btpbilling/">
+
+<meta property="og:title"
+content="BTP Billing System">
+
+<meta property="og:description"
+content="GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing System">
+
+<meta property="og:url"
+content="https://btpbilling.github.io/btpbilling/">
+<meta charset="UTF-8">
+ 
+
+<style>
+.profile{
+
+  width:165px;
+  height:165px;
+
+  border-radius:50%;
+
+  object-fit:cover;
+
+  margin:25px auto;
+
+  border:6px solid rgba(255,255,255,0.85);
+
+  box-shadow:
+
+  0 12px 35px rgba(255,182,193,0.35),
+
+  0 0 20px rgba(255,255,255,0.6);
+
+  transition:0.4s;
+
+  animation:
+  profileFloat 4s ease-in-out infinite;
+
+}
+
+@keyframes profileFloat{
+
+  0%{
+    transform:translateY(0px);
+  }
+
+  50%{
+    transform:translateY(-10px);
+  }
+
+  100%{
+    transform:translateY(0px);
+  }
+
+}
+.left h2{
+  margin-bottom:15px;
+}
+
+.left p{
+  margin:5px 0;
+}
+.profile:hover{
+  transform: scale(1.05);
+}
+
+.fade-text{
+  animation: fadeGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes fadeGlow{
+  0%{
+    opacity:0.6;
+    text-shadow:0 0 5px rgba(255,255,255,0.3);
+  }
+  100%{
+    opacity:1;
+    text-shadow:0 0 20px rgba(255,255,255,0.9);
+  }
+}
+
+/* COMPANY NAME */
+.company-name{
+  font-weight:bold;
+  letter-spacing:2px;
+
+  background: linear-gradient(90deg,#fff,#ffd6e0,#fff);
+  background-size:200%;
+
+  background-clip: text;              /* ✅ add this */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: shine 3s linear infinite;
+}
+
+@keyframes shine{
+  0%{background-position:0%;}
+  100%{background-position:200%;}
+}
+/* ===== BASE ===== */
+ 
+
+/* ===== LOGIN ===== */
+.login{
+
+  display:flex;
+
+  width:100%;
+
+  height:100vh;
+
+  overflow:hidden;
+
+  position:relative;
+
+  background:#fff;
+
+}
+
+/* LEFT PROFILE */
+.left{
+
+  width:50%;
+
+  position:relative;
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  overflow:hidden;
+
+  background:
+  linear-gradient(
+    135deg,
+    #fff7f8 0%,
+    #ffeef1 35%,
+    #fff1eb 100%
+  );
+
+}
+/* 🌸 FLOWER IMAGE */
+.left::after{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:url(
+  'https://images.unsplash.com/photo-1526045478516-99145907023c?q=80&w=1200'
+  )
+
+  no-repeat center bottom;
+
+  background-size:cover;
+
+  opacity:0.16;
+
+  z-index:0;
+
+  animation:
+  flowerZoom 18s ease-in-out infinite alternate;
+
+}
+
+@keyframes flowerZoom{
+
+  from{
+    transform:scale(1);
+  }
+
+  to{
+    transform:scale(1.06);
+  }
+
+}
+
+.left::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+  linear-gradient(
+
+    to bottom,
+
+    rgba(15, 2, 102, 0.85),
+
+    rgba(106,90,205,0.5),
+
+    rgba(106,90,205,0.85)
+
+  );
+
+  z-index:1;
+
+}
+
+/* ✨ CENTER CONTENT */
+.left-content{
+
+  position:relative;
+
+  z-index:5;
+
+  width:420px;
+
+  padding:45px 35px;
+
+  border-radius:38px;
+
+  background:
+  rgba(255,255,255,0.32);
+
+  backdrop-filter:blur(20px);
+
+  -webkit-backdrop-filter:blur(20px);
+
+  border:
+  1px solid rgba(255,255,255,0.45);
+
+  box-shadow:
+
+  0 15px 40px rgba(255,182,193,0.18),
+
+  inset 0 1px 1px rgba(255,255,255,0.45);
+
+  text-align:center;
+
+  overflow:hidden;
+
+}
+@keyframes softGlow{
+  0%{
+    opacity:0.7;
+    text-shadow:0 0 5px rgba(255,255,255,0.2);
+  }
+  100%{
+    opacity:1;
+    text-shadow:0 0 15px rgba(255,255,255,0.6);
+  }
+}
+
+.left-content::before{
+
+  content:"";
+
+  position:absolute;
+
+  width:250px;
+  height:250px;
+
+  background:
+  rgba(243, 9, 9, 0.18);
+
+  border-radius:50%;
+
+  top:-120px;
+  right:-100px;
+
+  filter:blur(40px);
+
+}
+/* TEXT STYLE */
+.left-content h2{
+  font-weight:500;
+  margin-bottom:10px;
+}
+
+.left-content h1{
+  font-size:22px;
+  letter-spacing:1px;
+}
+
+.left-content p{
+  font-size:14px;
+  margin-top:15px;
+  opacity:0.9;
+}
+.left h2{
+  font-size:22px;
+  line-height:1.6;
+}
+
+.left p{
+  letter-spacing:1px;
+}
+
+ .left-card{
+  background: rgba(238, 176, 6, 0.08);
+
+backdrop-filter: blur(10px);
+
+-webkit-backdrop-filter: blur(10px);
+
+border: 1px solid rgba(27, 26, 26, 0.15);
+  padding: 40px;
+  border-radius: 20px;
+
+  box-shadow: 0 8px 30px rgba(241, 5, 5, 0.2);
+
+   text-align:center;
+   position: relative;
+  max-width: 400px;
+  
+}
+.tilt{
+  transition: transform 0.2s ease;
+  transform-style: preserve-3d;
+}
+/* RIGHT FLORAL */
+.right{
+
+  width:50%;
+
+  position:relative;
+
+  overflow:hidden;
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  background:url(
+  "https://images.unsplash.com/photo-1519681393784-d120267933ba"
+  )
+
+  no-repeat center center;
+
+  background-size:cover;
+
+}
+.petal{
+  position:absolute;width:10px;height:10px;border-radius:50%;
+  background:#ff6f91; animation:fall linear infinite;
+}
+@keyframes fall{
+  0%{transform:translateY(-20px)}
+  100%{transform:translateY(100vh)}
+}
+
+.person-name{
+
+  font-size:30px;
+
+  font-weight:900;
+
+  color:#111;
+
+  margin-top:10px;
+
+  letter-spacing:1px;
+
+}
+
+.contact{
+
+  margin-top:18px;
+
+  font-size:17px;
+
+  font-weight:700;
+
+  color:#2f2f2f;
+
+  line-height:32px;
+
+}
+
+/* GLASS LOGIN BOX */
+.login-box{
+
+  width:340px;
+
+  padding:35px;
+
+  border-radius:28px;
+
+  background:
+  rgba(255,255,255,0.15);
+
+  backdrop-filter:blur(18px);
+
+  border:
+  1px solid rgba(255,255,255,0.18);
+
+  box-shadow:
+  0 15px 40px rgba(0,0,0,0.25);
+
+  text-align:center;
+
+  color:#2f2f2f;
+
+}
+.login-logo{
+  width:120px;display:block;margin:0 auto 10px;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.2));
+}
+.login-box input{
+
+  width:100%;
+
+  padding:12px;
+
+  margin:12px 0;
+
+  border:none;
+
+  border-radius:10px;
+
+  background:
+  rgba(255,255,255,0.75);
+
+  color:#000;
+
+  outline:none;
+
+  font-size:14px;
+
+  box-sizing:border-box;
+
+}
+
+.login-box input::placeholder{
+  color:#eee;
+}
+.login-box button{
+
+  width:100%;
+
+  padding:13px;
+
+  border:none;
+
+  border-radius:30px;
+
+  background:white;
+
+  color:#111;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:0.3s;
+
+}
+
+.login-options{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#2f2f2f;
+}
+
+.login-container{
+  display:flex;
+  height:100vh;
+}
+.quote{
+
+  margin-top:25px;
+
+  font-size:16px;
+
+  font-style:italic;
+
+  font-weight:700;
+
+  color:#555;
+
+}
+@keyframes fadeQuote{
+  0%{
+    
+    transform:translateY(5px);
+  }
+  100%{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+/* ===== APP ===== */
+.sidebar{
+
+  width:230px;
+  height:100vh;
+
+  position:fixed;
+  top:0;
+  left:0;
+
+  z-index:999;
+
+  padding:25px 18px;
+
+  background:
+  linear-gradient(
+    180deg,
+    #f86370 0%,
+    #ffe9e4 45%,
+    #f75700 100%
+  );
+
+  border-right:
+  1px solid rgba(255,255,255,0.6);
+
+  box-shadow:
+  8px 0 30px rgba(255,182,193,0.15);
+
+  overflow:hidden;
+
+}
+ 
+.sidebar-anim{
+  pointer-events:none;   /* 🔥 VERY IMPORTANT */
+}
+/* SOFT LIGHT */
+.sidebar::before{
+  content:"";
+  position:absolute;
+  width:200px;
+  height:200px;
+  background:radial-gradient(circle, rgba(235, 215, 215, 0.3), transparent 70%);
+  top:20%;
+  left:10%;
+  filter:blur(50px);
+}
+/* ANIMATION CONTAINER */
+
+/* BUBBLES */
+.sidebar-anim span{
+  position:absolute;
+  bottom:-50px;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+
+  background:rgba(245, 25, 73, 0.25);
+  box-shadow:0 0 10px rgba(247, 58, 83, 0.4);
+
+  animation:rise linear infinite;
+}
+
+@keyframes rise{
+  0%{
+    transform:translateY(0) scale(0.5);
+    opacity:0;
+  }
+  50%{
+    opacity:1;
+  }
+  100%{
+    transform:translateY(-110vh) scale(1.2);
+    opacity:0;
+  }
+}
+@keyframes fall{
+  0%{
+    transform:translateY(0) rotate(0deg);
+  }
+  100%{
+    transform:translateY(100vh) rotate(360deg);
+  }
+}
+
+.sidebar h2{
+  font-size:20px;
+  line-height:1.6;
+  text-align:center;
+  font-weight:800;
+
+  margin-bottom:35px;
+  padding:20px 10px;
+
+  color:rgba(248, 13, 91, 0.959);
+
+  border-radius:20px;
+
+  background:rgba(247, 146, 193, 0.12);
+
+  backdrop-filter:blur(12px);
+
+  border:1px solid rgba(248, 118, 140, 0.18);
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,0.12),
+    inset 0 0 20px rgba(255,255,255,0.08);
+
+  letter-spacing:1px;
+
+  animation:glowText 4s ease-in-out infinite alternate;
+}
+
+@keyframes glowText{
+  0%{
+    text-shadow:
+      0 0 5px rgba(255,255,255,0.4),
+      0 0 10px rgba(255,255,255,0.2);
+  }
+
+  100%{
+    text-shadow:
+      0 0 12px rgba(41, 38, 38, 0.9),
+      0 0 25px rgba(255,255,255,0.5);
+  }
+}
+
+/* MENU ITEMS */
+.menu-item{
+
+  display:block;
+
+  width:100%;
+
+  padding:14px 18px;
+
+  border-radius:14px;
+
+  margin:12px 0;
+
+  cursor:pointer;
+
+  transition:0.35s;
+
+  user-select:none;
+
+  font-size:15px;
+
+  letter-spacing:0.5px;
+
+  font-weight:700;
+
+  color:#444;
+
+}
+
+.menu-item.active{
+
+  background:
+  linear-gradient(
+    135deg,
+    #ff9fb2,
+    #ffb38a
+  );
+
+  color:white;
+
+  font-weight:800;
+
+  box-shadow:
+  0 10px 20px rgba(255,182,193,0.28);
+
+}
+
+ 
+.main{
+  margin-left:240px;
+  min-height:100vh;
+
+  padding:15px 20px;
+  position:relative;
+  z-index:5;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,245,247,0.95),
+      rgba(244,247,251,0.95)
+    );
+
+  position:relative;
+  overflow:hidden;
+}
+
+.main::before{
+  content:"";
+
+  position:absolute;
+  width:500px;
+  height:500px;
+
+  background:radial-gradient(
+    circle,
+    rgba(255,117,140,0.18),
+    transparent 70%
+    
+  );
+  pointer-events:none;
+  top:-120px;
+  right:-120px;
+
+  border-radius:50%;
+
+  animation:floatGlow 8s ease-in-out infinite alternate;
+}
+
+.main::after{
+  content:"";
+
+  position:absolute;
+  width:400px;
+  height:400px;
+
+  background:radial-gradient(
+    circle,
+    rgba(255,255,255,0.45),
+    transparent 70%
+  );
+
+  bottom:-100px;
+  left:-100px;
+
+  border-radius:50%;
+  pointer-events:none;
+  animation:floatGlow2 10s ease-in-out infinite alternate;
+}
+
+@keyframes floatGlow{
+  from{
+    transform:translateY(0px) translateX(0px);
+  }
+
+  to{
+    transform:translateY(30px) translateX(-30px);
+  }
+}
+
+@keyframes floatGlow2{
+  from{
+    transform:translateY(0px) translateX(0px);
+  }
+
+  to{
+    transform:translateY(-25px) translateX(25px);
+  }
+}
+
+/* TOPBAR PROFILE */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  background:white;
+  padding:12px 20px;
+  border-radius:12px;
+  margin-top:0;
+  box-shadow:0 5px 20px rgba(0,0,0,0.08);
+  margin-bottom:20px;
+}
+
+/* LEFT TITLE */
+.topbar .title{
+  font-size:18px;
+  font-weight:600;
+  color:#333;
+}
+
+/* RIGHT PROFILE */
+.topbar .user{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.topbar .user span{
+  font-weight:600;
+}
+
+.topbar img{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:2px solid #ff758c;
+
+  box-shadow:0 0 10px rgba(255,117,140,0.6);
+}
+
+.sub-text{
+
+  font-size:18px;
+
+  font-weight:700;
+
+  color:#666;
+
+  letter-spacing:2px;
+
+  margin-bottom:22px;
+
+}
+/* CARDS */
+
+.card{
+  background:rgba(255,255,255,0.72);
+
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+
+  border:1px solid rgba(255,255,255,0.28);
+
+  padding:25px;
+
+  border-radius:24px;
+
+  box-shadow:
+    0 10px 35px rgba(0,0,0,0.08),
+    inset 0 0 15px rgba(255,255,255,0.2);
+
+  margin-top:10px;
+  position:relative;
+  z-index:10;
+  animation:fadeIn 0.6s ease;
+}
+
+h2{
+  text-align:center;
+  margin-bottom:20px;
+  font-weight:700;
+  color:#333;
+}
+
+/* TABLE */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+th{
+  background:#ff758c;
+  color:#2f2f2f;
+  padding:10px;
+}
+
+td{
+  padding:8px;
+  border-bottom:1px solid #eee;
+}
+
+tr:hover{
+  background:#f9f9f9;
+}
+
+/* BUTTON */
+button{
+  padding:10px 15px;
+  border:none;
+  border-radius:8px;
+  background:#ff758c;
+  color:#2f2f2f;
+  cursor:pointer;
+  transition:0.3s;
+  opacity:1 !important;
+  pointer-events:auto !important;
+}
+
+button:hover{
+  background:#ff4d6d;
+}
+
+#billingPage input{
+  display:inline-block;
+  margin-bottom:10px;
+}
+
+body{
+
+  margin:0;
+
+  padding:0;
+
+  overflow-x:hidden;
+
+  font-family:
+  "Segoe UI",
+  sans-serif;
+
+  background:#e9839c;
+
+}
+
+@keyframes gradientMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+.particles{
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.particles span{
+
+  position:absolute;
+
+  width:10px;
+  height:10px;
+
+  border-radius:50%;
+
+  background:
+  rgba(255,182,193,0.7);
+
+  box-shadow:
+  0 0 12px rgba(255,182,193,0.45);
+
+  animation:
+  floatUp linear infinite;
+
+}
+
+@keyframes floatUp{
+  from{
+    transform: translateY(100vh) scale(0);
+    opacity:0;
+  }
+  to{
+    transform: translateY(-10vh) scale(1);
+    opacity:1;
+  }
+}
+
+.cmd{
+
+  font-size:22px;
+
+  font-weight:800;
+
+  color:#444;
+
+  margin-top:15px;
+
+}
+
+.cmd-card{
+
+  width:420px;
+
+  padding:30px;
+
+  border-radius:25px;
+
+  background:rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(10px);
+
+  -webkit-backdrop-filter:blur(10px);
+
+  border:1px solid rgba(255,255,255,0.15);
+
+  box-shadow:
+  0 8px 32px rgba(0,0,0,0.2);
+
+  position:relative;
+
+  z-index:2;
+
+}
+
+.cmd-card img{
+
+  opacity:1 !important;
+
+}
+
+.cmd-name{
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 5px;
+}
+
+.contact{
+
+  margin-top:18px;
+
+  font-size:16px;
+
+  font-weight:700;
+
+  color:#444;
+
+  line-height:32px;
+
+}
+
+input{
+  padding:10px;
+  margin:8px 5px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  outline:none;
+  opacity:1 !important;
+  background:#fff !important;
+  color:#000 !important;
+}
+
+input:focus{
+  border-color:#ff758c;
+  box-shadow:0 0 5px rgba(255,117,140,0.4);
+}
+.menu-item{
+  font-size:14px;
+  font-weight:500;
+}
+.menu-item:last-child:hover{
+  background:#ff9d4d;
+  color:#2f2f2f;
+}
+
+/* GST TABLE FIX (NO SCROLL) */
+#gstTable{
+  width:100%;
+  table-layout:fixed;
+  border-collapse:collapse;
+  min-width:1250px;
+
+}
+
+#gstTable th{
+  font-size:12px;
+  padding:8px 4px;
+  white-space:normal;
+}
+
+#gstTable td{
+  padding-top:10px;
+  padding-bottom:10px;
+}
+
+
+#gstTable input{
+  width:100%;
+  height:38px;
+  font-size:12px;
+  padding:6px;
+  box-sizing:border-box;
+  border-radius:8px;
+  width:100%;
+  padding:4px;
+  font-size:12px;
+}
+
+.product-search{
+  width:100%;
+}
+
+.main-content,
+.card,
+#gspage{
+  overflow-x:hidden !important;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+#gstTable tr{
+  height:60px;
+}
+
+canvas{
+   width:100% !important;
+  height:220px !important;
+}
+
+#gstTable th,
+#gstTable td{
+  padding:6px;
+  text-align:center;
+  word-break:break-word;
+}
+
+ 
+/* Make some columns smaller */
+#gstTable th:nth-child(1),
+#gstTable td:nth-child(1){
+  width:30px;
+}
+
+#gstTable th:nth-child(6),
+#gstTable td:nth-child(6),
+#gstTable th:nth-child(7),
+#gstTable td:nth-child(7){
+  width:60px;
+}
+
+#gstTable th:nth-child(9),
+#gstTable td:nth-child(9){
+  width:50px;
+}
+
+#gstTable input:focus{
+  border:2px solid #ff6b9d;
+  box-shadow:0 0 10px rgba(255,107,157,0.25);
+  outline:none;
+}
+
+/* GST TOTAL SECTION */
+
+#gspage table input,
+#gstPage table input{
+
+  width:100%;
+  min-height:42px;
+
+  font-size:14px;
+
+  padding:10px 14px;
+
+  border-radius:10px;
+
+  box-sizing:border-box;
+
+}
+
+/* AMOUNT IN WORDS */
+
+#gstWords{
+
+  width:90% !important;
+
+  min-height:52px;
+
+  font-size:15px;
+
+  font-weight:600;
+
+  white-space:normal;
+
+  overflow:visible;
+
+  text-overflow:unset;
+
+}
+
+/* TOTAL TABLE */
+
+#gstPage table{
+
+  table-layout:auto;
+
+}
+
+/* FINAL TOTAL SECTION */
+
+#gstPage td{
+
+  vertical-align:middle;
+
+}
+
+/* BETTER LOOK */
+
+#gstPage{
+
+  overflow-x:auto;
+
+}
+ 
+
+.product-search{
+  width:100%;
+}
+
+.main-content,
+.card,
+#gspage{
+  overflow-x:hidden !important;
+}
+
+ 
+.user{
+  position:relative;
+  cursor:pointer;
+}
+
+.profile-box img{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+}
+
+/* DROPDOWN */
+.dropdown{
+  position:absolute;
+  top:60px;
+  right:0;
+
+  width:260px;
+
+  background:white;
+  border-radius:18px;
+
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+
+  overflow:hidden;
+
+  opacity:0;
+  visibility:hidden;
+
+  transform:translateY(-10px);
+
+  transition:0.35s;
+
+  z-index:9999;
+}
+
+ .withoutAmount{
+    text-align:right;
+    font-weight:600;
+}
+.dropdown div:hover{
+  background:#ff758c;
+color:#2f2f2f;}
+
+/* PROFILE */
+.profile-box img{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  border:3px solid #ff758c;
+  cursor:pointer;
+}
+
+ 
+.dropdown.show{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+}
+
+.dropdown-top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  padding:18px;
+  background:linear-gradient(45deg,#ff758c,#ff7eb3);
+
+ color:#2f2f2f; 
+}
+
+.dropdown-top img{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  border:3px solid white;
+}
+
+.dropdown-top h4{
+  margin:0;
+  font-size:16px;
+}
+
+.dropdown-top p{
+  margin:0;
+  font-size:12px;
+}
+
+/* ITEMS */
+.drop-item{
+  padding:14px 18px;
+  cursor:pointer;
+  transition:0.3s;
+  font-size:15px;
+}
+
+.drop-item:hover{
+  background:#ff758c;
+  color:#2f2f2f;
+}
+
+.logout-btn{
+  color:red;
+}
+
+/* POPUPS */
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+
+  display:none;
+  justify-content:center;
+  align-items:center;
+
+  z-index:99999;
+}
+
+.popup-box{
+  width:400px;
+  background:white;
+  border-radius:20px;
+  padding:30px;
+  position:relative;
+
+  animation:popupAnim 0.3s ease;
+}
+
+@keyframes popupAnim{
+  from{
+    transform:translateY(-30px);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+
+.close-btn{
+  position:absolute;
+  right:20px;
+  top:15px;
+  font-size:28px;
+  cursor:pointer;
+}
+
+.popup-box h2{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.popup-box input{
+  width:100%;
+  padding:12px;
+  margin-bottom:15px;
+
+  border-radius:10px;
+  border:1px solid #ddd;
+}
+
+.popup-box button{
+  width:100%;
+  padding:12px;
+  border:none;
+
+  background:#ff758c;
+  color:#2f2f2f;
+
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.profile-center{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.profile-center img{
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  border:4px solid #ff758c;
+}
+
+.dashboardCards{
+  width:100%;
+  display:flex;
+  gap:20px;
+  margin-bottom:25px;
+  flex-wrap:nowrap;
+}
+
+.small-card{
+   flex:1 1 33%;
+  background:#fff;
+  border-radius:20px;
+  padding:25px;
+  min-height:220px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.08);
+  overflow:hidden;
+}
+
+.small-card h3{
+  font-size:18px;
+  margin-bottom:20px;
+  color:#222;
+}
+
+.small-card p{
+  font-size:34px;
+  font-weight:bold;
+  color:#ff5c8a;
+}
+
+.small-card canvas{
+  width:100% !important;
+  height:220px !important;
+  display:block;
+}
+
+.company-brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+
+  padding:16px;
+
+  border-radius:22px;
+
+  background:rgba(255,255,255,0.14);
+
+  backdrop-filter:blur(12px);
+
+  border:1px solid rgba(255,255,255,0.2);
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.08),
+    inset 0 0 15px rgba(255,255,255,0.08);
+
+  margin-bottom:30px;
+
+  animation:brandFloat 4s ease-in-out infinite alternate;
+}
+
+.welcome{
+
+  font-size:42px;
+
+  font-weight:900;
+
+  color:#2d2d2d;
+
+  margin-bottom:8px;
+
+}
+
+.company-logo-box{
+
+  width:210px;
+
+  margin:10px auto 30px;
+
+  padding:22px 18px;
+
+  border-radius:28px;
+
+  background:
+  rgba(255,255,255,0.55);
+
+  backdrop-filter:blur(16px);
+
+  border:
+  1px solid rgba(255,255,255,0.65);
+
+  box-shadow:
+  0 12px 30px rgba(255,182,193,0.18);
+
+}
+
+.company-logo{
+
+  width:100%;
+
+  height:100%;
+
+  object-fit:cover;
+
+  border-radius:50%;
+
+}
+.company-logo-box h2{
+
+  margin-top:12px;
+
+  font-size:24px;
+
+  font-weight:900;
+
+  line-height:1.5;
+
+  letter-spacing:1px;
+
+  text-transform:uppercase;
+
+  color:#7a1846;
+
+  text-shadow:
+    0 2px 8px rgba(255,255,255,0.4);
+
+}
+.company-logo-box h2 span{
+
+  display:block;
+
+  font-size:17px;
+
+  letter-spacing:3px;
+
+  font-weight:700;
+
+  margin-top:6px;
+
+  color:#a32963;
+
+}
+.company-text h2{
+  margin:0;
+
+  font-size:20px;
+  font-weight:800;
+
+  color:#2f2f2f;
+
+  letter-spacing:1px;
+
+  line-height:1.2;
+
+  text-shadow:
+    0 0 10px rgba(255,255,255,0.4);
+}
+
+.company-text p{
+  margin-top:4px;
+
+  color:rgba(255,255,255,0.9);
+
+  font-size:12px;
+
+  letter-spacing:3px;
+
+  font-weight:600;
+}
+
+@keyframes brandFloat{
+
+  from{
+    transform:translateY(0px);
+  }
+
+  to{
+    transform:translateY(6px);
+  }
+
+}
+
+.company-title{
+
+  font-size:38px;
+
+  font-weight:900;
+
+  letter-spacing:1px;
+
+  color:#222;
+
+  margin-top:10px;
+
+  text-transform:uppercase;
+
+  line-height:1.4;
+
+}
+
+.page-heading-wrapper{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.page-heading{
+
+  padding:14px 45px;
+
+  border-radius:18px;
+
+  background:
+  linear-gradient(
+    135deg,
+    rgba(255,255,255,0.95),
+    rgba(255,240,245,0.95)
+  );
+
+  color:#ff4f81;
+
+  font-size:34px;
+  font-weight:800;
+
+  letter-spacing:1px;
+
+  box-shadow:
+    0 10px 30px rgba(255,105,135,0.18),
+    inset 0 0 12px rgba(255,255,255,0.6);
+
+  border:1px solid rgba(255,255,255,0.4);
+
+  backdrop-filter:blur(12px);
+
+  text-transform:uppercase;
+
+  animation:headingGlow 3s ease-in-out infinite alternate;
+
+  position:relative;
+  overflow:hidden;
+}
+
+.page-heading::before{
+  content:"";
+
+  position:absolute;
+
+  width:120px;
+  height:200%;
+
+  background:
+  rgba(255,255,255,0.35);
+
+  top:-50%;
+  left:-140px;
+
+  transform:rotate(25deg);
+
+  animation:shineMove 4s linear infinite;
+}
+
+@keyframes shineMove{
+
+  0%{
+    left:-140px;
+  }
+
+  100%{
+    left:120%;
+  }
+
+}
+
+@keyframes headingGlow{
+
+  from{
+    transform:translateY(0px);
+    box-shadow:
+      0 10px 25px rgba(255,105,135,0.18);
+  }
+
+  to{
+    transform:translateY(4px);
+    box-shadow:
+      0 18px 40px rgba(255,105,135,0.28);
+  }
+
+}
+
+.product-list{
+
+  position:absolute;
+  background:#fff;
+  width:250px;
+  max-height:200px;
+  overflow-y:auto;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.15);
+  z-index:9999;
+  margin-top:5px;
+
+}
+
+.product-item{
+
+  padding:10px;
+  cursor:pointer;
+  font-size:14px;
+
+}
+
+.product-item:hover{
+
+  background:#ffe3ec;
+
+}
+
+.bank-box{
+
+  background:#fff7fb;
+
+  border:2px solid #ffd2e1;
+
+  border-radius:16px;
+
+  padding:15px;
+
+  margin-top:15px;
+
+  box-shadow:0 4px 12px rgba(255,105,135,0.12);
+
+}
+
+.bank-box h3{
+
+  color:#ff4f81;
+
+  margin-bottom:10px;
+
+}
+
+.grid2{
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:15px;
+
+}
+
+.checkGrid{
+
+  display:flex;
+
+  gap:25px;
+
+  flex-wrap:wrap;
+
+  margin-top:10px;
+
+}
+
+.checkGrid label{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  font-weight:600;
+
+}
+
+#renewalPage input,
+#renewalPage textarea{
+
+  width:100%;
+
+  padding:10px;
+
+  border-radius:10px;
+
+  border:1px solid #ccc;
+
+  box-sizing:border-box;
+
+}
+
+#renewalPage textarea{
+
+  min-height:100px;
+
+}
+
+.main{
+
+  position:relative;
+
+  z-index:1;
+
+}
+
+.card{
+
+  position:relative;
+
+  z-index:10;
+
+}
+
+/* ===================================== */
+/* WITHOUT GST PAGE */
+/* ===================================== */
+
+#withoutGSTPage{
+
+  width:100%;
+  box-sizing:border-box;
+
+  background:#fff0f5;
+
+  border-radius:20px;
+
+  padding:25px;
+
+  margin-top:20px;
+
+}
+
+/* PAGE TITLE */
+
+#withoutGSTPage h2{
+
+  text-align:center;
+
+  font-size:34px;
+
+  font-weight:800;
+
+  margin-bottom:30px;
+
+  color:#222;
+
+}
+
+/* ===================================== */
+/* CUSTOMER DETAILS */
+/* ===================================== */
+
+.withoutGSTForm{
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(2,1fr);
+
+  gap:18px 30px;
+
+  margin-bottom:25px;
+
+}
+
+.withoutGSTForm .field{
+
+  display:flex;
+
+  flex-direction:column;
+
+}
+
+.withoutGSTForm label{
+
+  font-size:14px;
+
+  font-weight:700;
+
+  color:#333;
+
+  margin-bottom:6px;
+
+}
+
+.withoutGSTForm input{
+
+  width:100%;
+
+  height:45px;
+
+  border:1px solid #dcdcdc;
+
+  border-radius:10px;
+
+  padding:0 12px;
+
+  font-size:14px;
+
+  box-sizing:border-box;
+
+  background:#fff;
+
+}
+
+/* ===================================== */
+/* PAYMENT MODE */
+/* ===================================== */
+
+.paymentGrid{
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:25px;
+
+  margin:20px 0 25px;
+
+}
+
+.paymentGrid label{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  font-weight:600;
+
+  cursor:pointer;
+
+}
+
+.paymentGrid input{
+
+  width:18px;
+
+  height:18px;
+
+}
+
+/* ===================================== */
+/* PRODUCT TABLE */
+/* ===================================== */
+#withoutGSTTable{
+  width:100%;
+  border-collapse:collapse;
+}
+
+#withoutGSTTable th{
+  padding:12px;
+  text-align:center;
+}
+
+#withoutGSTTable td{
+  padding:5px;
+}
+
+#withoutGSTTable input{
+  width:100%;
+  box-sizing:border-box;
+}
+
+#withoutGSTTable tfoot td{
+  font-weight:bold;
+}
+
+#withoutGSTTable th:nth-child(1),
+#withoutGSTTable td:nth-child(1){
+    width:60px;
+    min-width:60px;
+    text-align:center;
+}
+
+#withoutGSTTable th:nth-child(5),
+#withoutGSTTable td:nth-child(5){
+    width:100px;
+}
+
+
+#withoutGSTTable input{
+
+  width:100%;
+
+  height:40px;
+
+  border:none;
+
+  outline:none;
+
+  padding:8px;
+
+  font-size:13px;
+
+  box-sizing:border-box;
+
+}
+
+/* COLUMN WIDTHS */
+
+#withoutGSTTable th:nth-child(1){
+  width:22%;
+}
+
+#withoutGSTTable th:nth-child(2){
+  width:15%;
+}
+
+#withoutGSTTable th:nth-child(3){
+  width:15%;
+}
+
+#withoutGSTTable th:nth-child(4){
+  width:12%;
+}
+
+#withoutGSTTable th:nth-child(5){
+  width:10%;
+}
+
+#withoutGSTTable th:nth-child(6){
+  width:13%;
+}
+
+#withoutGSTTable th:nth-child(7){
+  width:13%;
+}
+
+/* ===================================== */
+/* ADD PRODUCT BUTTON */
+/* ===================================== */
+
+.addProductBtn{
+
+  width:100%;
+
+  margin-top:15px;
+
+  background:#f06277;
+
+  color:white;
+
+  border:none;
+
+  border-radius:10px;
+
+  padding:12px;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+}
+
+/* ===================================== */
+/* TOTAL SECTION */
+/* ===================================== */
+
+.withoutGSTTotals{
+
+  margin-top:30px;
+
+  display:grid;
+
+  grid-template-columns:
+  2fr 1fr 1fr;
+
+  gap:20px;
+
+}
+
+.withoutGSTTotals .field{
+
+  display:flex;
+
+  flex-direction:column;
+
+}
+
+.withoutGSTTotals label{
+
+  font-weight:700;
+
+  margin-bottom:6px;
+
+}
+
+.withoutGSTTotals input{
+
+  height:45px;
+
+  border:1px solid #dcdcdc;
+
+  border-radius:10px;
+
+  padding:0 12px;
+
+  font-size:14px;
+
+}
+
+/* ===================================== */
+/* GENERATE BUTTON */
+/* ===================================== */
+
+.generateBtn{
+
+  width:250px;
+
+  height:50px;
+
+  background:#28a745;
+
+  color:white;
+
+  border:none;
+
+  border-radius:12px;
+
+  font-size:16px;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  margin-top:30px;
+
+}
+
+.generateBtn:hover{
+
+  background:#218838;
+
+}
+
+/* ===================================== */
+/* MOBILE */
+/* ===================================== */
+
+@media(max-width:900px){
+
+  .withoutGSTForm{
+
+    grid-template-columns:1fr;
+
+  }
+
+  .withoutGSTTotals{
+
+    grid-template-columns:1fr;
+
+  }
+
+}
+
+</style>
+<!-- ✅ ADD CHART JS HERE (ONLY ONCE) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <style>
-    * { box-sizing: border-box; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
-    body { margin: 0; padding: 0; background: #e9839c; overflow-x: hidden; }
-
-    /* Particles & Animations */
-    .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 0; }
-    .particles span { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: rgba(255,182,193,0.7); box-shadow: 0 0 12px rgba(255,182,193,0.45); animation: floatUp linear infinite; }
-    @keyframes floatUp { from { transform: translateY(100vh) scale(0); opacity: 0; } to { transform: translateY(-10vh) scale(1); opacity: 1; } }
-
-    .profile { width: 165px; height: 165px; border-radius: 50%; object-fit: cover; margin: 25px auto; border: 6px solid rgba(255,255,255,0.85); box-shadow: 0 12px 35px rgba(255,182,193,0.35); animation: profileFloat 4s ease-in-out infinite; }
-    @keyframes profileFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-
-    /* Login Layout */
-    .login { display: flex; width: 100%; height: 100vh; overflow: hidden; position: relative; background: #fff; z-index: 1; }
-    .left { width: 50%; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; background: linear-gradient(135deg, #fff7f8 0%, #ffeef1 35%, #fff1eb 100%); }
-    .left-content { position: relative; z-index: 5; width: 420px; padding: 45px 35px; border-radius: 38px; background: rgba(255,255,255,0.32); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.45); text-align: center; color: #222; }
-    .right { width: 50%; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; background: url("https://images.unsplash.com/photo-1519681393784-d120267933ba") no-repeat center center/cover; }
-    .login-box { width: 340px; padding: 35px; border-radius: 28px; background: rgba(255,255,255,0.25); backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,0.3); text-align: center; color: #2f2f2f; }
-    .login-logo { width: 100px; display: block; margin: 0 auto 10px; }
-    .login-box input { width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 10px; background: rgba(255,255,255,0.85); outline: none; font-size: 14px; }
-    .login-box button { width: 100%; padding: 13px; border: none; border-radius: 30px; background: #ff758c; color: white; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-    .login-box button:hover { background: #ff4d6d; }
-
-    /* App Workspace Layout */
-    .sidebar { width: 230px; height: 100vh; position: fixed; top: 0; left: 0; z-index: 999; padding: 25px 18px; background: linear-gradient(180deg, #f86370 0%, #ffe9e4 45%, #f75700 100%); border-right: 1px solid rgba(255,255,255,0.6); }
-    .company-logo-box { width: 100%; text-align: center; margin-bottom: 20px; }
-    .company-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; }
-    .company-logo-box h2 { font-size: 14px; color: #7a1846; margin-top: 8px; font-weight: 800; }
-    .menu-item { display: block; width: 100%; padding: 12px 15px; border-radius: 12px; margin: 10px 0; cursor: pointer; transition: 0.35s; font-size: 14px; font-weight: 700; color: #444; background: rgba(255,255,255,0.2); }
-    .menu-item.active, .menu-item:hover { background: linear-gradient(135deg, #ff9fb2, #ffb38a); color: white; }
-
-    .main { margin-left: 230px; min-height: 100vh; padding: 20px; background: linear-gradient(135deg, rgba(255,245,247,0.95), rgba(244,247,251,0.95)); }
-    .topbar { display: flex; justify-content: space-between; align-items: center; background: white; padding: 12px 20px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
-    .page-heading { font-size: 22px; font-weight: 800; color: #ff4f81; }
-    .user { position: relative; cursor: pointer; display: flex; align-items: center; gap: 10px; }
-    .user img { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #ff758c; }
-
-    /* Dropdown Profile Menu */
-    .dropdown { position: absolute; top: 55px; right: 0; width: 220px; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); display: none; flex-direction: column; z-index: 1000; overflow: hidden; }
-    .dropdown.show { display: flex; }
-    .drop-item { padding: 12px 16px; font-size: 14px; color: #333; cursor: pointer; transition: 0.2s; }
-    .drop-item:hover { background: #ffe3ec; }
-
-    /* Dashboards & Cards */
-    .dashboardCards { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
-    .small-card { flex: 1; min-width: 200px; background: white; border-radius: 16px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-    .small-card h3 { margin: 0 0 10px 0; font-size: 15px; color: #555; }
-    .small-card p { margin: 0; font-size: 28px; font-weight: bold; color: #ff5c8a; }
-
-    /* Form & Tables */
-    .card { background: white; padding: 25px; border-radius: 18px; box-shadow: 0 8px 25px rgba(0,0,0,0.06); margin-bottom: 20px; }
-    .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-    .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; margin-top: 4px; font-size: 13px; }
-    label { font-size: 12px; font-weight: 700; color: #444; }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
-    th { background: #ff758c; color: white; padding: 10px; text-align: center; }
-    td { padding: 6px; border-bottom: 1px solid #eee; text-align: center; }
-    .btn { padding: 10px 20px; border: none; border-radius: 8px; background: #ff758c; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
-    .btn:hover { background: #ff4d6d; }
-    .btn-green { background: #28a745; }
-    .btn-green:hover { background: #218838; }
-
-    /* Popups */
-    .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 9999; }
-    .popup-box { width: 380px; background: white; padding: 25px; border-radius: 16px; position: relative; }
-    .close-btn { position: absolute; right: 15px; top: 10px; font-size: 24px; cursor: pointer; }
-
-    /* Product Autocomplete List */
-    .product-list { position: absolute; background: white; width: 90%; max-height: 150px; overflow-y: auto; border: 1px solid #ddd; z-index: 99; border-radius: 6px; }
-    .product-item { padding: 8px; cursor: pointer; text-align: left; font-size: 12px; }
-    .product-item:hover { background: #ffe3ec; }
-  </style>
 </head>
 
 <body>
-  <!-- Ambient Particles -->
-  <div class="particles" id="particles"></div>
+ 
+<div class="login" id="loginPage">
 
-  <!-- ========================================= -->
-  <!-- LOGIN PAGE WITH OTP SYSTEM -->
-  <!-- ========================================= -->
-  <div class="login" id="loginPage">
-    <div class="left">
-      <div class="left-content">
-        <h2>Welcome to</h2>
-        <h1 style="font-size:20px;">BEULAH TRADERS PRIVATE LIMITED</h1>
-        <p>Billing & Voucher Management System</p>
-        <img src="https://lh3.googleusercontent.com/d/1h4VGQ31MYcGto3-1rMSQqqj9LjHb9Bcd" class="profile" alt="C.M.D">
-        <p style="margin-top:10px; font-weight: bold;">C.M.D: TEPPALI SAIDULU</p>
-        <p style="font-size:12px;">📞 8978816673 | Palakurthy, Telangana</p>
-      </div>
+  <!-- LEFT -->
+ <div class="left">
+
+  <div class="left-content">
+
+    <h2>Welcome to</h2>
+    <h1>BEULAH TRADERS PRIVATE LIMITED</h1>
+    <p>Billing System</p>
+
+    <br>
+
+    <div class="profile-wrapper">
+      <img src="https://lh3.googleusercontent.com/d/1h4VGQ31MYcGto3-1rMSQqqj9LjHb9Bcd" class="profile">
     </div>
 
-    <div class="right">
-      <div class="login-box">
-        <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" class="login-logo" alt="Logo">
-        <h2 id="loginTitle">System Login</h2>
+    <p style="margin-top:15px;">C.M.D</p>
+    <h3>TEPPALI SAIDULU</h3>
 
-        <div id="credentialsForm">
-          <input id="user" placeholder="Username">
-          <input id="pass" type="password" placeholder="Password">
-          <button onclick="requestOTP()">Send OTP</button>
-        </div>
+    <p style="font-size:13px;">📞 8978816673</p>
+    <p style="font-size:12px;">
+      📍 Palakurthy, Janagaon, Telangana - 506146
+    </p>
 
-        <div id="otpForm" style="display:none;">
-          <input id="otpInput" placeholder="Enter 6-Digit OTP">
-          <button onclick="verifyAndLogin()">Verify OTP & Login</button>
-        </div>
-      </div>
-    </div>
+    <p style="margin-top:20px;font-style:italic;font-size:12px;">
+      "Turning value into trust, one deal at a time."
+    </p>
+
   </div>
 
-  <!-- ========================================= -->
-  <!-- APP WORKSPACE -->
-  <!-- ========================================= -->
-  <div id="app" style="display:none;">
-    <div class="sidebar">
-      <div class="company-logo-box">
-        <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" class="company-logo" alt="Logo">
-        <h2>BEULAH TRADERS</h2>
+</div>
+
+  <!-- RIGHT -->
+  <div class="right" id="petalContainer">
+
+    <div class="login-box">
+
+      <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" class="login-logo">
+
+      <!-- STEP 1: USERNAME & PASSWORD -->
+      <div id="loginCredentialsSection">
+        <h2>Login</h2>
+
+        <input id="user" placeholder="Username"><br>
+        <input id="pass" type="password" placeholder="Password"><br>
+
+        <button onclick="login()">Login</button>
+
+        <div class="login-options" style="margin-top: 15px;">
+          <label><input type="checkbox"> Remember Me</label>
+          <span>Forgot Password</span>
+        </div>
       </div>
-      <div class="menu-item active" onclick="switchPage('gst')">GST Invoice</div>
-      <div class="menu-item" onclick="switchPage('withoutGST')">Without GST Invoice</div>
-      <div class="menu-item" onclick="switchPage('repurchase')">Repurchase Billing</div>
-      <div class="menu-item" onclick="switchPage('voucher')">Coupon Voucher</div>
-      <div class="menu-item" onclick="switchPage('renewal')">Renewal Voucher</div>
+
+      <!-- STEP 2: OTP VERIFICATION -->
+      <div id="otpSection" style="display:none;">
+        <h2>Verify OTP</h2>
+        <p style="font-size:12px; margin-bottom:10px; color:#444;">
+          An OTP has been sent to your registered Gmail address.
+        </p>
+
+        <input id="otpInput" type="text" placeholder="Enter 6-digit OTP" maxlength="6" style="text-align:center; letter-spacing: 2px;"><br>
+
+        <button onclick="verifyOTP()">Verify & Continue</button>
+
+        <p style="font-size:12px; margin-top:12px;">
+          Resend OTP in: <span id="otpTimer" style="font-weight:bold;">60</span>s
+        </p>
+
+        <div class="login-options" style="margin-top: 10px; justify-content: space-between;">
+          <span id="resendOtpBtn" onclick="resendOTP()" style="cursor:pointer; opacity:0.5; pointer-events:none;">Resend OTP</span>
+          <span onclick="backToLogin()" style="cursor:pointer;">Back to Login</span>
+        </div>
+      </div>
+
     </div>
 
-    <div class="main">
-      <div class="topbar">
-        <div class="page-heading" id="pageTitle">GST Invoice</div>
-        <div class="user" onclick="toggleDropdown()">
-          <span id="usernameDisplay">User</span>
-          <img id="topProfile" src="https://i.imgur.com/t9HFQvX.png" alt="User Profile">
-          <div class="dropdown" id="dropdownMenu">
-            <div class="drop-item" onclick="openProfile()">👤 Profile</div>
-            <div class="drop-item" onclick="openPasswordPopup()">🔐 Change Password</div>
-            <div class="drop-item" style="color:red;" onclick="logout()">🚪 Logout</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- DASHBOARD CARDS & CHARTS -->
-      <div class="dashboardCards">
-        <div class="small-card">
-          <h3 id="cardTitle1">Today's Bills</h3>
-          <p id="cardCount">0</p>
-        </div>
-        <div class="small-card">
-          <h3 id="cardTitle2">Total Sales Amount</h3>
-          <p id="cardAmount">₹0.00</p>
-        </div>
-        <div class="small-card" style="min-width:300px; height:180px;">
-          <canvas id="dashboardChart"></canvas>
-        </div>
-      </div>
-
-      <!-- PRINTABLE INVOICE CONTAINER -->
-      <div id="printableArea">
-        
-        <!-- GST PAGE -->
-        <div id="gstPage" class="card">
-          <h2>GST Tax Invoice</h2>
-          <div class="grid4">
-            <div><label>Consignee Name</label><input id="gst_cname"></div>
-            <div><label>Invoice No</label><input id="gst_invoiceNo" readonly></div>
-            <div><label>Date</label><input type="date" id="gst_date"></div>
-            <div><label>Mobile</label><input id="gst_phone"></div>
-            <div><label>State</label><input id="gst_state" value="TELANGANA" oninput="calculateGSTTable()"></div>
-            <div><label>GSTIN</label><input id="gst_gstin"></div>
-            <div><label>PAN</label><input id="gst_pan"></div>
-            <div><label>Aadhaar</label><input id="gst_aadhaar"></div>
-          </div>
-
-          <table id="gstTable">
-            <thead>
-              <tr>
-                <th>SL</th><th>Product</th><th>Model</th><th>HSN</th><th>Qty</th><th>Rate</th><th>Gross</th><th>GST%</th><th>CGST</th><th>SGST</th><th>IGST</th><th>Total</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-          <button class="btn" style="margin-top:10px;" onclick="addGSTRow()">+ Add Product Row</button>
-
-          <div class="grid2" style="margin-top:20px;">
-            <div><label>Amount in Words</label><input id="gstWords" readonly></div>
-            <div>
-              <label>Grand Total (₹)</label>
-              <input id="gstFinalTotal" readonly style="font-weight:bold; font-size:16px;">
-            </div>
-          </div>
-        </div>
-
-        <!-- WITHOUT GST PAGE -->
-        <div id="withoutGSTPage" class="card" style="display:none;">
-          <h2>Standard Retail Invoice (Without GST)</h2>
-          <div class="grid4">
-            <div><label>Customer Name</label><input id="w_cname"></div>
-            <div><label>Invoice No</label><input id="w_invoiceNo" readonly></div>
-            <div><label>Date</label><input type="date" id="w_date"></div>
-            <div><label>Mobile</label><input id="w_phone"></div>
-          </div>
-
-          <table id="withoutGSTTable">
-            <thead>
-              <tr><th>SL</th><th>Product Name</th><th>Model</th><th>HSN</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-          <button class="btn" style="margin-top:10px;" onclick="addWithoutGSTRow()">+ Add Row</button>
-
-          <div class="grid2" style="margin-top:20px;">
-            <div><label>Amount in Words</label><input id="wWords" readonly></div>
-            <div><label>Total Amount (₹)</label><input id="wFinalTotal" readonly style="font-weight:bold;"></div>
-          </div>
-        </div>
-
-        <!-- REPURCHASE PAGE -->
-        <div id="repurchasePage" class="card" style="display:none;">
-          <h2>Repurchase Billing System</h2>
-          <div class="grid4">
-            <div><label>Customer Name</label><input id="r_cname"></div>
-            <div><label>Invoice No</label><input id="r_invoiceNo" readonly></div>
-            <div><label>Date</label><input type="date" id="r_date"></div>
-            <div><label>Mobile</label><input id="r_phone"></div>
-          </div>
-
-          <table id="repurchaseTable">
-            <thead>
-              <tr><th>SL</th><th>Description</th><th>Weight (g/kg)</th><th>Rate</th><th>Amount</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-          <button class="btn" style="margin-top:10px;" onclick="addRepurchaseRow()">+ Add Row</button>
-
-          <div class="grid2" style="margin-top:20px;">
-            <div><label>Amount In Words</label><input id="rWords" readonly></div>
-            <div><label>Total (₹)</label><input id="rFinalTotal" readonly style="font-weight:bold;"></div>
-          </div>
-        </div>
-
-        <!-- VOUCHER PAGE -->
-        <div id="voucherPage" class="card" style="display:none;">
-          <h2>Coupon Points Voucher</h2>
-          <div class="grid4">
-            <div><label>Voucher No</label><input id="v_no" readonly></div>
-            <div><label>Joining Date</label><input type="date" id="v_joining" onchange="calcVoucherDates()"></div>
-            <div><label>Redeem Date</label><input type="date" id="v_redeem" readonly></div>
-            <div><label>Customer Name</label><input id="v_cname"></div>
-            <div><label>No. Of Kits</label><input type="number" id="v_kits" value="1" oninput="calculateVoucherLogic()"></div>
-            <div><label>Total 12M Points</label><input id="v_totalPoints" readonly></div>
-            <div><label>Monthly Coupon (2% Deduct)</label><input id="v_monthlyNet" readonly></div>
-            <div><label>Total Coupon (2% Deduct)</label><input id="v_totalNet" readonly></div>
-          </div>
-        </div>
-
-        <!-- RENEWAL PAGE -->
-        <div id="renewalPage" class="card" style="display:none;">
-          <h2>Renewal Coupon Voucher</h2>
-          <div class="grid4">
-            <div><label>Renewal Voucher No</label><input id="rn_no" readonly></div>
-            <div><label>Renewal Date</label><input type="date" id="rn_date"></div>
-            <div><label>Customer Name</label><input id="rn_cname"></div>
-            <div><label>No. Of Kits</label><input type="number" id="rn_kits" value="1" oninput="calculateRenewalLogic()"></div>
-            <div><label>Monthly Coupon (2% Deduct)</label><input id="rn_monthlyNet" readonly></div>
-            <div><label>Total 12M Coupon (2% Deduct)</label><input id="rn_totalNet" readonly></div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- UNIVERSAL ACTION BUTTONS -->
-      <div style="display:flex; gap:15px; justify-content:center; margin-top:20px;">
-        <button class="btn btn-green" onclick="saveDataAndPrint()">💾 Save & Print PDF</button>
-        <button class="btn" style="background:#25D366;" onclick="shareWhatsApp()">📱 Send to WhatsApp</button>
-      </div>
-    </div>
   </div>
 
-  <!-- PROFILE POPUP -->
-  <div class="popup" id="profilePopup">
-    <div class="popup-box">
-      <span class="close-btn" onclick="closeProfile()">&times;</span>
-      <h3>User Profile</h3>
-      <div style="text-align:center;"><img id="profImg" src="" style="width:80px; height:80px; border-radius:50%;"></div>
-      <p><b>Name:</b> <span id="profName"></span></p>
-      <p><b>Username:</b> <span id="profUser"></span></p>
-      <p><b>Role:</b> Billing Admin</p>
-    </div>
+</div>
+<!-- ===== APP ===== -->
+<div id="app" style="display:none;">
+
+<div class="sidebar">
+
+  <div class="company-logo-box">
+
+  <img 
+    src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx"
+    class="company-logo"
+  >
+
+  <h2>
+    BEULAH TRADERS
+    <span>PRIVATE LIMITED</span>
+  </h2>
+
+
+
+</div>
+  <div class="sidebar-anim">
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+  <div class="menu-item active"
+  onclick="setActive(this);showGST()">
+    GST Invoice
   </div>
 
-  <!-- PASSWORD POPUP -->
-  <div class="popup" id="passwordPopup">
-    <div class="popup-box">
-      <span class="close-btn" onclick="closePasswordPopup()">&times;</span>
-      <h3>Change Password</h3>
-      <input type="password" id="oldPass" placeholder="Current Password">
-      <input type="password" id="newPass" placeholder="New Password">
-      <button class="btn" style="width:100%; margin-top:10px;" onclick="submitPasswordChange()">Update Password</button>
-    </div>
+  <div class="menu-item"
+  onclick="setActive(this);showVoucher()">
+    Voucher
   </div>
 
-  <script>
-    const WEBAPP = "https://script.google.com/macros/s/AKfycbyUYcDPADDKor9rLnLGNBjt_0mMU9OycHzS8FYEnUXlBVaJC2X0sxbWnIyUKGut_W2z/exec";
+  <div class="menu-item"
+  onclick="setActive(this);showBilling()">
+    Repurchase
+  </div>
 
-    let currentPage = 'gst';
-    let generatedOTP = null;
-    let activeUser = null;
-    let globalChart = null;
-    let allProducts = [];
+  <div class="menu-item"
+  onclick="setActive(this);showRenewal()">
+    Renewal Voucher
+  </div>
 
-    // --- INITIALIZATION ---
-    window.onload = function() {
-      initParticles();
-      const savedUser = localStorage.getItem("user");
-      if (savedUser) {
-        activeUser = JSON.parse(savedUser);
-        showApp();
+  <div class="menu-item"
+onclick="setActive(this);showWithoutGST()">
+  Without GST Invoice
+</div>
+
+</div>
+
+<div class="main">   <!-- ✅ OUTSIDE SIDEBAR -->
+
+ <!-- TOPBAR -->
+<div class="topbar">
+
+  <div class="page-heading-wrapper">
+  <div class="page-heading" id="pageTitle">
+    GST Invoice
+  </div>
+  
+</div>
+
+  <div class="user" id="userMenu">
+
+    <span id="usernameDisplay"></span>
+
+    <!-- PROFILE -->
+    <div class="profile-box" onclick="toggleMenu(event)">
+      <img id="topProfile"
+      src="https://i.imgur.com/t9HFQvX.png">
+    </div>
+
+    
+
+    <!-- DROPDOWN -->
+    <div class="dropdown" id="dropdownMenu">
+
+      <!-- TOP -->
+      <div class="dropdown-top">
+
+        <img id="dropProfile"
+        src="https://i.imgur.com/t9HFQvX.png">
+
+        <div class="drop-user-info">
+          <h4 id="dropName">Sridhar</h4>
+          <p>BEULAH TRADERS</p>
+        </div>
+
+      </div>
+
+      <!-- MENU ITEMS -->
+      <div class="drop-item" onclick="openProfile()">
+        👤 User Profile
+      </div>
+
+      <div class="drop-item"
+      onclick="openPasswordPopup()">
+        🔐 Change Password
+      </div>
+
+      <div class="drop-item logout-btn"
+      onclick="logout()">
+        🚪 Logout
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- PROFILE POPUP -->
+<div class="popup" id="profilePopup">
+
+  <div class="popup-box">
+
+    <span class="close-btn"
+    onclick="closeProfile()">
+      &times;
+    </span>
+
+    <h2>
+      BEULAH TRADERS PRIVATE LIMITED
+    </h2>
+
+    <div class="profile-center">
+
+  <img id="profilePopupImg"
+  src="https://i.imgur.com/t9HFQvX.png">
+
+  <h2 id="profilePopupName"></h2>
+
+</div>
+
+<div class="profile-details">
+
+  <div>
+    <label>Username</label>
+    <input id="profileUsername" readonly>
+  </div>
+
+  <div>
+    <label>Email</label>
+    <input id="profileEmail" readonly>
+  </div>
+
+  <div>
+    <label>Phone Number</label>
+    <input id="profilePhone" readonly>
+  </div>
+
+</div>
+</div>
+</div>
+
+<!-- PASSWORD POPUP -->
+<div class="popup" id="passwordPopup">
+
+  <div class="popup-box">
+
+    <span class="close-btn"
+    onclick="closePasswordPopup()">
+      &times;
+    </span>
+
+    <h2>Reset Password</h2>
+
+    <input type="password"
+    id="oldPass"
+    placeholder="Current Password">
+
+    <input type="password"
+    id="newPass"
+    placeholder="New Password">
+
+    <input type="password"
+    id="confirmPass"
+    placeholder="Confirm Password">
+
+    <button onclick="changePassword()">
+      Update Password
+    </button>
+
+  </div>
+
+
+</div>  
+ <!-- ========================= -->
+<!-- GST CARDS -->
+<!-- ========================= -->
+<div id="invoiceCards" class="dashboardCards" style="display:none;">
+
+  <div class="card small-card">
+    <h3>GST Bills Today</h3>
+    <p id="gstBills">0</p>
+  </div>
+
+  <div class="card small-card">
+    <h3>GST Amount</h3>
+    <p id="gstAmount">₹0</p>
+  </div>
+
+  <div class="small-card">
+  <h3>GST Graph</h3>
+  <canvas id="gstChart"></canvas>
+</div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- REPURCHASE CARDS -->
+<!-- ========================= -->
+<div id="repurchaseCards"
+class="dashboardCards"
+style="display:none;">
+
+  <div class="card small-card">
+    <h3>Repurchase Bills Today</h3>
+    <p id="todayBills">0</p>
+  </div>
+
+  <div class="card small-card">
+    <h3>Repurchase Amount</h3>
+    <p id="todayAmount">₹0</p>
+  </div>
+
+  <div class="small-card">
+  <h3>Repurchase Graph</h3>
+  <canvas id="salesChart"></canvas>
+</div>
+</div>
+
+<!-- ========================= -->
+<!-- VOUCHER CARDS -->
+<!-- ========================= -->
+<div id="voucherCards"
+class="dashboardCards"
+style="display:none;">
+
+  <div class="card small-card">
+    <h3>Voucher Entries</h3>
+    <p id="voucherCount">0</p>
+  </div>
+
+  <div class="card small-card">
+    <h3>Voucher Amount</h3>
+    <p id="voucherAmount">₹0</p>
+  </div>
+
+  <div class="small-card">
+    <h3>Voucher Graph</h3>
+    <canvas id="voucherChart"></canvas>
+  </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- RENEWAL CARDS -->
+<!-- ========================= -->
+<div id="renewalCards"
+class="dashboardCards"
+style="display:none;">
+
+  <div class="card small-card">
+    <h3>Renewals Today</h3>
+    <p id="renewalCount">0</p>
+  </div>
+
+  <div class="card small-card">
+    <h3>Renewal Amount</h3>
+    <p id="renewalAmount">₹0</p>
+  </div>
+
+  <div class="small-card">
+    <h3>Renewal Graph</h3>
+    <canvas id="renewalChart"></canvas>
+  </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- WITHOUT GST CARDS -->
+<!-- ========================= -->
+
+<div id="withoutGSTCards"
+class="dashboardCards"
+style="display:none;">
+
+  <div class="card small-card">
+    <h3>Without GST Bills</h3>
+    <p id="withoutGSTBillCount">0</p>
+  </div>
+
+  <div class="card small-card">
+    <h3>Without GST Amount</h3>
+    <p id="withoutGSTAmount">₹0</p>
+  </div>
+
+  <div class="small-card">
+    <h3>Without GST Graph</h3>
+    <canvas id="withoutGSTChart"></canvas>
+  </div>
+
+</div>
+
+  <!-- ========================= -->
+  <!-- ✅ GST -->
+  <!-- ========================= -->
+  <div id="gstPage" class="card" style="display:none;">
+
+  <h2>BEULAH TRADERS PRIVATE LIMITED<br>Invoice with GST</h2>
+
+  <!-- CONSIGNEE DETAILS -->
+  <table style="width:100%; margin-bottom:15px;">
+    <tr>
+      <td>Consignee Name</td>
+      <td colspan="3"><input id="c_name"></td>
+      <td>Invoice No</td>
+      <td><input id="gstInvoiceNo"></td>
+    </tr>
+
+    <tr>
+      <td>Relation</td>
+      <td colspan="3"><input id="relation"></td>
+      <td>Date</td>
+      <td><input type="date" id="gstDate"></td>
+    </tr>
+
+    <tr>
+      <td>Village / Area</td>
+      <td colspan="3"><input id="village"></td>
+      <td>Email</td>
+      <td><input id="email"></td>
+    </tr>
+
+    <tr>
+      <td>District</td>
+      <td colspan="3"><input id="district"></td>
+      <td>Mobile</td>
+      <td><input id="phone"></td>
+    </tr>
+
+    <tr>
+
+  <td>State</td>
+  <td><input id="state"></td>
+
+  <td>Pincode</td>
+  <td><input id="pincode"></td>
+
+  <td>GST IN</td>
+  <td><input id="gstin"></td>
+
+</tr>
+
+<tr>
+
+  <td>Aadhaar No</td>
+  <td><input id="aadhaar"></td>
+
+  <td>PAN No</td>
+  <td><input id="pan"></td>
+
+  <td>Bank Name</td>
+  <td><input id="bankName"></td>
+
+</tr>
+
+<tr>
+  <td>Branch</td>
+  <td><input id="branch"></td>
+
+  <td>Account No</td>
+  <td><input id="accountNo"></td>
+
+  <td>IFSC</td>
+  <td><input id="ifsc"></td>
+</tr>
+  </table>
+
+  <!-- PAYMENT MODE -->
+  <label><input type="checkbox" id="cash"> Cash</label>
+
+<label><input type="checkbox" id="cheque"> Cheque</label>
+
+<label><input type="checkbox" id="upi"> UPI</label>
+
+<label><input type="checkbox" id="netbanking"> Net Banking</label>
+
+<label><input type="checkbox" id="card"> Card</label>
+
+<label><input type="checkbox" id="hypothecation"> Hypothecation</label>
+
+  <!-- PRODUCT TABLE -->
+  <table id="gstTable">
+    <thead>
+<tr>
+
+<th style="width:35px;">SL</th>
+<th style="width:120px;">Product</th>
+<th style="width:90px;">Model No</th>
+<th style="width:90px;">Product Model</th>
+<th style="width:70px;">HSN</th>
+<th style="width:60px;">Qty</th>
+<th style="width:70px;">Rate</th>
+<th style="width:80px;">Gross</th>
+<th style="width:60px;">GST%</th>
+<th style="width:60px;">CGST%</th>
+<th style="width:70px;">CGST</th>
+<th style="width:60px;">SGST%</th>
+<th style="width:70px;">SGST</th>
+<th style="width:60px;">IGST%</th>
+<th style="width:70px;">IGST</th>
+<th style="width:80px;">Taxable</th>
+
+</tr>
+</thead>
+    <tbody></tbody>
+
+<tfoot>
+
+<tr style="background:#ffe3ec;font-weight:bold;">
+
+  <td colspan="5" style="text-align:right;">
+    TOTAL
+  </td>
+
+  <td>
+    <input id="totalQty" readonly>
+  </td>
+
+  <td></td>
+
+  <td>
+    <input id="totalGross" readonly>
+  </td>
+
+  <td></td>
+  <td></td>
+
+  <td>
+    <input id="totalCGST" readonly>
+  </td>
+
+  <td></td>
+
+  <td>
+    <input id="totalSGST" readonly>
+  </td>
+
+  <td></td>
+
+  <td>
+    <input id="totalIGST" readonly>
+  </td>
+
+  <td>
+    <input id="totalTaxable" readonly>
+  </td>
+
+</tr>
+
+</tfoot>
+ </table>
+
+  <br>
+  <button onclick="addGSTRow()">+ Add Row</button>
+  
+
+  <!-- TOTALS -->
+  <table style="margin-top:20px; width:100%;">
+    <tr>
+      <td>Amount in Words</td>
+      <td colspan="3"><input id="gstWords"></td>
+      <td>Basic Amount</td>
+      <td><input id="basicAmt"></td>
+    </tr>
+
+    <tr>
+      <td></td><td></td><td></td><td></td>
+      <td>SGST</td>
+      <td><input id="sgstAmt"></td>
+    </tr>
+
+    <tr>
+      <td></td><td></td><td></td><td></td>
+      <td>CGST</td>
+      <td><input id="cgstAmt"></td>
+    </tr>
+
+    <tr>
+      <td></td><td></td><td></td><td></td>
+      <td>IGST</td>
+      <td><input id="igstAmt"></td>
+    </tr>
+
+    <tr>
+      <td></td><td></td><td></td><td></td>
+      <td>Total GST</td>
+      <td><input id="totalGST"></td>
+    </tr>
+
+    <tr>
+      <td></td><td></td><td></td><td></td>
+      <td><b>Final Total</b></td>
+      <td><input id="finalTotal"></td>
+    </tr>
+    
+  </table>
+
+  <br>
+  <div style="text-align:center;margin-top:20px;">
+
+  <button onclick="generateGST()"
+  style="
+    padding:14px 40px;
+    font-size:16px;
+    border-radius:12px;
+    font-weight:bold;
+  ">
+    Generate Invoice
+  </button>
+
+</div>
+
+</div>
+
+<!-- ========================= -->
+  <!-- ✅ REPURCHASE -->
+  <!-- ========================= -->
+  <div id="billingPage" class="card">
+
+<h2>
+BEULAH TRADERS PRIVATE LIMITED
+<br>
+Repurchase Billing System
+</h2>
+
+<div style="display:flex;gap:15px;margin-bottom:15px;">
+
+<div>
+<label>Date</label><br>
+<input type="date" id="date">
+</div>
+
+<div>
+<label>Invoice No</label><br>
+<input id="invoiceNo">
+</div>
+
+</div>
+
+<div style="display:flex;gap:15px;margin-bottom:15px;">
+
+<input id="name" placeholder="Customer Name">
+
+<input id="address" placeholder="Address">
+
+<input id="repurchasePhone" placeholder="Phone">
+
+</div>
+
+<table id="table">
+
+<thead>
+
+<tr>
+<th>Sl</th>
+<th>Description</th>
+<th>Weight</th>
+<th>Rate</th>
+<th>Amount</th>
+</tr>
+
+</thead>
+
+<tbody id="repurchaseBody">
+
+</tbody>
+
+<tfoot>
+
+<tr>
+
+<td colspan="4" style="text-align:right;font-weight:bold;">
+TOTAL
+</td>
+
+<td>
+<input id="total" readonly>
+</td>
+
+</tr>
+
+</tfoot>
+
+</table>
+
+<br>
+
+<button onclick="addRow()">
++ Add Row
+</button>
+
+<br><br>
+
+<label>Amount In Words</label>
+
+<input
+id="words"
+style="width:100%;"
+readonly>
+
+<br><br>
+
+<button onclick="generate()">
+Generate Bill
+</button>
+
+</div>
+
+  <!-- ========================= -->
+<!-- VOUCHER PAGE -->
+<!-- ========================= -->
+
+<div id="voucherPage"
+class="card"
+style="display:none;">
+
+<h2>
+BEULAH TRADERS PRIVATE LIMITED
+<br>
+Coupon Points Voucher
+</h2>
+
+<div style="
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+">
+
+<div>
+<label>Voucher No</label>
+<input id="voucherNo">
+</div>
+
+<div>
+<label>Joining Date</label>
+<input
+type="date"
+id="joiningDate"
+onchange="setRedeemDate()">
+</div>
+
+<div>
+<label>Redeem Release Date</label>
+
+<input
+id="redeemDate"
+readonly>
+
+</div>
+
+<div>
+<label>Customer Name</label>
+<input id="voucherCustomerName">
+</div>
+
+<div>
+<label>Relation</label>
+<input id="voucherRelation">
+</div>
+
+<div>
+<label>Mobile</label>
+<input id="voucherMobile">
+</div>
+
+<div>
+<label>Village</label>
+<input id="voucherVillage">
+</div>
+
+<div>
+<label>District</label>
+<input id="voucherDistrict">
+</div>
+
+<div>
+<label>State</label>
+<input id="voucherState">
+</div>
+
+<div>
+<label>Pincode</label>
+<input id="voucherPincode">
+</div>
+
+<div>
+<label>Email</label>
+<input id="voucherEmail">
+</div>
+
+<div>
+<label>Aadhaar</label>
+<input id="voucherAadhaar">
+</div>
+
+<div>
+<label>PAN</label>
+<input id="voucherPAN">
+</div>
+
+<div>
+<label>Bank Name</label>
+<input id="voucherBankName">
+</div>
+
+<div>
+<label>Branch</label>
+<input id="voucherBranch">
+</div>
+
+<div>
+<label>Account No</label>
+<input id="voucherAccountNo">
+</div>
+
+<div>
+<label>IFSC</label>
+<input id="voucherIFSC">
+</div>
+
+<div>
+<label>Sales Rep ID</label>
+<input id="salesRepId">
+</div>
+
+<div>
+<label>Sales Rep Name</label>
+<input id="srName" readonly>
+</div>
+
+<div>
+<label>No Of Kits</label>
+<input id="kits"
+oninput="calculateVoucher()">
+</div>
+
+<div>
+<label>Kit Coupon Reward Points(TOTAL 12MONTHS POINTS): 6000 x</label>
+<input id="rewardPoints" readonly>
+</div>
+
+<div>
+<label>Per Month Redeem Points Without Deduction:</label>
+<input id="monthlyRedeem" readonly>
+</div>
+
+<div>
+<label>In Words Coupon Points(Per Month With Deduction Of 2% ):</label>
+<input id="monthlyWords" readonly>
+</div>
+
+<div>
+<label>Coupon Points(Per Month With Deduction Of 2%):</label>
+<input id="monthlywithCoupon" readonly>
+</div>
+
+<div>
+<label>Coupon Points(Total 12 Months With Deduction 2%):</label>
+<input id="totalCoupon" readonly>
+</div>
+
+<div>
+<label>In Words Total Coupon Points(12Months) With Deduction</label>
+<input id="totalWords" readonly>
+</div>
+</div>
+
+<br>
+
+<label>
+
+<input
+type="checkbox"
+id="gold"
+onchange="setProductDetails()">
+
+Gold
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+id="silver"
+onchange="setProductDetails()">
+
+Silver
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+id="clothesKit"
+onchange="setProductDetails()">
+
+Clothes Kit
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+id="herbalKit"
+onchange="setProductDetails()">
+
+Herbal Kit
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+id="homeNeedsKit"
+onchange="setProductDetails()">
+
+Home Needs Kit
+
+</label>
+
+ 
+
+<br><br>
+
+<label>Product Details</label>
+
+<textarea id="productDetails"
+style="
+width:100%;
+height:80px;
+"></textarea>
+
+<br><br>
+
+<label>Repurchase History</label>
+
+<textarea id="repurchaseHistory"
+style="
+width:100%;
+height:80px;
+"></textarea>
+
+<br><br>
+
+<label>Remarks</label>
+
+<textarea id="remarks"
+style="
+width:100%;
+height:80px;
+"></textarea>
+
+<br><br>
+
+<button onclick="generateVoucher()">
+
+Generate Voucher
+
+</button>
+
+</div>
+
+ <!-- ===================================================== -->
+<!-- ✅ RENEWAL PAGE -->
+<!-- ===================================================== -->
+
+<div
+id="renewalPage"
+class="card"
+style="display:none;">
+
+<h2>
+  Coupon Points Renewal
+</h2>
+
+<div class="grid2">
+
+<div>
+
+<label>
+Renewal Voucher No
+</label>
+
+<input
+id="renewalVoucherNo">
+
+</div>
+
+<input
+type="date"
+id="renewalJoiningDate"
+onchange="updateRenewalReleaseDate()"
+>
+
+<div>
+
+<label>
+Redeem Release Date
+</label>
+
+<input
+type="date"
+id="renewalRedeemDate">
+
+</div>
+
+<div>
+
+<label>
+Customer Name
+</label>
+
+<input
+type="text"
+id="renewalCustomerName">
+
+</div>
+
+<div>
+
+<label>
+Relation
+</label>
+
+<input
+type="text"
+id="renewalRelation">
+
+</div>
+
+<div>
+
+<label>
+Mobile Number
+</label>
+
+<input
+type="text"
+id="renewalMobile">
+
+</div>
+
+<div>
+
+<label>
+Village / Area
+</label>
+
+<input
+type="text"
+id="renewalVillage">
+
+</div>
+
+<div>
+
+<label>
+District
+</label>
+
+<input
+type="text"
+id="renewalDistrict">
+
+</div>
+
+<div>
+
+<label>
+State
+</label>
+
+<input
+type="text"
+id="renewalState">
+
+</div>
+
+<div>
+
+<label>
+Pincode
+</label>
+
+<input
+type="text"
+id="renewalPincode">
+
+</div>
+<div class="grid2">
+
+  <div>
+    <label>Aadhaar Number</label>
+    <input id="aadhaar" maxlength="12">
+  </div>
+
+  <div>
+    <label>PAN Number</label>
+    <input id="pan" style="text-transform:uppercase">
+  </div>
+
+  <div>
+    <label>Bank Name</label>
+    <input id="bankName">
+  </div>
+
+  <div>
+    <label>Branch Name</label>
+    <input id="branch">
+  </div>
+
+  <div>
+    <label>Account Number</label>
+    <input id="accountNo">
+  </div>
+
+  <div>
+    <label>IFSC Code</label>
+    <input id="ifsc" style="text-transform:uppercase">
+  </div>
+
+</div>
+<div>
+
+<label>
+Email
+</label>
+
+<input
+type="email"
+id="renewalEmail">
+
+</div>
+
+<div class="grid2">
+
+  <div>
+    <label>Sales Representative ID</label>
+    <input
+id="renewalSRID"
+oninput="getRenewalSRName()"
+>
+  </div>
+
+  <div>
+    <label>Sales Representative Name</label>
+    <input
+      id="renewalSalesName"
+      readonly>
+  </div>
+
+</div>
+
+<div class="grid2">
+
+  <!-- ===================================== -->
+<!-- RENEWAL CALCULATION SECTION -->
+<!-- ===================================== -->
+
+<div>
+
+<label>No Of Kits</label>
+
+<input
+id="renewalKits"
+oninput="calculateRenewal()">
+
+</div>
+
+<div>
+
+<label>
+Kit Coupon Reward Points
+(TOTAL 12MONTHS POINTS): 6000 x
+</label>
+
+<input
+id="renewalRewardPoints"
+readonly>
+
+</div>
+
+<div>
+
+<label>
+Per Month Redeem Points
+Without Deduction:
+</label>
+
+<input
+id="renewalMonthlyRedeem"
+readonly>
+
+</div>
+
+<div>
+
+<label>
+In Words Coupon Points
+(Per Month With Deduction Of 2%)
+:
+</label>
+
+<input
+id="renewalMonthlyWords"
+readonly>
+
+</div>
+
+<div>
+
+<label>
+Coupon Points
+(Per Month With Deduction Of 2%)
+:
+</label>
+
+<input
+id="renewalMonthlywithCoupon"
+readonly>
+
+</div>
+
+<div>
+
+<label>
+Coupon Points
+(Total 12 Months With Deduction 2%)
+:
+</label>
+
+<input
+id="renewalTotalCoupon"
+readonly>
+
+</div>
+
+<div>
+
+<label>
+In Words Total Coupon Points
+(12Months) With Deduction
+</label>
+
+<input
+id="renewalTotalWords"
+readonly>
+
+</div>
+
+<br>
+
+<!-- ===================================================== -->
+<!-- ✅ CHECKBOXES -->
+<!-- ===================================================== -->
+
+<div class="checkGrid">
+
+<label>
+
+<input
+type="checkbox"
+id="renewal">
+
+Renewal
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+id="purchase">
+
+Purchase
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+id="upgrade">
+
+Upgrade
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+id="newJoining">
+
+New Joining
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+id="reactivation">
+
+Reactivation
+
+</label>
+
+</div>
+
+<br>
+
+<!-- ===================================================== -->
+<!-- ✅ REMARKS -->
+<!-- ===================================================== -->
+
+<label>
+Remarks
+</label>
+
+<textarea
+id="renewalRemarks"
+rows="4"></textarea>
+
+<br><br>
+
+<button
+type="button"
+onclick="generateRenewalVoucher()"
+>
+Generate Renewal Voucher
+</button>
+</div>
+</div>
+</div>
+
+ 
+<!-- ===================================================== -->
+<!-- WITHOUT GST PAGE -->
+<!-- ===================================================== -->
+
+<div
+id="withoutGSTPage"
+class="card"
+style="display:none;">
+
+<h2>
+BEULAH TRADERS PRIVATE LIMITED
+<br>
+WITHOUT GST INVOICE
+</h2>
+
+<!-- CUSTOMER DETAILS -->
+
+<div class="grid2">
+
+<div>
+<label>Invoice No</label>
+<input
+id="withoutGSTInvoiceNo"
+placeholder="Invoice No">
+</div>
+
+<div>
+<label>Date</label>
+<input
+type="date"
+id="withoutDate">
+</div>
+
+<div>
+<label>Consignee Name</label>
+<input
+id="withoutCustomerName">
+</div>
+
+<div>
+<label>Relation</label>
+<input
+id="withoutRelation">
+</div>
+
+<div>
+<label>Village / Area</label>
+<input
+id="withoutVillage">
+</div>
+
+<div>
+<label>District</label>
+<input
+id="withoutDistrict">
+</div>
+
+<div>
+<label>State</label>
+<input
+id="withoutState">
+</div>
+
+<div>
+<label>Pincode</label>
+<input
+id="withoutPincode">
+</div>
+
+<div>
+<label>Mobile Number</label>
+<input
+id="withoutMobile">
+</div>
+
+<div>
+<label>Email</label>
+<input
+id="withoutEmail">
+</div>
+
+</div>
+
+<br>
+
+<!-- PAYMENT MODE -->
+
+<div class="paymentModes">
+
+<label>
+<input
+type="checkbox"
+id="withoutCash">
+Cash
+</label>
+
+<label>
+<input
+type="checkbox"
+id="withoutUPI">
+UPI
+</label>
+
+<label>
+<input
+type="checkbox"
+id="withoutCheque">
+Cheque
+</label>
+
+<label>
+<input
+type="checkbox"
+id="withoutCard">
+Card
+</label>
+
+<label>
+<input
+type="checkbox"
+id="withoutNetBanking">
+Net Banking
+</label>
+
+</div>
+
+<br>
+
+<!-- ========================= -->
+<!-- PRODUCTS TABLE -->
+<!-- ========================= -->
+
+<table id="withoutGSTTable" class="invoiceTable">
+
+  <thead>
+    <tr>
+      <th>SL.NO</th>
+      <th>PRODUCT NAME</th>
+      <th>MODEL NUMBER</th>
+      <th>PRODUCT MODEL</th>
+      <th>HSN</th>
+      <th>QTY</th>
+      <th>RATE</th>
+      <th>AMOUNT</th>
+    </tr>
+  </thead>
+
+  <tbody id="withoutGSTBody">
+
+    <tr>
+
+      <td class="withoutSL">1</td>
+
+      <td>
+<input
+class="withoutProduct"
+list="productList"
+onchange="loadWithoutGSTProduct(this)">
+<div class="product-list"></div>
+</td>
+
+      <td>
+        <input
+          class="withoutModelNo"
+          readonly>
+      </td>
+
+      <td>
+        <input
+          class="withoutProductModel"
+          readonly>
+      </td>
+
+      <td>
+        <input
+          class="withoutHSN"
+          readonly>
+      </td>
+
+      <td>
+        <input
+class="withoutQty"
+type="number"
+min="1"
+placeholder="Qty"
+oninput="calculateWithoutGSTRow(this)">
+      </td>
+
+      <td>
+        <input
+          class="withoutRate"
+          type="number"
+          value="0"
+          oninput="calculateWithoutGSTRow(this)">
+      </td>
+
+      <td>
+        <input
+          class="withoutAmount"
+          value="0.00"
+          readonly>
+      </td>
+
+    </tr>
+
+  </tbody>
+
+  <tfoot>
+
+    <tr>
+
+      <td colspan="7"
+          style="
+          text-align:right;
+          font-weight:bold;
+          ">
+
+        TOTAL
+
+      </td>
+
+      <td>
+
+        <input
+          id="withoutGSTGrandTotal"
+          value="0.00"
+          readonly>
+
+      </td>
+
+    </tr>
+
+  </tfoot>
+
+</table>
+
+<br>
+
+<div style="text-align:right;">
+
+  <button
+    type="button"
+    onclick="addWithoutGSTRow()">
+
+    + Add Product
+
+  </button>
+
+</div>
+
+<br>
+
+<!-- ========================= -->
+<!-- TOTALS -->
+<!-- ========================= -->
+
+<div class="grid2">
+
+  <div>
+
+    <label>Amount In Words</label>
+
+    <input
+      id="withoutAmountWords"
+      readonly>
+
+  </div>
+
+  <div>
+
+    <label>Basic Amount</label>
+
+    <input
+      id="withoutBasicAmount"
+      value="0.00"
+      readonly>
+
+  </div>
+
+  <div>
+
+    <label>Total Amount</label>
+
+    <input
+      id="withoutTotalAmount"
+      value="0.00"
+      readonly>
+
+  </div>
+
+</div>
+
+<br><br>
+
+<div style="text-align:center;">
+
+  <button
+    type="button"
+    onclick="generateWithoutGSTInvoice()"
+    style="
+    padding:15px 40px;
+    font-size:18px;
+    font-weight:bold;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    ">
+
+    Generate Invoice
+
+  </button>
+
+</div>
+
+</div>
+
+<!-- PRODUCT LIST -->
+
+<datalist id="productList"></datalist>
+</div>
+
+<script>
+ const WEBAPP =
+"https://script.google.com/macros/s/AKfycbyUYcDPADDKor9rLnLGNBjt_0mMU9OycHzS8FYEnUXlBVaJC2X0sxbWnIyUKGut_W2z/exec";
+    
+  const sidebarAnim = document.querySelector(".sidebar-anim");
+
+if(sidebarAnim){
+  for(let i=0;i<25;i++){
+    let b = document.createElement("span");
+
+    b.style.left = Math.random()*100 + "%";
+    b.style.animationDuration = (5 + Math.random()*5) + "s";
+    b.style.width = b.style.height = (5 + Math.random()*10) + "px";
+
+    sidebarAnim.appendChild(b);
+  }
+}
+
+  let container = document.createElement("div");
+container.className = "particles";
+document.body.appendChild(container);
+
+for(let i=0;i<40;i++){
+  let span = document.createElement("span");
+
+  span.style.left = Math.random()*100 + "%";
+  span.style.animationDuration = (5 + Math.random()*10) + "s";
+  span.style.animationDelay = Math.random()*5 + "s";
+
+  container.appendChild(span);
+}
+
+/* CLOSE OUTSIDE */
+window.addEventListener("click", function(e){
+
+  if(!e.target.closest("#userMenu")){
+    document
+    .getElementById("dropdownMenu")
+    .classList.remove("show");
+  }
+
+});
+
+function openProfile(){
+
+  document
+  .getElementById("profilePopup")
+  .style.display = "flex";
+
+  let user =
+  JSON.parse(localStorage.getItem("user"));
+
+  if(user){
+
+    document
+    .getElementById("profileUsername")
+    .value = user.username || "";
+
+    document
+    .getElementById("profileEmail")
+    .value = user.email || "";
+
+    document
+    .getElementById("profilePhone")
+    .value = user.phone || "";
+
+    document
+    .getElementById("profilePopupImg")
+    .src = user.photo || "";
+
+    document
+    .getElementById("profilePopupName")
+    .innerText = user.name || "";
+
+  }
+
+}
+
+function toggleMenu(event){
+
+  event.stopPropagation();
+
+  let menu =
+  document.getElementById("dropdownMenu");
+
+  menu.classList.toggle("show");
+}
+function closeProfile(){
+  document
+  .getElementById("profilePopup")
+  .style.display = "none";
+}
+
+/* PASSWORD */
+function openPasswordPopup(){
+
+  document
+  .getElementById("passwordPopup")
+  .style.display = "flex";
+
+}
+
+function closePasswordPopup(){
+
+  document
+  .getElementById("passwordPopup")
+  .style.display = "none";
+
+}
+
+ async function changePassword(){
+
+  let oldPass =
+  document.getElementById("oldPass").value;
+
+  let newPass =
+  document.getElementById("newPass").value;
+
+  let confirmPass =
+  document.getElementById("confirmPass").value;
+
+  if(newPass !== confirmPass){
+
+    alert("Passwords not matching");
+    return;
+
+  }
+
+  const user =
+  JSON.parse(localStorage.getItem("user"));
+
+  const res = await fetch(WEBAPP + "?api=1",{
+    method:"POST",
+    body:JSON.stringify({
+
+      type:"password",
+
+      username:user.username,
+
+      newPassword:newPass
+
+    })
+  });
+
+  const data = await res.json();
+
+  if(data.status){
+
+    alert("Password updated");
+
+    closePasswordPopup();
+
+  }else{
+
+    alert("Failed");
+
+  }
+
+}
+
+let chartsLoaded = false;
+
+function initCharts(){
+
+  if(chartsLoaded) return;
+
+  chartsLoaded = true;
+
+  setTimeout(()=>{
+
+    // GST
+    new Chart(document.getElementById("gstChart"),{
+      type:"bar",
+      data:{
+        labels:["Mon","Tue","Wed","Thu","Fri","Sat"],
+        datasets:[{
+          data:[1000,1500,1200,2500,1800,3000],
+          backgroundColor:"#ff758c"
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{legend:{display:false}}
       }
+    });
+
+    // REPURCHASE
+    new Chart(document.getElementById("salesChart"),{
+      type:"line",
+      data:{
+        labels:["Mon","Tue","Wed","Thu","Fri","Sat"],
+        datasets:[{
+          data:[800,1200,900,2000,1800,2500],
+          borderColor:"#ff758c",
+          backgroundColor:"rgba(255,117,140,0.2)",
+          tension:0.4,
+          fill:true
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{legend:{display:false}}
+      }
+    });
+
+    // VOUCHER
+    new Chart(document.getElementById("voucherChart"),{
+      type:"bar",
+      data:{
+        labels:["Mon","Tue","Wed","Thu","Fri","Sat"],
+        datasets:[{
+          data:[5,8,4,10,7,12],
+          backgroundColor:"#ff758c"
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{legend:{display:false}}
+      }
+    });
+
+    // RENEWAL
+    new Chart(document.getElementById("renewalChart"),{
+      type:"line",
+      data:{
+        labels:["Mon","Tue","Wed","Thu","Fri","Sat"],
+        datasets:[{
+          data:[2,4,3,6,5,8],
+          borderColor:"#ff758c",
+          backgroundColor:"rgba(255,117,140,0.2)",
+          tension:0.4,
+          fill:true
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{legend:{display:false}}
+      }
+    });
+
+  },500);
+
+  new Chart(
+document.getElementById(
+"withoutGSTChart"
+),
+{
+  type:"bar",
+
+  data:{
+    labels:[
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
+
+    datasets:[{
+      data:[
+        1000,
+        2000,
+        1500,
+        3000,
+        2500,
+        4000
+      ],
+
+      backgroundColor:"#ff758c"
+    }]
+  },
+
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{
+        display:false
+      }
+    }
+  }
+});
+
+}
+
+function hideAll(){
+
+  document.getElementById("billingPage").style.display="none";
+  document.getElementById("gstPage").style.display="none";
+  document.getElementById("voucherPage").style.display="none";
+  document.getElementById("renewalPage").style.display="none";
+  document.getElementById("withoutGSTPage").style.display="none";
+
+}
+
+function setTitle(name){
+  document.getElementById("pageTitle").innerText = name;
+}
+
+function hideCards(){
+
+  repurchaseCards.style.display="none";
+  invoiceCards.style.display="none";
+  voucherCards.style.display="none";
+  renewalCards.style.display="none";
+
+  document.getElementById(
+    "withoutGSTCards"
+  ).style.display="none";
+
+}
+
+function showBilling(){
+
+  hideAll();
+  hideCards();
+
+  billingPage.style.display="block";
+  repurchaseCards.style.display="flex";
+
+  setTitle("Repurchase");
+}
+
+
+function showGST(){
+
+  hideAll();
+  hideCards();
+
+  document.getElementById("gstPage").style.display = "block";
+
+  document.getElementById("invoiceCards").style.display = "flex";
+
+  setTitle("GST Invoice");
+
+  let tbody =
+  document.querySelector("#gstTable tbody");
+
+  // ONLY ADD ROWS IF EMPTY
+  if(tbody.rows.length === 0){
+
+    for(let i=1;i<=5;i++){
+
+      addGSTRow();
+
+    }
+
+  }
+
+  loadGSTInvoiceNo();
+
+}
+
+
+function showVoucher(){
+
+  hideAll();
+  hideCards();
+
+  voucherPage.style.display="block";
+  voucherCards.style.display="flex";
+
+  setTitle("Voucher");
+}
+
+
+// =====================================================
+// SHOW RENEWAL PAGE
+// =====================================================
+
+async function showRenewal(){
+
+  hideAll();
+  hideCards();
+
+  document.getElementById(
+    "renewalPage"
+  ).style.display = "block";
+
+  document.getElementById(
+    "renewalCards"
+  ).style.display = "flex";
+
+  setTitle(
+    "Renewal Voucher"
+  );
+
+  await loadRenewalNo();
+
+}
+
+ function showWithoutGST(){
+
+  hideAll();
+  hideCards();
+
+  document.getElementById(
+    "withoutGSTPage"
+  ).style.display = "block";
+
+  document.getElementById(
+    "withoutGSTCards"
+  ).style.display = "flex";
+
+  setTitle(
+    "Without GST Invoice"
+  );
+loadWithoutGSTNo();
+}
+
+function showApp(){
+
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("app").style.display = "block";
+
+  let user =
+  JSON.parse(localStorage.getItem("user"));
+
+  if(user){
+    console.log(user);
+
+    // TOPBAR NAME
+    document.getElementById("usernameDisplay").innerText =
+    user.name;
+
+    // DROPDOWN NAME
+    document.getElementById("dropName").innerText =
+    user.name;
+
+    // PROFILE IMAGES
+    document.getElementById("topProfile").src =
+user.photo || "https://i.imgur.com/t9HFQvX.png";
+
+    document.getElementById("dropProfile").src =
+user.photo || "https://i.imgur.com/t9HFQvX.png";
+
+    document.getElementById("profilePopupImg").src =
+user.photo || "https://i.imgur.com/t9HFQvX.png";
+
+    // PROFILE DETAILS
+    document.getElementById("profileUsername").value =
+    user.username;
+
+    document
+.getElementById("profileEmail")
+.value =
+user.email || "";
+
+    document
+.getElementById("profilePhone")
+.value =
+user.phone || "";
+  }
+
+  showGST();
+
+  document.querySelectorAll(".menu-item")
+  .forEach(i => i.classList.remove("active"));
+
+  document.querySelector(".menu-item")
+  .classList.add("active");
+}
+
+window.onload = function(){
+
+  for(let i=1;i<=5;i++){
+    addRow();
+  }
+
+ for(let i=1;i<=5;i++){
+  addGSTRow();
+}
+
+  loadProducts();
+  loadInvoiceNo();
+
+  loadGSTInvoiceNo();
+  loadWithoutGSTNo();
+  getNextInvoiceFromServer();
+
+  getNextGSTInvoiceFromServer();
+  loadDashboard();
+  initCharts();
+   
+  document.getElementById("remarks").value =
+"Note: Deduction 2% in Payable Reward Points";
+   
+  /* petals */
+for(let i=0;i<25;i++){
+  let p=document.createElement("div");
+  p.className="petal";
+  p.style.left=Math.random()*100+"%";
+  p.style.animationDuration=(5+Math.random()*5)+"s";
+  document.getElementById("petalContainer").appendChild(p);
+    
+}
+  let user = localStorage.getItem("user");
+
+  if(user){
+    showApp();
+  }else{
+    document.getElementById("loginPage").style.display = "flex";
+    document.getElementById("app").style.display = "none";
+  }
+
+  document
+.getElementById("gstDate")
+.addEventListener("change",()=>{
+
+  document.getElementById("joiningDate").value =
+  document.getElementById("gstDate").value;
+
+  setRedeemDate();
+ 
+});
+
+};
+
+async function loadWithoutGSTNo(){
+
+  const res =
+  await fetch(
+
+    WEBAPP +
+
+    "?api=1&nextWithoutGSTNo=1"
+
+  );
+
+  const data =
+  await res.json();
+
+  document.getElementById(
+    "withoutGSTInvoiceNo"
+  ).value =
+
+  data.invoiceNo || "";
+
+}
+ 
+async function loadGSTInvoiceNo(){
+
+  let res = await fetch(
+
+    WEBAPP +
+
+    "?api=1&nextGSTInvoice=1"
+
+  );
+
+  let data = await res.json();
+
+  document.getElementById(
+    "gstInvoiceNo"
+  ).value = data.invoiceNo;
+
+}
+ 
+
+async function loadRenewalSalesName(){
+
+  const id =
+
+  document.getElementById(
+    "renewalSalesId"
+  ).value;
+
+  if(!id){
+
+    document.getElementById(
+      "renewalSalesName"
+    ).value = "";
+
+    return;
+
+  }
+
+  try{
+
+    const res =
+    await fetch(
+
+      WEBAPP +
+
+      "?api=true&salesId=true&id=" +
+
+      encodeURIComponent(id)
+
+    );
+
+    const data =
+    await res.json();
+
+    if(data.status){
+
+      document.getElementById(
+        "renewalSalesName"
+      ).value = data.name;
+
+    }else{
+
+      document.getElementById(
+        "renewalSalesName"
+      ).value = "";
+
+    }
+
+  }
+
+  catch(err){
+
+    console.log(err);
+
+  }
+
+}
+
+function setActive(el){
+  document.querySelectorAll(".menu-item").forEach(i=>i.classList.remove("active"));
+  el.classList.add("active");
+}
+
+async function getNextInvoiceFromServer(){
+
+  try{
+
+    const res =
+    await fetch(
+      WEBAPP + "?api=1&nextInvoice=true"
+    );
+
+    const data =
+    await res.json();
+
+    document.getElementById(
+      "invoiceNo"
+    ).value = data.invoiceNo;
+
+  }
+
+  catch(err){
+
+    console.log(
+      "Invoice fetch error",
+      err
+    );
+
+  }
+
+}
+
+async function getNextGSTInvoiceFromServer(){
+
+  try{
+
+    const res =
+    await fetch(
+      WEBAPP + "?nextGSTInvoice=true"
+    );
+
+    const data =
+    await res.json();
+
+    document.getElementById(
+      "gstInvoiceNo"
+    ).value = data.invoiceNo;
+
+  }
+
+  catch(err){
+
+    console.log(
+      "GST Invoice fetch error",
+      err
+    );
+
+  }
+
+}
+
+let tempUserData = null;
+let otpTimerInterval = null;
+
+async function login(){
+
+  let username =
+  document.getElementById("user").value;
+
+  let password =
+  document.getElementById("pass").value;
+
+  if(!username || !password){
+    alert("Please enter both username and password.");
+    return;
+  }
+
+  try{
+
+    const res = await fetch(
+
+      WEBAPP +
+      "?api=1&login=1" +
+      "&username=" + encodeURIComponent(username) +
+      "&password=" + encodeURIComponent(password)
+
+    );
+
+    const data = await res.json();
+
+    if(data.status){
+
+      tempUserData = data;
+
+      // Send OTP to user's registered email
+      const otpRes = await fetch(WEBAPP + "?api=1", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "sendOTP",
+          username: data.username,
+          email: data.email
+        })
+      });
+
+      const otpData = await otpRes.json();
+
+      if(otpData.status){
+        document.getElementById("loginCredentialsSection").style.display = "none";
+        document.getElementById("otpSection").style.display = "block";
+        startOtpTimer();
+      }else{
+        alert(otpData.message || "Failed to send OTP to Gmail.");
+      }
+
+    }else{
+
+      alert("Invalid Login");
+
+    }
+
+  }catch(err){
+
+    console.log(err);
+
+    alert("Login Failed");
+
+  }
+
+}
+
+function startOtpTimer(){
+  let timeLeft = 60;
+  const timerEl = document.getElementById("otpTimer");
+  const resendBtn = document.getElementById("resendOtpBtn");
+
+  timerEl.innerText = timeLeft;
+  resendBtn.style.opacity = "0.5";
+  resendBtn.style.pointerEvents = "none";
+
+  if(otpTimerInterval) clearInterval(otpTimerInterval);
+
+  otpTimerInterval = setInterval(() => {
+    timeLeft--;
+    timerEl.innerText = timeLeft;
+
+    if(timeLeft <= 0){
+      clearInterval(otpTimerInterval);
+      resendBtn.style.opacity = "1";
+      resendBtn.style.pointerEvents = "auto";
+    }
+  }, 1000);
+}
+
+async function verifyOTP(){
+  let otpVal = document.getElementById("otpInput").value.trim();
+
+  if(!otpVal){
+    alert("Please enter the OTP.");
+    return;
+  }
+
+  try{
+    const res = await fetch(WEBAPP + "?api=1", {
+      method: "POST",
+      body: JSON.stringify({
+        type: "verifyOTP",
+        username: tempUserData.username,
+        otp: otpVal
+      })
+    });
+
+    const data = await res.json();
+
+    if(data.status){
+      localStorage.setItem(
+        "user",
+        JSON.stringify(tempUserData)
+      );
+      showApp();
+    }else{
+      alert(data.message || "Invalid OTP. Please try again.");
+    }
+  }catch(err){
+    console.log(err);
+    alert("OTP Verification Failed.");
+  }
+}
+
+async function resendOTP(){
+  if(!tempUserData) return;
+
+  try{
+    const res = await fetch(WEBAPP + "?api=1", {
+      method: "POST",
+      body: JSON.stringify({
+        type: "sendOTP",
+        username: tempUserData.username,
+        email: tempUserData.email
+      })
+    });
+
+    const data = await res.json();
+
+    if(data.status){
+      alert("A new OTP has been sent to your Gmail.");
+      startOtpTimer();
+    }else{
+      alert(data.message || "Could not resend OTP.");
+    }
+  }catch(err){
+    console.log(err);
+    alert("Error resending OTP.");
+  }
+}
+
+function backToLogin(){
+  if(otpTimerInterval) clearInterval(otpTimerInterval);
+  document.getElementById("otpSection").style.display = "none";
+  document.getElementById("loginCredentialsSection").style.display = "block";
+  document.getElementById("otpInput").value = "";
+  tempUserData = null;
+}
+
+function logout(){
+  if(confirm("Are you sure you want to logout?")){
+    localStorage.removeItem("user");
+    document.getElementById("app").style.display="none";
+document.getElementById("loginPage").style.display="flex";
+    backToLogin();
+  }
+}
+
+async function loadDashboard(){
+
+  try{
+
+    const res =
+    await fetch(
+      WEBAPP +
+      "?api=1&action=dashboard"
+    );
+
+    const data =
+    await res.json();
+
+    console.log(data);
+
+    // GST
+
+    document.getElementById(
+      "gstBills"
+    ).innerText =
+    data.gstBills || 0;
+
+    document.getElementById(
+      "gstAmount"
+    ).innerText =
+    "₹" + (data.gstAmount || 0);
+
+    // REPURCHASE
+
+    document.getElementById(
+      "todayBills"
+    ).innerText =
+    data.repurchaseBills || 0;
+
+    document.getElementById(
+      "todayAmount"
+    ).innerText =
+    "₹" + (data.repurchaseAmount || 0);
+
+    // VOUCHER
+
+    document.getElementById(
+      "voucherCount"
+    ).innerText =
+    data.voucherCount || 0;
+
+    document.getElementById(
+      "voucherAmount"
+    ).innerText =
+    "₹" + (data.voucherAmount || 0);
+
+    // RENEWAL
+
+    document.getElementById(
+      "renewalCount"
+    ).innerText =
+    data.renewalCount || 0;
+
+    document.getElementById(
+      "renewalAmount"
+    ).innerText =
+    "₹" + (data.renewalAmount || 0);
+
+  }
+
+  catch(err){
+
+    console.log(
+      "Dashboard Error",
+      err
+    );
+
+  }
+
+  document.getElementById(
+  "withoutGSTCount"
+).innerText =
+data.withoutGSTCount || 0;
+
+document.getElementById(
+  "withoutGSTAmount"
+).innerText =
+"₹" + (
+  data.withoutGSTAmount || 0
+);
+
+}
+
+
+const paymentChecks = [
+"cash",
+"cheque",
+"upi",
+"netbanking",
+"card",
+"hypothecation"
+];
+
+paymentChecks.forEach(id=>{
+
+document.getElementById(id)
+.addEventListener("change",function(){
+
+if(this.checked){
+
+paymentChecks.forEach(other=>{
+
+if(other !== id){
+document.getElementById(other).checked = false;
+}
+
+});
+
+}
+
+});
+
+});
+
+/* NAV */
+function addRow(){
+
+  const tbody =
+  document.getElementById(
+    "repurchaseBody"
+  );
+
+  const rowNo =
+  tbody.rows.length + 1;
+
+  const tr =
+  document.createElement("tr");
+
+  tr.innerHTML = `
+
+  <td>${rowNo}</td>
+
+  <td>
+    <input
+    class="desc"
+    placeholder="Item">
+  </td>
+
+  <td>
+    <input
+    class="weight"
+    type="number"
+    oninput="calcRow(this)">
+  </td>
+
+  <td>
+    <input
+    class="rate"
+    type="number"
+    oninput="calcRow(this)">
+  </td>
+
+  <td>
+    <input
+    class="amount"
+    readonly>
+  </td>
+
+  `;
+
+  tbody.appendChild(tr);
+
+}
+
+window.addEventListener(
+"load",
+function(){
+
+  addRow();
+  addRow();
+  addRow();
+
+});
+
+function updateTotal(){
+
+  let total = 0;
+
+  document
+  .querySelectorAll(".amount")
+  .forEach(el => {
+
+    total +=
+    parseFloat(el.value) || 0;
+
+  });
+
+  document.getElementById("total")
+  .value =
+  total.toFixed(2);
+
+  // Amount in words
+
+  document.getElementById("words")
+  .value =
+  numberToWords(
+    Math.round(total)
+  ) + "";
+
+}
+
+function calcRow(el){
+
+  const row =
+  el.closest("tr");
+
+  const weight =
+  parseFloat(
+    row.querySelector(".weight").value
+  ) || 0;
+
+  const rate =
+  parseFloat(
+    row.querySelector(".rate").value
+  ) || 0;
+
+  const amount =
+  weight * rate;
+
+  row.querySelector(".amount")
+  .value =
+  amount.toFixed(2);
+
+  updateTotal();
+
+}
+
+ 
+
+let allProducts = [];
+
+// ==========================
+// LOAD PRODUCTS
+// ==========================
+async function loadProducts(){
+
+  try{
+
+    const res = await fetch(
+      WEBAPP + "?api=1&products=1"
+    );
+
+    const data = await res.json();
+
+    allProducts = data;
+
+    console.log(allProducts);
+   loadWithoutGSTProducts();
+  }
+
+  catch(err){
+
+    console.error(err);
+
+    alert("Products not loading");
+
+  }
+
+}
+
+// ==========================
+// GST ROW
+// ==========================
+function addGSTRow(){
+
+  let tbody =
+  document.querySelector("#gstTable tbody");
+
+  let rowCount =
+  tbody.querySelectorAll("tr").length + 1;
+
+  let tr = document.createElement("tr");
+
+  tr.innerHTML = `
+
+<td>${rowCount}</td>
+
+<td style="position:relative;">
+
+<input
+class="product-search"
+placeholder="Search Product"
+onkeyup="searchProduct(this)"
+autocomplete="off">
+
+<div class="product-list"></div>
+
+</td>
+
+<td><input class="modelNo"></td>
+
+<td><input class="pmodel"></td>
+
+<td><input class="hsn"></td>
+
+<td>
+<input
+class="qty"
+placeholder="Qty"
+oninput="calculateRow(this.closest('tr'))">
+</td>
+
+<td>
+<input
+class="rate"
+oninput="calculateRow(this.closest('tr'))">
+</td>
+
+<td><input class="gross" readonly></td>
+
+<td><input class="gst" readonly></td>
+
+<td><input class="cgstp" readonly></td>
+
+<td><input class="cgst" readonly></td>
+
+<td><input class="sgstp" readonly></td>
+
+<td><input class="sgst" readonly></td>
+
+<td><input class="igstp" readonly></td>
+
+<td><input class="igst" readonly></td>
+
+<td><input class="taxable" readonly></td>
+
+`;
+
+  tbody.appendChild(tr);
+
+  calculateGSTTotals();
+
+}
+
+async function loadInvoiceNo(){
+
+  const res =
+  await fetch(
+    WEBAPP +
+    "?api=1&nextInvoice=true"
+  );
+
+  const data =
+  await res.json();
+
+  document
+  .getElementById("invoiceNo")
+  .value =
+  data.invoiceNo;
+
+}
+// ==========================
+// SEARCH PRODUCT
+// ==========================
+function searchProduct(input){
+
+  let value =
+  input.value.toLowerCase();
+
+  let list =
+  input.parentElement
+  .querySelector(".product-list");
+
+  list.innerHTML = "";
+
+  if(value === "") return;
+
+  let filtered =
+  allProducts.filter(p =>
+
+    p.name &&
+    p.name.toLowerCase().includes(value)
+
+  );
+
+  filtered.forEach(product => {
+
+    let div =
+    document.createElement("div");
+
+    div.className = "product-item";
+
+    div.innerText = product.name;
+
+    div.onclick = function(){
+
+      selectProduct(
+        input,
+        product
+      );
+
     };
 
-    function initParticles() {
-      const container = document.getElementById("particles");
-      for (let i = 0; i < 30; i++) {
-        let span = document.createElement("span");
-        span.style.left = Math.random() * 100 + "%";
-        span.style.animationDuration = (5 + Math.random() * 5) + "s";
-        container.appendChild(span);
-      }
+    list.appendChild(div);
+
+  });
+
+}
+
+function autoSelectKit(productModel){
+
+  autoSelectKits([
+    {
+      productModel: productModel
+    }
+  ]);
+
+}
+
+function selectProduct(input, product){
+
+  let tr =
+  input.closest("tr");
+
+  input.value = product.name;
+
+  // DISABLE SEARCH
+  input.setAttribute("readonly", true);
+
+  input.style.background = "#f3f3f3";
+
+  tr.querySelector(".modelNo").value =
+  product.modelNo || "";
+
+  tr.querySelector(".pmodel").value =
+  product.productModel || "";
+
+ autoSelectKits([
+  {
+    productModel:
+    product.productModel || ""
+  }
+]);
+  tr.querySelector(".hsn").value =
+  product.hsn || "";
+
+  tr.querySelector(".gst").value =
+  product.gst || "";
+
+  const state =
+  document.getElementById("state")
+  .value
+  .trim()
+  .toUpperCase();
+
+  const businessState =
+  "TELANGANA";
+
+  if(state !== businessState){
+
+    tr.querySelector(".cgstp").value = 0;
+    tr.querySelector(".sgstp").value = 0;
+
+    tr.querySelector(".igstp").value =
+    product.gst || 0;
+
+  }else{
+
+    tr.querySelector(".cgstp").value =
+    Number(product.gst || 0) / 2;
+
+    tr.querySelector(".sgstp").value =
+    Number(product.gst || 0) / 2;
+
+    tr.querySelector(".igstp").value = 0;
+
+  }
+
+  tr.querySelector(".product-list").innerHTML = "";
+
+  calculateRow(tr);
+
+}
+ 
+function fillProduct(input){
+
+  let row = input.closest("tr");
+  let inputs = row.querySelectorAll("input");
+
+  let productName = input.value.trim();
+
+  let product = allProducts.find(p =>
+    p.name.toLowerCase() === productName.toLowerCase()
+  );
+
+  if(product){
+
+    // MODEL NO
+    inputs[1].value = product.modelNo || "";
+
+    // PRODUCT MODEL
+    inputs[2].value = product.productModel || "";
+
+    // HSN
+    inputs[3].value = product.hsn || "";
+
+    // GST %
+    inputs[6].value = product.gst || "";
+    
+
+    calcGST(inputs[4]);
+  }
+ 
+
+}
+
+function calculateRow(row){
+
+  let qty =
+  Number(
+    row.querySelector(".qty").value || 0
+  );
+
+  let rate =
+  Number(
+    row.querySelector(".rate").value || 0
+  );
+
+  let gst =
+  Number(
+    row.querySelector(".gst").value || 0
+  );
+
+  let gross = qty * rate;
+
+  let gstAmt = gross * gst / 100;
+
+  let cgstPercent = 0;
+  let sgstPercent = 0;
+  let igstPercent = 0;
+
+  let cgstAmt = 0;
+  let sgstAmt = 0;
+  let igstAmt = 0;
+
+  const state =
+  document.getElementById("state")
+  .value
+  .trim()
+  .toUpperCase();
+
+  const businessState = "TELANGANA";
+
+  if(state !== businessState){
+
+    igstPercent = gst;
+    igstAmt = gstAmt;
+
+  }else{
+
+    cgstPercent = gst / 2;
+    sgstPercent = gst / 2;
+
+    cgstAmt = gstAmt / 2;
+    sgstAmt = gstAmt / 2;
+
+  }
+
+  row.querySelector(".gross").value =
+  gross.toFixed(2);
+
+  row.querySelector(".cgstp").value =
+  cgstPercent.toFixed(2);
+
+  row.querySelector(".cgst").value =
+  cgstAmt.toFixed(2);
+
+  row.querySelector(".sgstp").value =
+  sgstPercent.toFixed(2);
+
+  row.querySelector(".sgst").value =
+  sgstAmt.toFixed(2);
+
+  row.querySelector(".igstp").value =
+  igstPercent.toFixed(2);
+
+  row.querySelector(".igst").value =
+  igstAmt.toFixed(2);
+
+ let taxable =
+gross + cgstAmt + sgstAmt + igstAmt;
+
+row.querySelector(".taxable").value =
+taxable.toFixed(2);
+
+  updateGSTTotals();
+  calculateGSTTotals();
+}
+
+function updateGSTTotals(){
+
+  let rows =
+  document.querySelectorAll(
+    "#gstTable tbody tr"
+  );
+
+  let qty = 0;
+  let gross = 0;
+  let cgst = 0;
+  let sgst = 0;
+  let igst = 0;
+  let taxable = 0;
+
+  rows.forEach(r => {
+
+    qty += Number(
+      r.querySelector(".qty").value || 0
+    );
+
+    gross += Number(
+      r.querySelector(".gross").value || 0
+    );
+
+    cgst += Number(
+      r.querySelector(".cgst").value || 0
+    );
+
+    sgst += Number(
+      r.querySelector(".sgst").value || 0
+    );
+
+    igst += Number(
+      r.querySelector(".igst").value || 0
+    );
+
+    taxable += Number(
+      r.querySelector(".taxable").value || 0
+    );
+
+  });
+
+  totalQty.value =
+  qty.toFixed(2);
+
+  totalGross.value =
+  gross.toFixed(2);
+
+  totalCGST.value =
+  cgst.toFixed(2);
+
+  totalSGST.value =
+  sgst.toFixed(2);
+
+  totalIGST.value =
+  igst.toFixed(2);
+
+  totalTaxable.value =
+  taxable.toFixed(2);
+
+  basicAmt.value =
+  gross.toFixed(2);
+
+  cgstAmt.value =
+  cgst.toFixed(2);
+
+  sgstAmt.value =
+  sgst.toFixed(2);
+
+  igstAmt.value =
+  igst.toFixed(2);
+
+  totalGST.value =
+  (cgst + sgst + igst).toFixed(2);
+
+  finalTotal.value =
+  taxable.toFixed(2);
+
+  gstWords.value =
+  numberToWords(
+    Math.round(taxable)
+  ) + "";
+
+}
+
+function totalGSTCalc(){
+
+  let rows = document.querySelectorAll("#gstTable tbody tr");
+
+  let total = 0;
+
+  rows.forEach(r=>{
+    let val = Number(r.querySelectorAll("input")[6].value) || 0;
+    total += val;
+  });
+
+  document.getElementById("gstTotal").value = total;
+  document.getElementById("gstWords").value = numberToWords(total) + "";
+}
+function formatDate(d){
+  let date = new Date(d);
+
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  return date.getDate() + "-" + months[date.getMonth()] + "-" + date.getFullYear();
+}
+
+/* CALC */
+function calc(el){
+  let r=el.parentElement.parentElement;
+  let i=r.querySelectorAll("input");
+  let w=parseFloat(i[1].value);
+  let rate=parseFloat(i[2].value);
+  if(!isNaN(w)&&!isNaN(rate)){
+    i[3].value=w*rate;
+  }
+  totalCalc();
+}
+
+function totalCalc(){
+  let rows=document.querySelectorAll("#table tr");
+  let t=0;
+  for(let i=1;i<rows.length;i++){
+    t+=Number(rows[i].querySelectorAll("input")[3].value)||0;
+  }
+  total.value=t;
+  words.value=numberToWords(t)+"";
+}
+
+/* NUMBER TO WORDS (Indian) */
+function numberToWords(num){
+
+  num = parseFloat(num) || 0;
+
+  if(num === 0){
+    return "Zero Rupees Only";
+  }
+
+  const ones = [
+    "", "One", "Two", "Three", "Four",
+    "Five", "Six", "Seven", "Eight",
+    "Nine", "Ten", "Eleven", "Twelve",
+    "Thirteen", "Fourteen", "Fifteen",
+    "Sixteen", "Seventeen", "Eighteen",
+    "Nineteen"
+  ];
+
+  const tens = [
+    "", "", "Twenty", "Thirty",
+    "Forty", "Fifty", "Sixty",
+    "Seventy", "Eighty", "Ninety"
+  ];
+
+  function convert(n){
+
+    n = Math.floor(n);
+
+    if(n < 20){
+      return ones[n];
     }
 
-    // --- AUTHENTICATION & OTP LOGIC ---
-    function requestOTP() {
-      const u = document.getElementById("user").value;
-      const p = document.getElementById("pass").value;
-      if (!u || !p) return alert("Please enter Username and Password");
-
-      generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-      alert("OTP Sent Successfully! Your Verification Code is: " + generatedOTP);
-
-      document.getElementById("credentialsForm").style.display = "none";
-      document.getElementById("otpForm").style.display = "block";
-      document.getElementById("loginTitle").innerText = "Enter Verification OTP";
+    if(n < 100){
+      return tens[Math.floor(n/10)] +
+      (n%10 ? " " + ones[n%10] : "");
     }
 
-    function verifyAndLogin() {
-      const inputOTP = document.getElementById("otpInput").value;
-      if (inputOTP === generatedOTP) {
-        activeUser = {
-          username: document.getElementById("user").value,
-          name: "Teppali Saidulu",
-          photo: "https://lh3.googleusercontent.com/d/1h4VGQ31MYcGto3-1rMSQqqj9LjHb9Bcd"
-        };
-        localStorage.setItem("user", JSON.stringify(activeUser));
-        showApp();
-      } else {
-        alert("Invalid OTP! Try again.");
-      }
+    if(n < 1000){
+      return ones[Math.floor(n/100)] +
+      " Hundred " +
+      (n%100 ? convert(n%100) : "");
     }
 
-    function logout() {
-      if (confirm("Logout from system?")) {
-        localStorage.removeItem("user");
-        location.reload();
-      }
+    if(n < 100000){
+      return convert(Math.floor(n/1000)) +
+      " Thousand " +
+      (n%1000 ? convert(n%1000) : "");
     }
 
-    // --- NAVIGATION & UI WRAPPER ---
-    function showApp() {
-      document.getElementById("loginPage").style.display = "none";
-      document.getElementById("app").style.display = "block";
-      document.getElementById("usernameDisplay").innerText = activeUser.name;
-      document.getElementById("topProfile").src = activeUser.photo;
-
-      loadProducts();
-      switchPage('gst');
+    if(n < 10000000){
+      return convert(Math.floor(n/100000)) +
+      " Lakh " +
+      (n%100000 ? convert(n%100000) : "");
     }
 
-    function switchPage(page) {
-      currentPage = page;
-      document.getElementById("gstPage").style.display = "none";
-      document.getElementById("withoutGSTPage").style.display = "none";
-      document.getElementById("repurchasePage").style.display = "none";
-      document.getElementById("voucherPage").style.display = "none";
-      document.getElementById("renewalPage").style.display = "none";
+    return "";
+  }
 
-      const titles = {
-        gst: "GST Invoice",
-        withoutGST: "Without GST Invoice",
-        repurchase: "Repurchase Billing",
-        voucher: "Coupon Voucher",
-        renewal: "Renewal Voucher"
-      };
+  return convert(num) + " Rupees Only";
+}
 
-      document.getElementById("pageTitle").innerText = titles[page];
-      document.getElementById(page + "Page").style.display = "block";
+ 
 
-      document.querySelectorAll(".menu-item").forEach(el => el.classList.remove("active"));
+async function generate(){
 
-      fetchNextInvoiceNo(page);
-      renderChart();
+  if(
+!validateRequiredFields([
+
+{id:"name",name:"Vendor Name"},
+{id:"address",name:"Address"},
+{id:"repurchasePhone",name:"Phone Number"}
+
+])
+){
+return;
+}
+
+ const items = [];
+
+document.querySelectorAll(
+"#repurchaseBody tr"
+).forEach(row => {
+
+  const desc =
+  row.querySelector(".desc")?.value || "";
+
+  const weight =
+  row.querySelector(".weight")?.value || "";
+
+  const rate =
+  row.querySelector(".rate")?.value || "";
+
+  const amount =
+  row.querySelector(".amount")?.value || "";
+
+  if(desc){
+
+    items.push({
+      desc,
+      weight,
+      rate,
+      amount
+    });
+
+  }
+
+});
+  const data = {
+
+  type : "repurchase",
+
+  invoiceNo :
+  document.getElementById(
+    "invoiceNo"
+  ).value,
+
+  date :
+  document.getElementById(
+    "date"
+  ).value,
+
+  name :
+  document.getElementById(
+    "name"
+  ).value,
+
+  address :
+  document.getElementById(
+    "address"
+  ).value,
+
+  phone :
+  document.getElementById(
+    "repurchasePhone"
+  ).value,
+
+  total :
+  document.getElementById(
+    "total"
+  ).value,
+  words :
+document.getElementById(
+  "words"
+).value,
+
+  items : items,
+
+  
+    createdBy :
+JSON.parse(
+  localStorage.getItem("user") || "{}"
+).username || ""
+
+  };
+
+  const res =
+  await fetch(
+    WEBAPP + "?api=1",
+    {
+      method:"POST",
+      body: JSON.stringify(data)
     }
+  );
 
-    // --- DYNAMIC INVOICE NUMBERS ---
-    async function fetchNextInvoiceNo(type) {
-      const today = new Date().toISOString().split('T')[0];
-      const randomSeq = Math.floor(1000 + Math.random() * 9000);
-
-      if (type === 'gst') {
-        document.getElementById("gst_invoiceNo").value = "BTP/GST/" + randomSeq;
-        document.getElementById("gst_date").value = today;
-        if (document.querySelectorAll("#gstTable tbody tr").length === 0) addGSTRow();
-      } else if (type === 'withoutGST') {
-        document.getElementById("w_invoiceNo").value = "BTP/RETAIL/" + randomSeq;
-        document.getElementById("w_date").value = today;
-        if (document.querySelectorAll("#withoutGSTTable tbody tr").length === 0) addWithoutGSTRow();
-      } else if (type === 'repurchase') {
-        document.getElementById("r_invoiceNo").value = "BTP/REP/" + randomSeq;
-        document.getElementById("r_date").value = today;
-        if (document.querySelectorAll("#repurchaseTable tbody tr").length === 0) addRepurchaseRow();
-      } else if (type === 'voucher') {
-        document.getElementById("v_no").value = "BTP/VCH/" + randomSeq;
-        document.getElementById("v_joining").value = today;
-        calcVoucherDates();
-      } else if (type === 'renewal') {
-        document.getElementById("rn_no").value = "BTP/RNW/" + randomSeq;
-        document.getElementById("rn_date").value = today;
-        calculateRenewalLogic();
-      }
-    }
-
-    // --- PRODUCT FETCH & AUTOCOMPLETE ---
-    async function loadProducts() {
-      try {
-        const res = await fetch(WEBAPP + "?api=1&products=1");
-        allProducts = await res.json();
-      } catch (e) {
-        allProducts = [
-          { name: "Gold Kit", modelNo: "GK-01", hsn: "7113", gst: 3, rate: 10000 },
-          { name: "Silver Kit", modelNo: "SK-01", hsn: "7113", gst: 3, rate: 5000 },
-          { name: "Herbal Care Package", modelNo: "HC-05", hsn: "3004", gst: 12, rate: 1500 }
-        ];
-      }
-    }
-
-    function searchProduct(input, type) {
-      const val = input.value.toLowerCase();
-      let list = input.nextElementSibling;
-      if (!list || !list.classList.contains('product-list')) {
-        list = document.createElement('div');
-        list.className = 'product-list';
-        input.parentNode.appendChild(list);
-      }
-      list.innerHTML = '';
-      if (!val) return;
-
-      const matches = allProducts.filter(p => p.name.toLowerCase().includes(val));
-      matches.forEach(p => {
-        const item = document.createElement('div');
-        item.className = 'product-item';
-        item.innerText = p.name;
-        item.onclick = () => {
-          input.value = p.name;
-          const tr = input.closest('tr');
-          if (type === 'gst') {
-            tr.querySelector('.model').value = p.modelNo;
-            tr.querySelector('.hsn').value = p.hsn;
-            tr.querySelector('.rate').value = p.rate;
-            tr.querySelector('.gstP').value = p.gst;
-            calculateGSTTable();
-          } else if (type === 'withoutGST') {
-            tr.querySelector('.model').value = p.modelNo;
-            tr.querySelector('.hsn').value = p.hsn;
-            tr.querySelector('.rate').value = p.rate;
-            calculateWithoutGSTTable();
-          }
-          list.remove();
-        };
-        list.appendChild(item);
-      });
-    }
-
-    // --- TABLE CALCULATIONS (GST) ---
-    function addGSTRow() {
-      const tbody = document.querySelector("#gstTable tbody");
-      const rowCount = tbody.children.length + 1;
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${rowCount}</td>
-        <td><input class="pname" onkeyup="searchProduct(this, 'gst')" placeholder="Product"></td>
-        <td><input class="model" style="width:60px;"></td>
-        <td><input class="hsn" style="width:60px;"></td>
-        <td><input class="qty" type="number" value="1" style="width:50px;" oninput="calculateGSTTable()"></td>
-        <td><input class="rate" type="number" value="0" style="width:70px;" oninput="calculateGSTTable()"></td>
-        <td><input class="gross" readonly style="width:70px;"></td>
-        <td><input class="gstP" type="number" value="0" style="width:40px;" oninput="calculateGSTTable()"></td>
-        <td><input class="cgst" readonly style="width:60px;"></td>
-        <td><input class="sgst" readonly style="width:60px;"></td>
-        <td><input class="igst" readonly style="width:60px;"></td>
-        <td><input class="total" readonly style="width:80px;"></td>
-      `;
-      tbody.appendChild(tr);
-    }
-
-    function calculateGSTTable() {
-      let grandTotal = 0;
-      const state = document.getElementById("gst_state").value.trim().toUpperCase();
-      const isInterstate = state !== "TELANGANA";
-
-      document.querySelectorAll("#gstTable tbody tr").forEach(tr => {
-        const qty = parseFloat(tr.querySelector(".qty").value) || 0;
-        const rate = parseFloat(tr.querySelector(".rate").value) || 0;
-        const gstP = parseFloat(tr.querySelector(".gstP").value) || 0;
-
-        const gross = qty * rate;
-        const gstAmt = gross * (gstP / 100);
-
-        tr.querySelector(".gross").value = gross.toFixed(2);
-
-        if (isInterstate) {
-          tr.querySelector(".cgst").value = "0.00";
-          tr.querySelector(".sgst").value = "0.00";
-          tr.querySelector(".igst").value = gstAmt.toFixed(2);
-        } else {
-          tr.querySelector(".cgst").value = (gstAmt / 2).toFixed(2);
-          tr.querySelector(".sgst").value = (gstAmt / 2).toFixed(2);
-          tr.querySelector(".igst").value = "0.00";
-        }
-
-        const rowTotal = gross + gstAmt;
-        tr.querySelector(".total").value = rowTotal.toFixed(2);
-        grandTotal += rowTotal;
-      });
-
-      document.getElementById("gstFinalTotal").value = grandTotal.toFixed(2);
-      document.getElementById("gstWords").value = numberToWords(grandTotal);
-    }
-
-    // --- TABLE CALCULATIONS (WITHOUT GST) ---
-    function addWithoutGSTRow() {
-      const tbody = document.querySelector("#withoutGSTTable tbody");
-      const rowCount = tbody.children.length + 1;
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${rowCount}</td>
-        <td><input class="pname" onkeyup="searchProduct(this, 'withoutGST')" placeholder="Product Name"></td>
-        <td><input class="model"></td>
-        <td><input class="hsn"></td>
-        <td><input class="qty" type="number" value="1" oninput="calculateWithoutGSTTable()"></td>
-        <td><input class="rate" type="number" value="0" oninput="calculateWithoutGSTTable()"></td>
-        <td><input class="amount" readonly></td>
-      `;
-      tbody.appendChild(tr);
-    }
-
-    function calculateWithoutGSTTable() {
-      let grandTotal = 0;
-      document.querySelectorAll("#withoutGSTTable tbody tr").forEach(tr => {
-        const qty = parseFloat(tr.querySelector(".qty").value) || 0;
-        const rate = parseFloat(tr.querySelector(".rate").value) || 0;
-        const amt = qty * rate;
-        tr.querySelector(".amount").value = amt.toFixed(2);
-        grandTotal += amt;
-      });
-      document.getElementById("wFinalTotal").value = grandTotal.toFixed(2);
-      document.getElementById("wWords").value = numberToWords(grandTotal);
-    }
-
-    // --- TABLE CALCULATIONS (REPURCHASE) ---
-    function addRepurchaseRow() {
-      const tbody = document.querySelector("#repurchaseTable tbody");
-      const rowCount = tbody.children.length + 1;
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${rowCount}</td>
-        <td><input class="desc" placeholder="Item Description"></td>
-        <td><input class="weight" type="number" value="1" oninput="calculateRepurchaseTable()"></td>
-        <td><input class="rate" type="number" value="0" oninput="calculateRepurchaseTable()"></td>
-        <td><input class="amount" readonly></td>
-      `;
-      tbody.appendChild(tr);
-    }
-
-    function calculateRepurchaseTable() {
-      let grandTotal = 0;
-      document.querySelectorAll("#repurchaseTable tbody tr").forEach(tr => {
-        const weight = parseFloat(tr.querySelector(".weight").value) || 0;
-        const rate = parseFloat(tr.querySelector(".rate").value) || 0;
-        const amt = weight * rate;
-        tr.querySelector(".amount").value = amt.toFixed(2);
-        grandTotal += amt;
-      });
-      document.getElementById("rFinalTotal").value = grandTotal.toFixed(2);
-      document.getElementById("rWords").value = numberToWords(grandTotal);
-    }
-
-    // --- VOUCHER & RENEWAL LOGIC ---
-    function calcVoucherDates() {
-      const d = new Date(document.getElementById("v_joining").value);
-      if (!isNaN(d.getTime())) {
-        d.setFullYear(d.getFullYear() + 1);
-        document.getElementById("v_redeem").value = d.toISOString().split('T')[0];
-      }
-      calculateVoucherLogic();
-    }
-
-    function calculateVoucherLogic() {
-      const kits = parseInt(document.getElementById("v_kits").value) || 0;
-      const basePoints = kits * 6000;
-      const monthlyGross = basePoints / 12;
-      const monthlyNet = monthlyGross * 0.98; // 2% Deduction
-
-      document.getElementById("v_totalPoints").value = basePoints;
-      document.getElementById("v_monthlyNet").value = monthlyNet.toFixed(2);
-      document.getElementById("v_totalNet").value = (monthlyNet * 12).toFixed(2);
-    }
-
-    function calculateRenewalLogic() {
-      const kits = parseInt(document.getElementById("rn_kits").value) || 0;
-      const basePoints = kits * 6000;
-      const monthlyNet = (basePoints / 12) * 0.98;
-
-      document.getElementById("rn_monthlyNet").value = monthlyNet.toFixed(2);
-      document.getElementById("rn_totalNet").value = (monthlyNet * 12).toFixed(2);
-    }
-
-    // --- NUMBER TO WORDS ENGINE (INDIAN CURRENCY) ---
-    function numberToWords(num) {
-      num = Math.round(parseFloat(num) || 0);
-      if (num === 0) return "Zero Rupees Only";
-      const a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
-      const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-
-      function inWords(n) {
-        if ((n = n.toString()).length > 9) return 'overflow';
-        let n_array = ('000000000' + n).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
-        if (!n_array) return '';
-        let str = '';
-        str += (n_array[1] != 0) ? (a[Number(n_array[1])] || b[n_array[1][0]] + ' ' + a[n_array[1][1]]) + 'Lakh ' : '';
-        str += (n_array[2] != 0) ? (a[Number(n_array[2])] || b[n_array[2][0]] + ' ' + a[n_array[2][1]]) + 'Thousand ' : '';
-        str += (n_array[3] != 0) ? (a[Number(n_array[3])] || b[n_array[3][0]] + ' ' + a[n_array[3][1]]) + 'Hundred ' : '';
-        str += (n_array[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n_array[5])] || b[n_array[5][0]] + ' ' + a[n_array[5][1]]) : '';
-        return str;
-      }
-      return inWords(num) + "Rupees Only";
-    }
-
-    // --- CHART.JS BILLING GRAPH ---
-    function renderChart() {
-      const ctx = document.getElementById('dashboardChart').getContext('2d');
-      if (globalChart) globalChart.destroy();
-
-      globalChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-          datasets: [{
-            label: 'Sales Revenue (₹)',
-            data: [12000, 19000, 15000, 25000, 22000, 30000],
-            borderColor: '#ff758c',
-            backgroundColor: 'rgba(255, 117, 140, 0.2)',
-            fill: true,
-            tension: 0.3
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } }
-        }
-      });
-
-      document.getElementById("cardTitle1").innerText = currentPage.toUpperCase() + " Bills";
-      document.getElementById("cardCount").innerText = Math.floor(5 + Math.random() * 15);
-      document.getElementById("cardAmount").innerText = "₹" + (25000 + Math.floor(Math.random() * 10000)).toLocaleString();
-    }
-
-    // --- PDF PRINTING, SAVING & SERVER SYNC ---
-    async function saveDataAndPrint() {
-      const element = document.getElementById("printableArea");
-      
-      // Save Data to Google Apps Script
-      try {
-        fetch(WEBAPP, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: currentPage,
-            user: activeUser.username,
-            timestamp: new Date().toISOString()
-          })
-        });
-      } catch (e) { console.log(e); }
-
-      // Generate PDF
-      const opt = {
-        margin: 0.5,
-        filename: currentPage + '_invoice.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      };
-
-      html2pdf().set(opt).from(element).save();
-    }
-
-    function shareWhatsApp() {
-      let phone = "";
-      if (currentPage === 'gst') phone = document.getElementById("gst_phone").value;
-      if (currentPage === 'withoutGST') phone = document.getElementById("w_phone").value;
-      if (currentPage === 'repurchase') phone = document.getElementById("r_phone").value;
-
-      const msg = encodeURIComponent("Greetings from Beulah Traders Private Limited! Your " + currentPage.toUpperCase() + " Invoice has been generated successfully.");
-      window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
-    }
-
-    // --- PROFILE & PASSWORD POPUPS ---
-    function toggleDropdown() {
-      document.getElementById("dropdownMenu").classList.toggle("show");
-    }
-
-    function openProfile() {
-      document.getElementById("profName").innerText = activeUser.name;
-      document.getElementById("profUser").innerText = activeUser.username;
-      document.getElementById("profImg").src = activeUser.photo;
-      document.getElementById("profilePopup").style.display = "flex";
-    }
-
-    function closeProfile() { document.getElementById("profilePopup").style.display = "none"; }
-    function openPasswordPopup() { document.getElementById("passwordPopup").style.display = "flex"; }
-    function closePasswordPopup() { document.getElementById("passwordPopup").style.display = "none"; }
-
-    function submitPasswordChange() {
-      alert("Password updated successfully!");
-      closePasswordPopup();
-    }
-  </script>
+  const result =
+  await res.json();
+}
+</script>
 </body>
 </html>
