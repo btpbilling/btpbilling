@@ -2195,40 +2195,16 @@ color:#2f2f2f;}
 
       <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" class="login-logo">
 
-      <!-- STEP 1: USERNAME & PASSWORD -->
-      <div id="loginCredentialsSection">
-        <h2>Login</h2>
+      <h2>Login</h2>
 
-        <input id="user" placeholder="Username"><br>
-        <input id="pass" type="password" placeholder="Password"><br>
+      <input id="user" placeholder="Username"><br>
+      <input id="pass" type="password" placeholder="Password"><br>
 
-        <button onclick="login()">Login</button>
+      <button onclick="login()">Login</button>
 
-        <div class="login-options" style="margin-top: 15px;">
-          <label><input type="checkbox"> Remember Me</label>
-          <span>Forgot Password</span>
-        </div>
-      </div>
-
-      <!-- STEP 2: OTP VERIFICATION -->
-      <div id="otpSection" style="display:none;">
-        <h2>Verify OTP</h2>
-        <p style="font-size:12px; margin-bottom:10px; color:#444;">
-          An OTP has been sent to your registered Gmail address.
-        </p>
-
-        <input id="otpInput" type="text" placeholder="Enter 6-digit OTP" maxlength="6" style="text-align:center; letter-spacing: 2px;"><br>
-
-        <button onclick="verifyOTP()">Verify & Continue</button>
-
-        <p style="font-size:12px; margin-top:12px;">
-          Resend OTP in: <span id="otpTimer" style="font-weight:bold;">60</span>s
-        </p>
-
-        <div class="login-options" style="margin-top: 10px; justify-content: space-between;">
-          <span id="resendOtpBtn" onclick="resendOTP()" style="cursor:pointer; opacity:0.5; pointer-events:none;">Resend OTP</span>
-          <span onclick="backToLogin()" style="cursor:pointer;">Back to Login</span>
-        </div>
+      <div class="login-options">
+        <label><input type="checkbox"> Remember Me</label>
+        <span>Forgot Password</span>
       </div>
 
     </div>
@@ -2623,6 +2599,7 @@ style="display:none;">
   <td>IFSC</td>
   <td><input id="ifsc"></td>
 </tr>
+    </tr>
   </table>
 
   <!-- PAYMENT MODE -->
@@ -4505,8 +4482,7 @@ async function getNextGSTInvoiceFromServer(){
 
 }
 
-let tempUserData = null;
-let otpTimerInterval = null;
+
 
 async function login(){
 
@@ -4515,11 +4491,6 @@ async function login(){
 
   let password =
   document.getElementById("pass").value;
-
-  if(!username || !password){
-    alert("Please enter both username and password.");
-    return;
-  }
 
   try{
 
@@ -4536,27 +4507,12 @@ async function login(){
 
     if(data.status){
 
-      tempUserData = data;
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data)
+      );
 
-      // Send OTP to user's registered email
-      const otpRes = await fetch(WEBAPP + "?api=1", {
-        method: "POST",
-        body: JSON.stringify({
-          type: "sendOTP",
-          username: data.username,
-          email: data.email
-        })
-      });
-
-      const otpData = await otpRes.json();
-
-      if(otpData.status){
-        document.getElementById("loginCredentialsSection").style.display = "none";
-        document.getElementById("otpSection").style.display = "block";
-        startOtpTimer();
-      }else{
-        alert(otpData.message || "Failed to send OTP to Gmail.");
-      }
+      showApp();
 
     }else{
 
@@ -4574,105 +4530,11 @@ async function login(){
 
 }
 
-function startOtpTimer(){
-  let timeLeft = 60;
-  const timerEl = document.getElementById("otpTimer");
-  const resendBtn = document.getElementById("resendOtpBtn");
-
-  timerEl.innerText = timeLeft;
-  resendBtn.style.opacity = "0.5";
-  resendBtn.style.pointerEvents = "none";
-
-  if(otpTimerInterval) clearInterval(otpTimerInterval);
-
-  otpTimerInterval = setInterval(() => {
-    timeLeft--;
-    timerEl.innerText = timeLeft;
-
-    if(timeLeft <= 0){
-      clearInterval(otpTimerInterval);
-      resendBtn.style.opacity = "1";
-      resendBtn.style.pointerEvents = "auto";
-    }
-  }, 1000);
-}
-
-async function verifyOTP(){
-  let otpVal = document.getElementById("otpInput").value.trim();
-
-  if(!otpVal){
-    alert("Please enter the OTP.");
-    return;
-  }
-
-  try{
-    const res = await fetch(WEBAPP + "?api=1", {
-      method: "POST",
-      body: JSON.stringify({
-        type: "verifyOTP",
-        username: tempUserData.username,
-        otp: otpVal
-      })
-    });
-
-    const data = await res.json();
-
-    if(data.status){
-      localStorage.setItem(
-        "user",
-        JSON.stringify(tempUserData)
-      );
-      showApp();
-    }else{
-      alert(data.message || "Invalid OTP. Please try again.");
-    }
-  }catch(err){
-    console.log(err);
-    alert("OTP Verification Failed.");
-  }
-}
-
-async function resendOTP(){
-  if(!tempUserData) return;
-
-  try{
-    const res = await fetch(WEBAPP + "?api=1", {
-      method: "POST",
-      body: JSON.stringify({
-        type: "sendOTP",
-        username: tempUserData.username,
-        email: tempUserData.email
-      })
-    });
-
-    const data = await res.json();
-
-    if(data.status){
-      alert("A new OTP has been sent to your Gmail.");
-      startOtpTimer();
-    }else{
-      alert(data.message || "Could not resend OTP.");
-    }
-  }catch(err){
-    console.log(err);
-    alert("Error resending OTP.");
-  }
-}
-
-function backToLogin(){
-  if(otpTimerInterval) clearInterval(otpTimerInterval);
-  document.getElementById("otpSection").style.display = "none";
-  document.getElementById("loginCredentialsSection").style.display = "block";
-  document.getElementById("otpInput").value = "";
-  tempUserData = null;
-}
-
 function logout(){
   if(confirm("Are you sure you want to logout?")){
     localStorage.removeItem("user");
     document.getElementById("app").style.display="none";
 document.getElementById("loginPage").style.display="flex";
-    backToLogin();
   }
 }
 
@@ -5565,7 +5427,3046 @@ JSON.parse(
 
   const result =
   await res.json();
+
+  console.log(result);
+
+  // =========================
+  // SUCCESS
+  // =========================
+
+if(result.status){
+
+  alert(
+    "Repurchase Bill Generated Successfully"
+  );
+
+  loadDashboard();
+
+  if(result.pdfUrl){
+
+    window.open(
+      result.pdfUrl,
+      "_blank"
+    );
+
+  }
+
+  clearRepurchaseForm();
+
+    // WHATSAPP
+
+    const phone =
+    document
+    .getElementById("repurchasePhone")
+    .value
+    .trim();
+
+    const msg =
+
+`Hello ${data.name},
+
+Your Repurchase Bill Generated Successfully.
+
+Invoice No: ${result.invoiceNo}
+
+Amount: ₹${data.total}
+
+PDF:
+${result.pdfUrl}
+
+Thanks,
+BEULAH TRADERS`;
+
+    const whatsapp =
+
+`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`;
+
+    window.open(
+      whatsapp,
+      "_blank"
+    );
+
+  }
+
+  // =========================
+  // ERROR
+  // =========================
+
+  else{
+
+    alert(
+      result.message || "Generation Failed"
+    );
+
+  }
+
 }
+
+function clearRepurchaseForm(){
+
+  document.getElementById("name").value="";
+  document.getElementById("address").value="";
+  document.getElementById("repurchasePhone").value="";
+  document.getElementById("total").value="";
+  document.getElementById("words").value="";
+
+  document.querySelector(
+    "#repurchaseBody"
+  ).innerHTML="";
+
+  addRow();
+  addRow();
+  addRow();
+
+  loadRepurchaseNo();
+
+}
+
+function formatDateIndian(dateStr){
+
+  if(!dateStr) return "";
+
+  const d = new Date(dateStr);
+
+  const months = [
+    "Jan","Feb","Mar","Apr","May","Jun",
+    "Jul","Aug","Sep","Oct","Nov","Dec"
+  ];
+
+  const day =
+  String(d.getDate()).padStart(2,"0");
+
+  const month =
+  months[d.getMonth()];
+
+  const year =
+  d.getFullYear();
+
+  return `${day}-${month}-${year}`;
+
+}
+
+ 
+document.querySelectorAll(".tilt").forEach(card => {
+
+  card.addEventListener("mousemove", (e) => {
+    let rect = card.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+
+    let rotateX = -(y / rect.height - 0.5) * 10;
+    let rotateY = (x / rect.width - 0.5) * 10;
+
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  });
+
+  card.addEventListener("mouseleave", () => {
+    card.style.transform = "rotateX(0) rotateY(0)";
+  });
+
+});
+
+async function updateDashboard(){
+
+  try{
+
+    const res = await fetch(
+      WEBAPP + "?api=1&dashboard=1"
+    );
+
+    const data = await res.json();
+
+    document.getElementById(
+      "gstBills"
+    ).innerText =
+    data.gstBills || 0;
+
+    document.getElementById(
+      "gstAmount"
+    ).innerText =
+    "₹" + (data.gstAmount || 0);
+
+    document.getElementById(
+      "todayBills"
+    ).innerText =
+    data.repurchaseBills || 0;
+
+    document.getElementById(
+      "todayAmount"
+    ).innerText =
+    "₹" + (data.repurchaseAmount || 0);
+
+  }
+
+  catch(err){
+
+    console.log(err);
+
+  }
+
+}
+
 </script>
+
+<script>
+
+ 
+
+// =========================
+// LOAD NEXT GST INVOICE
+// =========================
+
+ 
+  async function loadNextGSTInvoice(){
+
+  try{
+
+    const res = await fetch(
+      WEBAPP + "?nextGSTInvoice=true"
+    );
+
+    const data = await res.json();
+
+    document.getElementById("gstInvoiceNo").value =
+    data.invoiceNo;
+
+  }catch(err){
+
+    console.log(err);
+
+  }
+}
+
+// PAGE LOAD
+window.addEventListener("load", () => {
+  loadNextGSTInvoice();
+});
+
+</script>
+
+<script>
+function formatDate(dateString){
+
+const d = new Date(dateString);
+
+const months = [
+"Jan","Feb","Mar",
+"Apr","May","Jun",
+"Jul","Aug","Sep",
+"Oct","Nov","Dec"
+];
+
+return `${d.getDate()}-${months[d.getMonth()]}-${d.getFullYear()}`;
+
+}
+
+function calculateGSTTotals(){
+
+  let rows =
+  document.querySelectorAll(
+    "#gstTable tbody tr"
+  );
+
+  let totalQty = 0;
+  let totalGross = 0;
+  let totalCGST = 0;
+  let totalSGST = 0;
+  let totalIGST = 0;
+  let totalTaxable = 0;
+
+  rows.forEach(r => {
+
+    let inputs =
+    r.querySelectorAll("input");
+
+    let qty =
+    Number(inputs[4].value) || 0;
+
+    let gross =
+    Number(inputs[6].value) || 0;
+
+    let cgst =
+    Number(inputs[9].value) || 0;
+
+    let sgst =
+    Number(inputs[11].value) || 0;
+
+    let igst =
+    Number(inputs[13].value) || 0;
+
+    let taxable =
+    Number(inputs[14].value) || 0;
+
+    totalQty += qty;
+    totalGross += gross;
+    totalCGST += cgst;
+    totalSGST += sgst;
+    totalIGST += igst;
+    totalTaxable += taxable;
+
+  });
+
+  // FOOTER TOTALS
+  document.getElementById("totalQty").value =
+  totalQty;
+
+  document.getElementById("totalGross").value =
+  totalGross.toFixed(2);
+
+  document.getElementById("totalCGST").value =
+  totalCGST.toFixed(2);
+
+  document.getElementById("totalSGST").value =
+  totalSGST.toFixed(2);
+
+  document.getElementById("totalIGST").value =
+  totalIGST.toFixed(2);
+
+  document.getElementById("totalTaxable").value =
+  totalTaxable.toFixed(2);
+
+  // SIDE TOTALS
+  document.getElementById("basicAmt").value =
+  totalGross.toFixed(2);
+
+  document.getElementById("cgstAmt").value =
+  totalCGST.toFixed(2);
+
+  document.getElementById("sgstAmt").value =
+  totalSGST.toFixed(2);
+
+  document.getElementById("igstAmt").value =
+  totalIGST.toFixed(2);
+
+  let gstTotal =
+  totalCGST +
+  totalSGST +
+  totalIGST;
+
+  document.getElementById("totalGST").value =
+  gstTotal.toFixed(2);
+
+  let finalTotal =
+  totalGross + gstTotal;
+
+  document.getElementById("finalTotal").value =
+  finalTotal.toFixed(2);
+
+  document.getElementById("gstWords").value =
+  numberToWords(
+    Math.round(finalTotal)
+  ) + "";
+
+
+  // AUTO VOUCHER SYNC
+
+document.getElementById(
+  "voucherNo"
+).value =
+document.getElementById(
+  "gstInvoiceNo"
+).value;
+
+document.getElementById(
+  "voucherCustomerName"
+).value =
+document.getElementById(
+  "c_name"
+).value;
+
+document.getElementById(
+  "voucherRelation"
+).value =
+document.getElementById(
+  "relation"
+).value;
+
+document.getElementById(
+  "voucherMobile"
+).value =
+document.getElementById(
+  "phone"
+).value;
+
+document.getElementById(
+  "voucherVillage"
+).value =
+document.getElementById(
+  "village"
+).value;
+
+document.getElementById(
+  "voucherDistrict"
+).value =
+document.getElementById(
+  "district"
+).value;
+
+document.getElementById(
+  "voucherState"
+).value =
+document.getElementById(
+  "state"
+).value;
+
+document.getElementById(
+  "voucherPincode"
+).value =
+document.getElementById(
+  "pincode"
+).value;
+
+document.getElementById(
+  "voucherEmail"
+).value =
+document.getElementById(
+  "email"
+).value;
+
+document.getElementById(
+  "voucherAadhaar"
+).value =
+document.getElementById(
+  "aadhaar"
+).value;
+
+document.getElementById(
+  "voucherPAN"
+).value =
+document.getElementById(
+  "pan"
+).value;
+
+document.getElementById(
+  "voucherBankName"
+).value =
+document.getElementById(
+  "bankName"
+).value;
+
+document.getElementById(
+  "voucherBranch"
+).value =
+document.getElementById(
+  "branch"
+).value;
+
+document.getElementById(
+  "voucherAccountNo"
+).value =
+document.getElementById(
+  "accountNo"
+).value;
+
+document.getElementById(
+  "voucherIFSC"
+).value =
+document.getElementById(
+  "ifsc"
+).value;
+}
+
+function generateGST(){
+
+  if(
+!validateRequiredFields([
+
+{id:"customerName",name:"Customer Name"},
+{id:"relation",name:"Relation"},
+{id:"village",name:"Village"},
+{id:"district",name:"District"},
+{id:"state",name:"State"},
+{id:"pincode",name:"Pincode"},
+{id:"mobile",name:"Mobile Number"},
+
+{id:"bankName",name:"Bank Name"},
+{id:"branch",name:"Branch"},
+{id:"accountNo",name:"Account Number"},
+{id:"ifsc",name:"IFSC Code"}
+
+])
+){
+return;
+}
+
+const aadhaar =
+document.getElementById(
+"aadhaar"
+)?.value
+?.trim();
+
+if(
+aadhaar &&
+!/^[0-9]{12}$/.test(aadhaar)
+){
+  alert(
+    "Invalid Aadhaar Number"
+  );
+  return;
+}
+
+const pan =
+document.getElementById(
+"pan"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+pan &&
+!/^[A-Z]{5}[0-9]{4}[A-Z]$/
+.test(pan)
+){
+  alert(
+    "Invalid PAN Number"
+  );
+  return;
+}
+
+const ifsc =
+document.getElementById(
+"ifsc"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+ifsc &&
+!/^[A-Z]{4}0[A-Z0-9]{6}$/
+.test(ifsc)
+){
+  alert(
+    "Invalid IFSC Code"
+  );
+  return;
+}
+
+const mobile =
+document.getElementById(
+"mobile"
+)?.value
+?.trim();
+
+if(
+mobile &&
+!/^[6-9][0-9]{9}$/
+.test(mobile)
+){
+  alert(
+    "Invalid Mobile Number"
+  );
+  return;
+}
+
+const pincode =
+document.getElementById(
+"pincode"
+)?.value
+?.trim();
+
+if(
+pincode &&
+!/^[0-9]{6}$/
+.test(pincode)
+){
+  alert(
+    "Invalid Pincode"
+  );
+  return;
+}
+
+
+  let rows =
+  document.querySelectorAll("#gstTable tbody tr");
+
+  let items = [];
+
+  rows.forEach(r => {
+
+    let inputs =
+    r.querySelectorAll("input");
+
+    let product =
+    inputs[0].value;
+
+    if(product){
+
+      items.push({
+
+  product :
+  product,
+
+  modelNo :
+  inputs[1].value,
+
+  productModel :
+  inputs[2].value,
+
+  hsn :
+  inputs[3].value,
+
+  qty :
+  Number(inputs[4].value || 0),
+
+  rate :
+  Number(inputs[5].value || 0),
+
+  gross :
+  Number(inputs[6].value || 0),
+
+  gst :
+  Number(inputs[7].value || 0),
+
+  cgstPercent :
+  Number(inputs[8].value || 0),
+
+  cgst :
+  Number(inputs[9].value || 0),
+
+  sgstPercent :
+  Number(inputs[10].value || 0),
+
+  sgst :
+  Number(inputs[11].value || 0),
+
+  igstPercent :
+  Number(inputs[12].value || 0),
+
+  igst :
+  Number(inputs[13].value || 0),
+
+  taxable :
+  Number(inputs[14].value || 0)
+ 
+
+});
+    }
+
+  });
+
+  // =========================
+  // GET VALUES
+  // =========================
+
+  let invoiceNo =
+  document.getElementById("gstInvoiceNo").value;
+
+  let invoiceDate =
+  formatDate(
+    document.getElementById("gstDate").value
+  );
+
+  let customerName =
+  document.getElementById("c_name").value;
+
+  let totalInvoice =
+  document.getElementById("finalTotal").value;
+
+  // =========================
+  // DATA OBJECT
+  // =========================
+
+  const data = {
+
+  type : "gstInvoice",
+
+  customerName :
+  document.getElementById("c_name").value,
+
+  relation :
+  document.getElementById("relation").value,
+
+  village :
+  document.getElementById("village").value,
+
+  district :
+  document.getElementById("district").value,
+
+  state :
+  document.getElementById("state").value,
+
+  pincode :
+  document.getElementById("pincode").value,
+
+  email :
+  document.getElementById("email").value,
+
+  mobile :
+  document.getElementById("phone").value,
+
+  gstin :
+  document.getElementById("gstin").value,
+
+  aadhaar :
+  document.getElementById("aadhaar").value,
+
+  pan :
+  document.getElementById("pan").value,
+
+  bankName :
+  document.getElementById("bankName").value,
+
+  branch :
+  document.getElementById("branch").value,
+
+  accountNo :
+  document.getElementById("accountNo").value,
+
+  ifsc :
+  document.getElementById("ifsc").value,
+
+  invoiceNo :
+  invoiceNo,
+
+  date :
+  invoiceDate,
+
+  // TOTALS
+  basicAmount :
+  Number(
+    document.getElementById("basicAmt").value || 0
+  ),
+
+  taxableAmount :
+  Number(
+    document.getElementById("basicAmt").value || 0
+  ),
+
+  cgstTotal :
+  Number(
+    document.getElementById("cgstAmt").value || 0
+  ),
+
+  sgstTotal :
+  Number(
+    document.getElementById("sgstAmt").value || 0
+  ),
+
+  igstTotal :
+  Number(
+    document.getElementById("igstAmt").value || 0
+  ),
+
+  totalGST :
+  Number(
+    document.getElementById("totalGST").value || 0
+  ),
+
+  finalTotal :
+  Number(
+    document.getElementById("finalTotal").value || 0
+  ),
+
+  totalQty :
+  Number(
+    document.getElementById("totalQty").value || 0
+  ),
+
+  // WORDS
+  words :
+  document.getElementById("gstWords").value,
+
+  // PAYMENT MODE
+  paymentMode :
+
+    document.getElementById("cash").checked
+    ? "Cash"
+
+    : document.getElementById("cheque").checked
+    ? "Cheque"
+
+    : document.getElementById("upi").checked
+    ? "UPI"
+
+    : document.getElementById("netbanking").checked
+    ? "Net Banking"
+
+    : document.getElementById("card").checked
+    ? "Card"
+
+    : document.getElementById("hypothecation").checked
+    ? "Hypothecation"
+
+    : "",
+
+  items : items,
+
+  createdBy :
+JSON.parse(
+  localStorage.getItem("user") || "{}"
+).username || ""
+
+};
+
+  console.log(data);
+
+  // =========================
+  // FETCH
+  // =========================
+
+  fetch(WEBAPP, {
+
+    method : "POST",
+
+    body : JSON.stringify(data),
+
+    headers : {
+      "Content-Type":
+      "text/plain;charset=utf-8"
+    }
+
+  })
+
+  .then(res => res.json())
+
+  .then(res => {
+
+    console.log(res);
+
+    if(res.status){
+
+      alert(
+        "Invoice Generated Successfully"
+      );
+      loadDashboard();
+
+      // PDF
+      if(res.pdfUrl){
+
+        window.open(
+          res.pdfUrl,
+          "_blank"
+        );
+
+      }
+
+      // WHATSAPP
+      if(res.whatsapp){
+
+        window.open(
+          res.whatsapp,
+          "_blank"
+        );
+
+      }
+
+      clearGSTForm();
+
+    }else{
+
+      alert(res.message);
+
+    }
+
+  })
+
+  .catch(err => {
+
+    console.log(err);
+
+    alert("Connection Failed");
+
+  });
+
+}
+
+function clearGSTForm(){
+
+  // CUSTOMER DETAILS
+
+  document.getElementById("c_name").value = "";
+
+  document.getElementById("relation").value = "";
+
+  document.getElementById("village").value = "";
+
+  document.getElementById("district").value = "";
+
+  document.getElementById("state").value = "";
+
+  document.getElementById("pincode").value = "";
+
+  document.getElementById("email").value = "";
+
+  document.getElementById("phone").value = "";
+
+  document.getElementById("gstin").value = "";
+
+  document.getElementById("aadhaar").value = "";
+
+  document.getElementById("pan").value = "";
+
+  document.getElementById("bankName").value = "";
+
+  document.getElementById("branch").value = "";
+
+  document.getElementById("accountNo").value = "";
+
+  document.getElementById("ifsc").value = "";
+
+  // PAYMENT
+
+  document.getElementById("cash").checked = false;
+
+  document.getElementById("cheque").checked = false;
+
+  document.getElementById("upi").checked = false;
+
+  document.getElementById("netbanking").checked = false;
+
+  document.getElementById("card").checked = false;
+
+  document.getElementById("hypothecation").checked = false;
+
+  // TABLE CLEAR
+
+  document.querySelector("#gstTable tbody").innerHTML = "";
+
+  // ADD NEW ROWS
+
+  for(let i=1;i<=5;i++){
+
+    addGSTRow();
+
+  }
+
+  // TOTALS
+
+  document.getElementById("totalQty").value = "";
+
+  document.getElementById("totalGross").value = "";
+
+  document.getElementById("totalCGST").value = "";
+
+  document.getElementById("totalSGST").value = "";
+
+  document.getElementById("totalIGST").value = "";
+
+  document.getElementById("totalTaxable").value = "";
+
+  document.getElementById("basicAmt").value = "";
+
+  document.getElementById("cgstAmt").value = "";
+
+  document.getElementById("sgstAmt").value = "";
+
+  document.getElementById("igstAmt").value = "";
+
+  document.getElementById("totalGST").value = "";
+
+  document.getElementById("finalTotal").value = "";
+
+  document.getElementById("gstWords").value = "";
+
+  // NEW GST INVOICE
+
+  loadGSTInvoiceNo();
+
+}
+
+function clearVoucherForm(){
+
+  // DO NOT CLEAR VOUCHER NO
+
+  // DO NOT CLEAR JOIN DATE
+
+  // DO NOT CLEAR REDEEM DATE
+
+  document.getElementById("voucherCustomerName").value = "";
+
+  document.getElementById("voucherRelation").value = "";
+
+  document.getElementById("voucherMobile").value = "";
+
+  document.getElementById("voucherVillage").value = "";
+
+  document.getElementById("voucherDistrict").value = "";
+
+  document.getElementById("voucherState").value = "";
+
+  document.getElementById("voucherPincode").value = "";
+
+  document.getElementById("voucherEmail").value = "";
+
+  document.getElementById("voucherAadhaar").value = "";
+
+  document.getElementById("voucherPAN").value = "";
+
+  document.getElementById("voucherBankName").value = "";
+
+  document.getElementById("voucherBranch").value = "";
+
+  document.getElementById("voucherAccountNo").value = "";
+
+  document.getElementById("voucherIFSC").value = "";
+
+  document.getElementById("salesRepId").value = "";
+
+  document.getElementById("srName").value = "";
+
+  document.getElementById("kits").value = "";
+
+  document.getElementById("rewardPoints").value = "";
+
+  document.getElementById("monthlyRedeem").value = "";
+
+  document.getElementById("monthlyWords").value = "";
+
+  document.getElementById("monthlywithCoupon").value = "";
+
+  document.getElementById("totalCoupon").value = "";
+
+  document.getElementById("totalWords").value = "";
+
+  document.getElementById("productDetails").value = "";
+
+  document.getElementById("repurchaseHistory").value = "";
+
+  document.getElementById("remarks").value =
+  "Note: Deduction 2% in Payable Reward Points";
+
+  // CHECKBOXES
+
+  document.getElementById("gold").checked = false;
+
+  document.getElementById("silver").checked = false;
+
+  document.getElementById("clothesKit").checked = false;
+
+  document.getElementById("herbalKit").checked = false;
+
+  document.getElementById("homeNeedsKit").checked = false;
+
+}
+
+ 
+let totalPoints = 0;
+let perMonth = 0;
+let finalMonthly = 0;
+let total12 = 0;
+
+function calculateVoucher(){
+
+  let kits =
+  Number(
+    document.getElementById("kits").value || 0
+  );
+
+  // TOTAL
+  let reward =
+  kits * 6000;
+
+  // MONTHLY
+  let monthly =
+  reward / 12;
+
+  // 2% DEDUCTION
+  let finalMonthly =
+  monthly - (monthly * 0.02);
+
+  // TOTAL 12 MONTHS
+  let total12 =
+  finalMonthly * 12;
+
+  document.getElementById("rewardPoints").value =
+  reward.toFixed(2);
+
+  // WITHOUT DEDUCTION
+  document.getElementById("monthlyRedeem").value =
+  monthly.toFixed(2);
+
+  // WITH DEDUCTION
+  document.getElementById("monthlywithCoupon").value =
+  finalMonthly.toFixed(2);
+
+  document.getElementById("totalCoupon").value =
+  total12.toFixed(2);
+
+  document.getElementById("monthlyWords").value =
+  numberToWords(
+    Math.round(finalMonthly)
+  );
+
+  document.getElementById("totalWords").value =
+  numberToWords(
+    Math.round(total12)
+  );
+
+}
+
+function generateVoucher(){
+
+  if(
+!validateRequiredFields([
+
+{id:"customerName",name:"Customer Name"},
+{id:"relation",name:"Relation"},
+{id:"mobile",name:"Mobile Number"},
+
+{id:"salesRepId",name:"Sales Rep ID"},
+{id:"salesRepName",name:"Sales Rep Name"}
+
+])
+){
+return;
+}
+
+const aadhaar =
+document.getElementById(
+"aadhaar"
+)?.value
+?.trim();
+
+if(
+aadhaar &&
+!/^[0-9]{12}$/.test(aadhaar)
+){
+  alert(
+    "Invalid Aadhaar Number"
+  );
+  return;
+}
+
+const pan =
+document.getElementById(
+"pan"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+pan &&
+!/^[A-Z]{5}[0-9]{4}[A-Z]$/
+.test(pan)
+){
+  alert(
+    "Invalid PAN Number"
+  );
+  return;
+}
+
+const ifsc =
+document.getElementById(
+"ifsc"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+ifsc &&
+!/^[A-Z]{4}0[A-Z0-9]{6}$/
+.test(ifsc)
+){
+  alert(
+    "Invalid IFSC Code"
+  );
+  return;
+}
+
+const mobile =
+document.getElementById(
+"mobile"
+)?.value
+?.trim();
+
+if(
+mobile &&
+!/^[6-9][0-9]{9}$/
+.test(mobile)
+){
+  alert(
+    "Invalid Mobile Number"
+  );
+  return;
+}
+
+const pincode =
+document.getElementById(
+"pincode"
+)?.value
+?.trim();
+
+if(
+pincode &&
+!/^[0-9]{6}$/
+.test(pincode)
+){
+  alert(
+    "Invalid Pincode"
+  );
+  return;
+}
+
+
+  // =========================
+  // CALCULATE VOUCHER
+  // =========================
+
+  let kits =
+  Number(
+    document.getElementById("kits").value || 0
+  );
+
+  // TOTAL POINTS
+
+  totalPoints =
+  kits * 6000;
+
+  // MONTHLY WITHOUT DEDUCTION
+
+  perMonth =
+  totalPoints / 12;
+
+  // 2% DEDUCTION
+
+  let deduction =
+  perMonth * 0.02;
+
+  // FINAL MONTHLY
+
+  finalMonthly =
+  perMonth - deduction;
+
+  // TOTAL 12 MONTHS
+
+  total12 =
+  finalMonthly * 12;
+
+  // =========================
+  // REDEEM DATE
+  // =========================
+
+  let joinDate =
+  new Date(
+    document.getElementById("joiningDate").value
+  );
+
+  let redeemDate =
+  new Date(joinDate);
+
+  // 1-15 => 15TH
+
+  if(joinDate.getDate() <= 15){
+
+    redeemDate.setMonth(
+      redeemDate.getMonth() + 2
+    );
+
+    redeemDate.setDate(15);
+
+  }else{
+
+    // 16-31 => 30TH
+
+    redeemDate.setMonth(
+      redeemDate.getMonth() + 2
+    );
+
+    redeemDate.setDate(30);
+
+  }
+
+  // FORMAT DATE
+
+  let redeemFormatted =
+  redeemDate.toLocaleDateString(
+    "en-GB",
+    {
+      day : "2-digit",
+      month : "short",
+      year : "numeric"
+    }
+  );
+
+  // =========================
+  // DATA OBJECT
+  // =========================
+
+  const data = {
+
+    type : "voucher",
+
+    joiningDate :
+    document.getElementById("joiningDate").value,
+
+    redeemDate :
+    redeemFormatted,
+
+    customerName :
+    document.getElementById("voucherCustomerName").value,
+
+    relation :
+    document.getElementById("voucherRelation").value,
+
+    mobile :
+    document.getElementById("voucherMobile").value,
+
+    village :
+    document.getElementById("voucherVillage").value,
+
+    district :
+    document.getElementById("voucherDistrict").value,
+
+    state :
+    document.getElementById("voucherState").value,
+
+    pincode :
+    document.getElementById("voucherPincode").value,
+
+    email :
+    document.getElementById("voucherEmail").value,
+
+    aadhaar :
+    document.getElementById("voucherAadhaar").value,
+
+    pan :
+    document.getElementById("voucherPAN").value,
+
+    bankName :
+    document.getElementById("voucherBankName").value,
+
+    branch :
+    document.getElementById("voucherBranch").value,
+
+    accountNo :
+    document.getElementById("voucherAccountNo").value,
+
+    ifsc :
+    document.getElementById("voucherIFSC").value,
+
+    salesRepId :
+    document.getElementById("salesRepId").value,
+
+    salesRepName :
+    document.getElementById("srName").value,
+
+    kits :
+    kits,
+
+    // =========================
+    // KIT TYPES
+    // =========================
+
+    gold :
+    document.getElementById("gold").checked,
+
+    silver :
+    document.getElementById("silver").checked,
+
+    clothesKit :
+    document.getElementById("clothesKit").checked,
+
+    herbalKit :
+    document.getElementById("herbalKit").checked,
+
+    homeNeedsKit :
+    document.getElementById("homeNeedsKit").checked,
+
+    // =========================
+    // DETAILS
+    // =========================
+
+    productDetails :
+    document.getElementById("productDetails").value,
+
+    repurchaseHistory :
+    document.getElementById("repurchaseHistory").value,
+
+    remarks :
+    document.getElementById("remarks").value,
+
+    // =========================
+    // CALCULATIONS
+    // =========================
+
+    rewardPoints :
+    totalPoints.toFixed(2),
+
+    monthlyRedeem :
+    perMonth.toFixed(2),
+
+    monthlywithCoupon :
+    finalMonthly.toFixed(2),
+
+    totalCoupon :
+    total12.toFixed(2),
+
+    monthlyWords :
+    numberToWords(
+      Math.round(finalMonthly)
+    ) + "",
+
+    totalWords :
+    numberToWords(
+      Math.round(total12)
+    ) + "",
+
+    createdBy :
+JSON.parse(
+  localStorage.getItem("user") || "{}"
+).username || ""
+
+  };
+
+  console.log(data);
+
+  // =========================
+  // FETCH
+  // =========================
+
+  fetch(WEBAPP + "?api=1",{
+
+  method : "POST",
+
+  body : JSON.stringify(data),
+
+  headers : {
+
+    "Content-Type":
+    "text/plain;charset=utf-8"
+
+  }
+
+})
+
+.then(r => r.json())
+
+.then(res => {
+
+  console.log(res);
+
+  if(res.status){
+
+    alert(
+      "Voucher Generated Successfully : " +
+      res.voucherNo
+    
+    );
+         loadDashboard();
+         clearVoucherForm();
+    // PDF
+
+    if(res.pdfUrl){
+
+      window.open(
+        res.pdfUrl,
+        "_blank"
+      );
+
+    }
+
+    // WHATSAPP
+
+    if(res.whatsapp){
+
+      window.open(
+        res.whatsapp,
+        "_blank"
+      );
+
+    }
+
+  }else{
+
+    alert(
+      res.message || "Voucher Failed"
+    );
+
+  }
+
+})
+
+.catch(err => {
+
+  console.log(err);
+
+  alert("Connection Failed");
+
+});
+
+}
+
+ 
+function openVoucherFromGST(){
+
+  document.getElementById("joiningDate").value =
+  document.getElementById("gstDate").value;
+
+  setRedeemDate();
+
+}
+
+function setProductDetails(){
+
+  let details = [];
+
+  if(document.getElementById("gold").checked){
+
+    details.push("Gold Kit");
+
+  }
+
+  if(document.getElementById("silver").checked){
+
+    details.push("Silver Kit");
+
+  }
+
+  if(document.getElementById("clothesKit").checked){
+
+    details.push("Clothes Kit");
+
+  }
+
+  if(document.getElementById("herbalKit").checked){
+
+    details.push("Herbal Kit");
+
+  }
+
+  if(document.getElementById("homeNeedsKit").checked){
+
+    details.push("Home Needs Kit");
+
+  }
+
+  document.getElementById(
+    "productDetails"
+  ).value =
+  details.join(", ");
+
+}
+ 
+
+function autoSelectKits(items){
+
+  let gold = false;
+  let silver = false;
+  let clothes = false;
+  let herbal = false;
+  let home = false;
+
+  items.forEach(item => {
+
+    let model =
+    (item.productModel || "")
+    .toLowerCase();
+
+    // GOLD
+    if(model.includes("gold")){
+
+      gold = true;
+
+    }
+
+    // SILVER
+    if(model.includes("silver")){
+
+      silver = true;
+
+    }
+
+    // CLOTHES
+    if(
+
+      model.includes("dress") ||
+      model.includes("cloth") ||
+      model.includes("shirt") ||
+      model.includes("pant") ||
+      model.includes("saree")
+
+    ){
+
+      clothes = true;
+
+    }
+
+    // HERBAL
+    if(
+
+      model.includes("herbal") ||
+      model.includes("ayur") ||
+      model.includes("health")
+
+    ){
+
+      herbal = true;
+
+    }
+
+    // HOME NEEDS
+    if(
+
+      model.includes("home") ||
+      model.includes("kitchen") ||
+      model.includes("fridge") ||
+      model.includes("washing") ||
+      model.includes("tv") ||
+      model.includes("mixie")
+
+    ){
+
+      home = true;
+
+    }
+
+  });
+
+  // CHECKBOXES
+
+  document.getElementById("gold").checked =
+  gold;
+
+  document.getElementById("silver").checked =
+  silver;
+
+  document.getElementById("clothesKit").checked =
+  clothes;
+
+  document.getElementById("herbalKit").checked =
+  herbal;
+
+  document.getElementById("homeNeedsKit").checked =
+  home;
+
+}
+ 
+function getSRDetails(id){
+
+  const ss =
+  SpreadsheetApp.getActive();
+
+  const sh =
+  ss.getSheetByName("SR_ID");
+
+  const data =
+  sh.getDataRange().getValues();
+
+  for(let i=1;i<data.length;i++){
+
+    if(
+      String(data[i][0]) ===
+      String(id)
+    ){
+
+      return {
+
+        status : true,
+
+        id : data[i][0],
+
+        name : data[i][1]
+
+      };
+
+    }
+
+  }
+
+  return {
+    status : false
+  };
+
+}
+
+document
+.getElementById("salesRepId")
+.addEventListener("change", async ()=>{
+
+  let id =
+  document.getElementById("salesRepId").value;
+
+  let res = await fetch(
+
+    WEBAPP +
+    "?api=1&salesId=1&id=" + id
+
+  );
+
+  let data =
+  await res.json();
+
+  if(data.status){
+
+    document.getElementById("srName").value =
+    data.name;
+
+  }else{
+
+    document.getElementById("srName").value = "";
+
+  }
+
+});
+
+ function setRedeemDate(){
+
+  let joining =
+  document.getElementById("joiningDate").value;
+
+  if(!joining) return;
+
+  let d = new Date(joining);
+
+  let day = d.getDate();
+
+  // ADD 2 MONTHS
+  d.setMonth(d.getMonth() + 2);
+
+  // 1-15 => 15
+  if(day <= 15){
+
+    d.setDate(15);
+
+  }
+
+  // 16-31 => 30
+  else{
+
+    d.setDate(30);
+
+  }
+
+  let months = [
+    "JAN","FEB","MAR","APR",
+    "MAY","JUN","JUL","AUG",
+    "SEP","OCT","NOV","DEC"
+  ];
+
+  let formatted =
+  d.getDate() + " " +
+  months[d.getMonth()] + " " +
+  d.getFullYear();
+
+  document
+  .getElementById("redeemDate")
+  .value = formatted;
+
+}
+
+ 
+function updateRenewalRemarks(){
+
+  let remarks = "";
+
+  if(
+    document.getElementById("renewal").checked
+  ){
+
+    remarks =
+    "Renewed as per customer request (Converted from HPBM to BTP).";
+
+  }
+
+  else if(
+    document.getElementById("purchase").checked
+  ){
+
+    remarks =
+    "New purchase initiated.";
+
+  }
+
+  else if(
+    document.getElementById("upgrade").checked
+  ){
+
+    remarks =
+    "Upgraded as per request.";
+
+  }
+
+  else if(
+    document.getElementById("newJoining").checked
+  ){
+
+    remarks =
+    "New joining completed.";
+
+  }
+
+  else if(
+    document.getElementById("reactivation").checked
+  ){
+
+    remarks =
+    "Reactivated as per request.";
+
+  }
+
+  document.getElementById(
+    "renewalRemarks"
+  ).value = remarks;
+
+}
+
+const renewalChecks = [
+
+  "renewal",
+  "purchase",
+  "upgrade",
+  "newJoining",
+  "reactivation"
+
+];
+
+renewalChecks.forEach(id=>{
+
+  document
+  .getElementById(id)
+  .addEventListener("change",function(){
+
+    if(this.checked){
+
+      renewalChecks.forEach(other=>{
+
+        if(other !== id){
+
+          document
+          .getElementById(other)
+          .checked = false;
+
+        }
+
+      });
+
+    }
+
+    updateRenewalRemarks();
+
+  });
+
+});
+
+async function generateRenewalVoucher(){
+
+  if(
+!validateRequiredFields([
+
+{id:"customerName",name:"Customer Name"},
+{id:"mobile",name:"Mobile Number"},
+
+{id:"aadhaar",name:"Aadhaar Number"},
+{id:"pan",name:"PAN Number"},
+
+{id:"bankName",name:"Bank Name"},
+{id:"branch",name:"Branch"},
+{id:"accountNo",name:"Account Number"},
+{id:"ifsc",name:"IFSC Code"}
+
+])
+){
+return;
+}
+
+ const aadhaar =
+document.getElementById(
+"aadhaar"
+)?.value
+?.trim();
+
+if(
+aadhaar &&
+!/^[0-9]{12}$/.test(aadhaar)
+){
+  alert(
+    "Invalid Aadhaar Number"
+  );
+  return;
+}
+
+const pan =
+document.getElementById(
+"pan"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+pan &&
+!/^[A-Z]{5}[0-9]{4}[A-Z]$/
+.test(pan)
+){
+  alert(
+    "Invalid PAN Number"
+  );
+  return;
+}
+
+const ifsc =
+document.getElementById(
+"ifsc"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+ifsc &&
+!/^[A-Z]{4}0[A-Z0-9]{6}$/
+.test(ifsc)
+){
+  alert(
+    "Invalid IFSC Code"
+  );
+  return;
+}
+
+const mobile =
+document.getElementById(
+"mobile"
+)?.value
+?.trim();
+
+if(
+mobile &&
+!/^[6-9][0-9]{9}$/
+.test(mobile)
+){
+  alert(
+    "Invalid Mobile Number"
+  );
+  return;
+}
+
+const pincode =
+document.getElementById(
+"pincode"
+)?.value
+?.trim();
+
+if(
+pincode &&
+!/^[0-9]{6}$/
+.test(pincode)
+){
+  alert(
+    "Invalid Pincode"
+  );
+  return;
+}
+
+  const data = {
+
+    type : "renewal",
+
+    renewalNo :
+    document.getElementById(
+      "renewalVoucherNo"
+    ).value,
+
+    joiningDate :
+    document.getElementById(
+      "renewalJoiningDate"
+    ).value,
+
+    redeemDate :
+    document.getElementById(
+      "renewalRedeemDate"
+    ).value,
+
+    customerName :
+    document.getElementById(
+      "renewalCustomerName"
+    ).value,
+
+    relation :
+    document.getElementById(
+      "renewalRelation"
+    ).value,
+
+    mobile :
+    document.getElementById(
+      "renewalMobile"
+    ).value,
+
+    village :
+    document.getElementById(
+      "renewalVillage"
+    ).value,
+
+    district :
+    document.getElementById(
+      "renewalDistrict"
+    ).value,
+
+    state :
+    document.getElementById(
+      "renewalState"
+    ).value,
+
+    pincode :
+    document.getElementById(
+      "renewalPincode"
+    ).value,
+
+    aadhaar : aadhaar,
+
+pan : pan,
+
+bankName :
+document.getElementById(
+"bankName"
+).value,
+
+branch :
+document.getElementById(
+"branch"
+).value,
+
+accountNo :
+String(
+document.getElementById(
+"accountNo"
+).value
+).trim(),
+
+ifsc : ifsc,
+
+    email :
+    document.getElementById(
+      "renewalEmail"
+    ).value,
+
+    salesRepId :
+    document.getElementById(
+      "renewalSRID"
+    ).value,
+
+    salesRepName :
+    document.getElementById(
+      "renewalSalesName"
+    ).value,
+
+    // ======================
+    // CALCULATIONS
+    // ======================
+
+    kits :
+    document.getElementById(
+      "renewalKits"
+    ).value,
+
+    rewardPoints :
+    document.getElementById(
+      "renewalRewardPoints"
+    ).value,
+
+    monthlyRedeem :
+    document.getElementById(
+      "renewalMonthlyRedeem"
+    ).value,
+
+    monthlyWords :
+    document.getElementById(
+      "renewalMonthlyWords"
+    ).value,
+
+    monthlywithCoupon :
+    document.getElementById(
+      "renewalMonthlywithCoupon"
+    ).value,
+
+    totalCoupon :
+    document.getElementById(
+      "renewalTotalCoupon"
+    ).value,
+
+    totalWords :
+    document.getElementById(
+      "renewalTotalWords"
+    ).value,
+
+    // ======================
+    // REMARKS
+    // ======================
+
+    remarks :
+    document.getElementById(
+      "renewalRemarks"
+    ).value,
+
+    // ======================
+    // CHECKBOXES
+    // ======================
+
+    renewal :
+    document.getElementById(
+      "renewal"
+    ).checked,
+
+    purchase :
+    document.getElementById(
+      "purchase"
+    ).checked,
+
+    upgrade :
+    document.getElementById(
+      "upgrade"
+    ).checked,
+
+    newJoining :
+    document.getElementById(
+      "newJoining"
+    ).checked,
+
+    reactivation :
+    document.getElementById(
+      "reactivation"
+    ).checked,
+
+    // ======================
+    // LOGIN USER
+    // ======================
+
+    createdBy :
+
+    JSON.parse(
+
+      localStorage.getItem(
+        "user"
+      ) || "{}"
+
+    ).username || ""
+
+  };
+
+  console.log(data);
+
+  try{
+
+    const res =
+    await fetch(WEBAPP,{
+
+      method : "POST",
+
+      body :
+      JSON.stringify(data),
+
+      headers : {
+
+        "Content-Type" :
+        "text/plain;charset=utf-8"
+
+      }
+
+    });
+
+    const result =
+    await res.json();
+
+    console.log(result);
+
+    if(result.status){
+
+      alert(
+        "Renewal Voucher Generated Successfully"
+      );
+
+      // Dashboard Refresh
+
+      loadDashboard();
+      clearRenewalForm();
+
+      // Open PDF
+
+      if(result.pdfUrl){
+
+        window.open(
+          result.pdfUrl,
+          "_blank"
+        );
+
+      }
+
+      // Open WhatsApp
+
+      if(result.whatsapp){
+
+        window.open(
+          result.whatsapp,
+          "_blank"
+        );
+
+      }
+
+      // Next Renewal No
+
+      loadRenewalNo();
+
+    }else{
+
+      alert(
+        result.message
+      );
+
+    }
+
+  }
+
+  catch(err){
+
+    console.log(err);
+
+    alert(
+      "Connection Failed"
+    );
+
+  }
+
+  
+
+}
+
+function clearRenewalForm(){
+
+  document
+  .querySelectorAll(
+    "#renewalPage input"
+  )
+  .forEach(el=>{
+
+    if(el.type==="checkbox"){
+
+      el.checked=false;
+
+    }else{
+
+      el.value="";
+
+    }
+
+  });
+
+  loadRenewalNo();
+
+}
+
+// =====================================================
+// LOAD RENEWAL NUMBER
+// =====================================================
+
+async function loadRenewalNo(){
+
+  try{
+
+    const res =
+    await fetch(
+
+      WEBAPP +
+
+      "?api=true&nextRenewalNo=true"
+
+    );
+
+    const data =
+    await res.json();
+
+    console.log(data);
+
+    document.getElementById(
+      "renewalVoucherNo"
+    ).value =
+
+    data.renewalNo || "";
+
+  }
+
+  catch(err){
+
+    console.log(err);
+
+    alert(
+      "Unable To Load Renewal Number"
+    );
+
+  }
+
+}
+
+function calculateRenewal(){
+
+  let kits = Number(
+
+    document.getElementById(
+      "renewalKits"
+    ).value || 0
+
+  );
+
+  let rewardPoints =
+  kits * 6000;
+
+  let monthlyRedeem =
+  rewardPoints / 12;
+
+  let monthlyWithCoupon =
+  monthlyRedeem * 0.98;
+
+  let totalCoupon =
+  rewardPoints * 0.98;
+
+  document.getElementById(
+    "renewalRewardPoints"
+  ).value =
+  rewardPoints.toFixed(2);
+
+  document.getElementById(
+    "renewalMonthlyRedeem"
+  ).value =
+  monthlyRedeem.toFixed(2);
+
+  document.getElementById(
+    "renewalMonthlywithCoupon"
+  ).value =
+  monthlyWithCoupon.toFixed(2);
+
+  document.getElementById(
+    "renewalTotalCoupon"
+  ).value =
+  totalCoupon.toFixed(2);
+
+  document.getElementById(
+    "renewalMonthlyWords"
+  ).value =
+  numberToWords(
+    Math.round(monthlyWithCoupon)
+  );
+
+  document.getElementById(
+    "renewalTotalWords"
+  ).value =
+  numberToWords(
+    Math.round(totalCoupon)
+  );
+
+}
+
+function updateRenewalReleaseDate(){
+
+  const joiningDate =
+  document.getElementById(
+    "renewalJoiningDate"
+  ).value;
+
+  if(!joiningDate) return;
+
+  const d = new Date(joiningDate);
+
+  let day = d.getDate();
+
+  let month = d.getMonth();
+
+  let year = d.getFullYear();
+
+  // =========================
+  // 1 - 15  => 15 after 2 months
+  // 16 - 31 => last date after 2 months
+  // =========================
+
+  month += 2;
+
+  let releaseDate;
+
+  if(day <= 15){
+
+    releaseDate =
+    new Date(year, month, 15);
+
+  }else{
+
+    releaseDate =
+    new Date(year, month + 1, 0);
+
+  }
+
+  const yyyy =
+  releaseDate.getFullYear();
+
+  const mm =
+  String(
+    releaseDate.getMonth() + 1
+  ).padStart(2,"0");
+
+  const dd =
+  String(
+    releaseDate.getDate()
+  ).padStart(2,"0");
+
+  document.getElementById(
+    "renewalRedeemDate"
+  ).value =
+
+  `${yyyy}-${mm}-${dd}`;
+
+}
+
+async function getRenewalSRName(){
+
+  const id =
+  document.getElementById(
+    "renewalSRID"
+  ).value;
+
+  if(!id) return;
+
+  const res =
+  await fetch(
+
+    WEBAPP +
+
+    "?api=1&salesId=true&id=" +
+
+    encodeURIComponent(id)
+
+  );
+
+  const data =
+  await res.json();
+
+  if(data.status){
+
+    document.getElementById(
+      "renewalSalesName"
+    ).value =
+    data.name || "";
+
+  }else{
+
+    document.getElementById(
+      "renewalSalesName"
+    ).value = "";
+
+  }
+
+}
+
+async function generateWithoutGSTInvoice(){
+
+  if(
+!validateRequiredFields([
+
+{id:"customerName",name:"Customer Name"},
+{id:"relation",name:"Relation"},
+{id:"village",name:"Village"},
+{id:"district",name:"District"},
+{id:"state",name:"State"},
+{id:"pincode",name:"Pincode"},
+{id:"mobile",name:"Mobile Number"},
+
+{id:"bankName",name:"Bank Name"},
+{id:"branch",name:"Branch"},
+{id:"accountNo",name:"Account Number"},
+{id:"ifsc",name:"IFSC Code"}
+
+])
+){
+return;
+}
+
+const aadhaar =
+document.getElementById(
+"aadhaar"
+)?.value
+?.trim();
+
+if(
+aadhaar &&
+!/^[0-9]{12}$/.test(aadhaar)
+){
+  alert(
+    "Invalid Aadhaar Number"
+  );
+  return;
+}
+
+const pan =
+document.getElementById(
+"pan"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+pan &&
+!/^[A-Z]{5}[0-9]{4}[A-Z]$/
+.test(pan)
+){
+  alert(
+    "Invalid PAN Number"
+  );
+  return;
+}
+
+const ifsc =
+document.getElementById(
+"ifsc"
+)?.value
+?.trim()
+?.toUpperCase();
+
+if(
+ifsc &&
+!/^[A-Z]{4}0[A-Z0-9]{6}$/
+.test(ifsc)
+){
+  alert(
+    "Invalid IFSC Code"
+  );
+  return;
+}
+
+const mobile =
+document.getElementById(
+"mobile"
+)?.value
+?.trim();
+
+if(
+mobile &&
+!/^[6-9][0-9]{9}$/
+.test(mobile)
+){
+  alert(
+    "Invalid Mobile Number"
+  );
+  return;
+}
+
+const pincode =
+document.getElementById(
+"pincode"
+)?.value
+?.trim();
+
+if(
+pincode &&
+!/^[0-9]{6}$/
+.test(pincode)
+){
+  alert(
+    "Invalid Pincode"
+  );
+  return;
+}
+
+
+  let rows =
+  document.querySelectorAll(
+    "#withoutGSTTable tbody tr"
+  );
+
+  let items = [];
+
+  rows.forEach(r => {
+
+    let inputs =
+    r.querySelectorAll("input");
+
+    let product =
+    inputs[0]?.value || "";
+
+    if(product){
+
+      items.push({
+
+        productName :
+        inputs[0]?.value || "",
+
+        modelNo :
+        inputs[1]?.value || "",
+
+        productModel :
+        inputs[2]?.value || "",
+
+        hsn :
+        inputs[3]?.value || "",
+
+        qty :
+        Number(
+          inputs[4]?.value || 0
+        ),
+
+        rate :
+        Number(
+          inputs[5]?.value || 0
+        ),
+
+        amount :
+        Number(
+          inputs[6]?.value || 0
+        )
+
+      });
+
+    }
+
+  });
+
+  // PAYMENT MODE
+
+  let paymentMode = "";
+
+  if(
+    document.getElementById("withoutCash")?.checked
+  ){
+    paymentMode = "Cash";
+  }
+
+  else if(
+    document.getElementById("withoutUPI")?.checked
+  ){
+    paymentMode = "UPI";
+  }
+
+  else if(
+    document.getElementById("withoutCheque")?.checked
+  ){
+    paymentMode = "Cheque";
+  }
+
+  else if(
+    document.getElementById("withoutCard")?.checked
+  ){
+    paymentMode = "Card";
+  }
+
+  else if(
+    document.getElementById("withoutNetBanking")?.checked
+  ){
+    paymentMode = "Net Banking";
+  }
+
+  const data = {
+
+    type : "withoutGST",
+
+    customerName :
+    document.getElementById(
+      "withoutCustomerName"
+    ).value,
+
+    relation :
+    document.getElementById(
+      "withoutRelation"
+    ).value,
+
+    village :
+    document.getElementById(
+      "withoutVillage"
+    ).value,
+
+    district :
+    document.getElementById(
+      "withoutDistrict"
+    ).value,
+
+    state :
+    document.getElementById(
+      "withoutState"
+    ).value,
+
+    pincode :
+    document.getElementById(
+      "withoutPincode"
+    ).value,
+
+    mobile :
+    document.getElementById(
+      "withoutMobile"
+    ).value,
+
+    email :
+    document.getElementById(
+      "withoutEmail"
+    ).value,
+
+    invoiceNo :
+    document.getElementById(
+      "withoutGSTInvoiceNo"
+    ).value,
+
+    date :
+    document.getElementById(
+      "withoutDate"
+    ).value,
+
+    paymentMode :
+    paymentMode,
+
+    totalAmount :
+    Number(
+      document.getElementById(
+        "withoutTotalAmount"
+      ).value || 0
+    ),
+
+    words :
+    document.getElementById(
+      "withoutAmountWords"
+    ).value,
+
+    items :
+    items,
+
+    createdBy :
+    localStorage.getItem(
+      "username"
+    ) || ""
+
+  };
+
+  try{
+
+    const res =
+    await fetch(
+      WEBAPP,
+      {
+        method : "POST",
+
+        body :
+        JSON.stringify(data),
+
+        headers : {
+          "Content-Type" :
+          "text/plain;charset=utf-8"
+        }
+      }
+    );
+
+    const result =
+    await res.json();
+
+    if(result.status){
+
+      alert(
+        "Invoice Generated Successfully"
+      );
+
+      if(result.pdfUrl){
+
+        window.open(
+          result.pdfUrl,
+          "_blank"
+        );
+
+      }
+
+      if(result.whatsapp){
+
+        window.open(
+          result.whatsapp,
+          "_blank"
+        );
+
+      }
+
+      loadWithoutGSTNo();
+
+      loadDashboard();
+      clearWithoutGSTForm();
+
+    }
+
+    else{
+
+      alert(
+        result.message ||
+        "Generation Failed"
+      );
+
+    }
+
+  }
+
+  catch(err){
+
+    console.log(err);
+
+    alert(
+      "Connection Failed"
+    );
+
+  }
+
+}
+
+function addWithoutGSTRow(){
+
+  const tbody =
+  document.getElementById(
+    "withoutGSTBody"
+  );
+
+  const rowCount =
+  tbody.rows.length + 1;
+
+  const tr =
+  document.createElement("tr");
+
+  tr.innerHTML = `
+
+    <td class="withoutSL">
+      ${rowCount}
+    </td>
+
+    <td>
+      <input
+      class="withoutProduct"
+      list="productList"
+      onchange="
+      loadWithoutGSTProduct(this)
+      ">
+    </td>
+
+    <td>
+      <input
+      class="withoutModelNo"
+      readonly>
+    </td>
+
+    <td>
+      <input
+      class="withoutProductModel"
+      readonly>
+    </td>
+
+    <td>
+      <input
+      class="withoutHSN"
+      readonly>
+    </td>
+
+    <td>
+      <input
+      class="withoutQty"
+      type="number"
+      value="1"
+      min="1"
+      oninput="
+      calculateWithoutGSTRow(this)
+      ">
+    </td>
+
+    <td>
+      <input
+      class="withoutRate"
+      type="number"
+      value="0"
+      oninput="
+      calculateWithoutGSTRow(this)
+      ">
+    </td>
+
+    <td>
+      <input
+      class="withoutAmount"
+      value="0.00"
+      readonly>
+    </td>
+
+  `;
+
+  tbody.appendChild(tr);
+
+}
+
+function clearWithoutGSTForm(){
+
+  document
+  .querySelectorAll(
+    "#withoutGSTPage input"
+  )
+  .forEach(el=>{
+
+    if(
+      el.type === "checkbox"
+    ){
+
+      el.checked = false;
+
+    }else{
+
+      el.value = "";
+
+    }
+
+  });
+
+  document.getElementById(
+    "withoutGSTBody"
+  ).innerHTML = "";
+
+  addWithoutGSTRow();
+
+  loadWithoutGSTNo();
+
+}
+
+function calculateWithoutGSTRow(el){
+
+  const row =
+  el.closest("tr");
+
+  const qty =
+  Number(
+    row.querySelector(
+      ".withoutQty"
+    ).value
+  ) || 0;
+
+  const rate =
+  Number(
+    row.querySelector(
+      ".withoutRate"
+    ).value
+  ) || 0;
+
+  const amount =
+  qty * rate;
+
+  row.querySelector(
+    ".withoutAmount"
+  ).value =
+  amount.toFixed(2);
+
+  calculateWithoutGSTTotal();
+
+}
+
+function calculateWithoutGSTTotal(){
+
+  let total = 0;
+
+  document
+  .querySelectorAll(
+    ".withoutAmount"
+  )
+  .forEach(input => {
+
+    total +=
+    Number(
+      input.value
+    ) || 0;
+
+  });
+
+  document.getElementById(
+    "withoutGSTGrandTotal"
+  ).value =
+  total.toFixed(2);
+
+  document.getElementById(
+    "withoutBasicAmount"
+  ).value =
+  total.toFixed(2);
+
+  document.getElementById(
+    "withoutTotalAmount"
+  ).value =
+  total.toFixed(2);
+
+  if(typeof numberToWords==="function"){
+
+    document.getElementById(
+      "withoutAmountWords"
+    ).value =
+
+      numberToWords(
+        Math.round(total)
+      ) +
+
+      "";
+
+  }
+
+}
+
+function loadWithoutGSTProducts(){
+
+  const list =
+  document.getElementById("productList");
+
+  if(!list) return;
+
+  list.innerHTML = "";
+
+  allProducts.forEach(product => {
+
+    const option =
+    document.createElement("option");
+
+    option.value =
+      product.productName ||
+      product.name ||
+      "";
+
+    list.appendChild(option);
+
+  });
+
+}
+
+function loadWithoutGSTProduct(el){
+
+  const productName = el.value;
+
+  const row = el.closest("tr");
+
+  const product = allProducts.find(
+    p => (p.productName || p.name) === productName
+  );
+
+  if(!product) return;
+
+  row.querySelector(".withoutModelNo").value =
+  product.modelNo || "";
+
+  row.querySelector(".withoutProductModel").value =
+  product.productModel || "";
+
+  row.querySelector(".withoutHSN").value =
+  product.hsn || "";
+
+  row.querySelector(".withoutRate").value =
+  product.rate || "";
+
+  calculateWithoutGSTRow(
+    row.querySelector(".withoutRate")
+  );
+
+}
+
+ function validateRequiredFields(fields){
+
+  for(const field of fields){
+
+    const el =
+    document.getElementById(field.id);
+
+    if(!el) continue;
+
+    if(
+      String(el.value).trim() === ""
+    ){
+
+      alert(
+        field.name +
+        " is required"
+      );
+
+      el.focus();
+
+      return false;
+
+    }
+
+  }
+
+  return true;
+
+}
+
+</script>
+
 </body>
 </html>
