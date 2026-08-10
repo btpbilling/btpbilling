@@ -178,11 +178,11 @@
       <img src="https://lh3.googleusercontent.com/d/1hjnqtrRAM4PWNwd0bdycxyffYXIXMvAx" class="login-logo">
       <h2>Login</h2>
 
-      <div id="stepCredentials">
-        <input id="user" placeholder="Username"><br>
-        <input id="pass" type="password" placeholder="Password"><br>
-        <button onclick="requestOTP()">Send OTP</button>
-      </div>
+    <div id="stepCredentials">
+  <input id="username" placeholder="Username"><br>
+  <input id="password" type="password" placeholder="Password"><br>
+  <button onclick="requestOTP()">Send OTP</button>
+</div>
 
       <div id="stepOTP" style="display:none;">
         <p style="font-size:12px; margin-bottom:5px;">Enter the OTP sent to your registered email:</p>
@@ -548,8 +548,9 @@
   };
 
 async function requestOTP() {
-  const userInputEl = document.getElementById("usernameInput") || document.getElementById("username");
-  const passInputEl = document.getElementById("passwordInput") || document.getElementById("password");
+  // Updated element lookup to match 'user' and 'pass'
+  const userInputEl = document.getElementById("user") || document.getElementById("usernameInput") || document.getElementById("username");
+  const passInputEl = document.getElementById("pass") || document.getElementById("passwordInput") || document.getElementById("password");
 
   if (!userInputEl || !passInputEl) {
     alert("HTML Error: Could not find username or password input elements. Please check input IDs in index.html.");
@@ -564,7 +565,8 @@ async function requestOTP() {
     return;
   }
 
-  const scriptUrl = "YOUR_APPS_SCRIPT_WEBAPP_URL_HERE"; 
+  // Update with your actual Google Apps Script Web App URL
+  const scriptUrl = WEBAPP; 
   const targetUrl = `${scriptUrl}?api=1&requestOTP=1&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
   try {
@@ -572,9 +574,12 @@ async function requestOTP() {
     const result = await response.json();
 
     if (result.status) {
-      alert(result.message);
-      const otpContainer = document.getElementById("otpSection") || document.getElementById("otpContainer");
-      if (otpContainer) otpContainer.style.display = "block";
+      currentOTPUsername = username; // Store for OTP verification step
+      alert(result.message || "OTP sent successfully!");
+      
+      // Hide login credentials step and show OTP input step
+      document.getElementById("stepCredentials").style.display = "none";
+      document.getElementById("stepOTP").style.display = "block";
     } else {
       alert(result.message || "Invalid credentials or user not found.");
     }
