@@ -573,6 +573,7 @@
 const WEBAPP = "https://script.google.com/macros/s/AKfycbyUYcDPADDKor9rLnLGNBjt_0mMU9OycHzS8FYEnUXlBVaJC2X0sxbWnIyUKGut_W2z/exec";
 let currentOTPUsername = "";
 let chartInstances = {};
+let productList = [];
 
 window.onload = function() {
   const sessionToken = sessionStorage.getItem("active_session");
@@ -593,7 +594,15 @@ window.onload = function() {
   for (let i = 0; i < 3; i++) { addRow(); }
   for (let i = 0; i < 3; i++) { addGSTRow(); }
   loadGSTInvoiceNo();
+  fetchProducts();
 };
+
+async function fetchProducts() {
+  try {
+    let res = await fetch(`${WEBAPP}?api=1&products=1`);
+    productList = await res.json();
+  } catch(e) { console.error("Error fetching product master:", e); }
+}
 
 async function requestOTP() {
   const username = document.getElementById("username").value.trim();
@@ -656,7 +665,6 @@ function showApp() {
     document.getElementById("profilePhone").value = user.phone || "";
     document.getElementById("profilePopupName").innerText = user.name || "User";
 
-    // Synchronize user profile pictures
     document.getElementById("topProfile").src = profilePic;
     document.getElementById("dropProfile").src = profilePic;
     document.getElementById("profilePopupImg").src = profilePic;
@@ -664,7 +672,6 @@ function showApp() {
   showGST();
 }
 
-// NAVIGATION & DASHBOARD CARD SWITCHING
 function hideAll() {
   ["billingPage","gstPage","voucherPage","renewalPage","withoutGSTPage"].forEach(id => {
     document.getElementById(id).style.display = "none";
@@ -676,10 +683,6 @@ function hideCards() {
   });
 }
 function setTitle(name) { document.getElementById("pageTitle").innerText = name; }
-function setActive(el) {
-  document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active"));
-  el.classList.add("active");
-}
 
 function showGST() { 
   hideAll(); hideCards(); 
@@ -717,7 +720,6 @@ function showWithoutGST() {
   loadDashboardMetrics("withoutGST");
 }
 
-// DASHBOARD METRICS & CHART RENDERER
 async function loadDashboardMetrics(moduleType) {
   try {
     let res = await fetch(WEBAPP + "?api=1&action=dashboard");
@@ -775,7 +777,6 @@ function renderChart(canvasId, type, labels, seriesData) {
   });
 }
 
-// WORKFLOW SYNC FUNCTIONS
 function syncGSTToVoucher() {
   document.getElementById("voucherCustomerName").value = document.getElementById("c_name").value;
   document.getElementById("voucherRelation").value = document.getElementById("relation").value;
@@ -794,65 +795,93 @@ function syncGSTToVoucher() {
   alert("GST Data Synced to Voucher Form!");
 }
 
-function syncGSTToRepurchase() {
-  document.getElementById("name").value = document.getElementById("c_name").value;
-  document.getElementById("address").value = document.getElementById("village").value + ", " + document.getElementById("district").value;
-  document.getElementById("repurchasePhone").value = document.getElementById("phone").value;
-  alert("GST Data Synced to Repurchase Form!");
+function addGSTRow() {
+  let tbody = document.querySelector("#gstTable tbody");
+  let rowCount = tbody.querySelectorAll("tr").length + 1;
+  let tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${rowCount}</td>
+    <td><input class="product-search" placeholder="Product" oninput="autocompleteProduct(this)"></td>
+    <td><input class="modelNo" style="width:60px;"></td>
+    <td><input class="pmodel" style="width:60px;"></td>
+    <td><input class="hsn" style="width:50px;"></td>
+    <td><input class="qty" style="width:40px;" oninput="calculateGSTRow(this)"></td>
+    <td><input class="rate" style="width:50px;" oninput="calculateGSTRow(this)"></td>
+    <td><input class="gross" readonly style="width:60px;"></td>
+    <td><input class="gst" readonly style="width:40px;"></td>
+    <td><input class="cgstp" readonly style="width:40px;"></td>
+    <td><input class="cgst" readonly style="width:50px;"></td>
+    <td><input class="sgstp" readonly style="width:40px;"></td>
+    <td><input class="sgst" readonly style="width:50px;"></td>
+    <td><input class="igstp" readonly style="width:40px;"></td>
+    <td><input class="igst" readonly style="width:50px;"></td>
+    <td><input class="taxable" readonly style="width:60px;"></td>
+  `;
+  tbody.appendChild(tr);
 }
 
-function syncGSTToRenewal() {
-  document.getElementById("renewalCustomerName").value = document.getElementById("c_name").value;
-  document.getElementById("renewalRelation").value = document.getElementById("relation").value;
-  document.getElementById("renewalMobile").value = document.getElementById("phone").value;
-  document.getElementById("renewalVillage").value = document.getElementById("village").value;
-  document.getElementById("renewalDistrict").value = document.getElementById("district").value;
-  document.getElementById("renewalState").value = document.getElementById("state").value;
-  document.getElementById("renewalPincode").value = document.getElementById("pincode").value;
-  document.getElementById("renewalEmail").value = document.getElementById("email").value;
-  document.getElementById("renewalAadhaar").value = document.getElementById("aadhaar").value;
-  document.getElementById("renewalPan").value = document.getElementById("pan").value;
-  document.getElementById("renewalBankName").value = document.getElementById("bankName").value;
-  document.getElementById("renewalBranch").value = document.getElementById("branch").value;
-  document.getElementById("renewalAccountNo").value = document.getElementById("accountNo").value;
-  document.getElementById("renewalIfsc").value = document.getElementById("ifsc").value;
-  alert("GST Data Synced to Renewal Form!");
-}
-
-// INVOICE & FORM UTILITIES
-function handleManualInvoice(type, manualVal) {
-  if (!manualVal) return;
-  const match = manualVal.match(/\d+$/);
-  if (match) {
-    let nextNum = parseInt(match[0], 10) + 1;
-    let nextInv = manualVal.replace(/\d+$/, String(nextNum).padStart(match[0].length, "0"));
-    console.log(`Manual entry detected. Next sequential ${type} invoice: ${nextInv}`);
+function autocompleteProduct(input) {
+  let val = input.value.toLowerCase();
+  if (!val) return;
+  let item = productList.find(p => p.name.toLowerCase().includes(val));
+  if (item) {
+    let row = input.closest("tr");
+    row.querySelector(".modelNo").value = item.modelNo || "";
+    row.querySelector(".pmodel").value = item.productModel || "";
+    row.querySelector(".hsn").value = item.hsn || "";
+    row.querySelector(".gst").value = item.gst || 0;
+    row.querySelector(".rate").value = item.rate || 0;
+    calculateGSTRow(input);
   }
 }
 
-function printFormattedPage(pageId) {
-  let content = document.getElementById(pageId).innerHTML;
-  let printWin = window.open("", "", "width=900,height=600");
-  printWin.document.write("<html><head><title>Print Billing Document</title><style>body{font-family:sans-serif;padding:20px;} table{width:100%;border-collapse:collapse;} th,td{border:1px solid #ccc;padding:8px;}</style></head><body>");
-  printWin.document.write(content);
-  printWin.document.write("</body></html>");
-  printWin.document.close();
-  printWin.print();
+function calculateGSTRow(elem) {
+  let row = elem.closest("tr");
+  let qty = parseFloat(row.querySelector(".qty").value) || 0;
+  let rate = parseFloat(row.querySelector(".rate").value) || 0;
+  let gstPct = parseFloat(row.querySelector(".gst").value) || 0;
+  let state = document.getElementById("state").value.trim().toLowerCase();
+
+  let gross = qty * rate;
+  row.querySelector(".gross").value = gross.toFixed(2);
+
+  let isTelangana = (state === "telangana" || state === "");
+  if (isTelangana) {
+    let half = gstPct / 2;
+    let cgstAmt = gross * (half / 100);
+    let sgstAmt = gross * (half / 100);
+
+    row.querySelector(".cgstp").value = half + "%";
+    row.querySelector(".cgst").value = cgstAmt.toFixed(2);
+    row.querySelector(".sgstp").value = half + "%";
+    row.querySelector(".sgst").value = sgstAmt.toFixed(2);
+    row.querySelector(".igstp").value = "0%";
+    row.querySelector(".igst").value = "0.00";
+    row.querySelector(".taxable").value = (gross + cgstAmt + sgstAmt).toFixed(2);
+  } else {
+    let igstAmt = gross * (gstPct / 100);
+    row.querySelector(".cgstp").value = "0%";
+    row.querySelector(".cgst").value = "0.00";
+    row.querySelector(".sgstp").value = "0%";
+    row.querySelector(".sgst").value = "0.00";
+    row.querySelector(".igstp").value = gstPct + "%";
+    row.querySelector(".igst").value = igstAmt.toFixed(2);
+    row.querySelector(".taxable").value = (gross + igstAmt).toFixed(2);
+  }
 }
 
-function shareWhatsApp(type) {
-  let name = document.getElementById("c_name") ? document.getElementById("c_name").value : "Customer";
-  let phone = document.getElementById("phone") ? document.getElementById("phone").value : "";
-  let msg = `Hello ${name}, your ${type} details from Beulah Traders Private Limited have been processed successfully. Thank you!`;
-  let url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
-  window.open(url, "_blank");
+function addRow() {
+  const tbody = document.getElementById("repurchaseBody");
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${tbody.rows.length + 1}</td>
+    <td><input class="desc" placeholder="Item"></td>
+    <td><input class="weight" type="number"></td>
+    <td><input class="rate" type="number"></td>
+    <td><input class="amount" readonly></td>
+  `;
+  tbody.appendChild(tr);
 }
-
-function toggleMenu(e) { e.stopPropagation(); document.getElementById("dropdownMenu").classList.toggle("show"); }
-function openProfile() { document.getElementById("profilePopup").style.display = "flex"; }
-function closeProfile() { document.getElementById("profilePopup").style.display = "none"; }
-function openPasswordPopup() { document.getElementById("passwordPopup").style.display = "flex"; }
-function closePasswordPopup() { document.getElementById("passwordPopup").style.display = "none"; }
 
 function logout() {
   if (confirm("Are you sure you want to logout?")) {
@@ -871,53 +900,6 @@ async function loadGSTInvoiceNo() {
   } catch(e){}
 }
 
-function addGSTRow() {
-  let tbody = document.querySelector("#gstTable tbody");
-  let rowCount = tbody.querySelectorAll("tr").length + 1;
-  let tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td>${rowCount}</td>
-    <td><input class="product-search" placeholder="Product"></td>
-    <td><input class="modelNo" style="width:60px;"></td>
-    <td><input class="pmodel" style="width:60px;"></td>
-    <td><input class="hsn" style="width:50px;"></td>
-    <td><input class="qty" style="width:40px;"></td>
-    <td><input class="rate" style="width:50px;"></td>
-    <td><input class="gross" readonly style="width:60px;"></td>
-    <td><input class="gst" readonly style="width:40px;"></td>
-    <td><input class="cgstp" readonly style="width:40px;"></td>
-    <td><input class="cgst" readonly style="width:50px;"></td>
-    <td><input class="sgstp" readonly style="width:40px;"></td>
-    <td><input class="sgst" readonly style="width:50px;"></td>
-    <td><input class="igstp" readonly style="width:40px;"></td>
-    <td><input class="igst" readonly style="width:50px;"></td>
-    <td><input class="taxable" readonly style="width:60px;"></td>
-  `;
-  tbody.appendChild(tr);
-}
-
-function addRow() {
-  const tbody = document.getElementById("repurchaseBody");
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td>${tbody.rows.length + 1}</td>
-    <td><input class="desc" placeholder="Item"></td>
-    <td><input class="weight" type="number"></td>
-    <td><input class="rate" type="number"></td>
-    <td><input class="amount" readonly></td>
-  `;
-  tbody.appendChild(tr);
-}
-
-function setRedeemDate() {
-  let jDate = document.getElementById("joiningDate").value;
-  if(jDate) {
-    let d = new Date(jDate);
-    d.setMonth(d.getMonth() + 12);
-    document.getElementById("redeemDate").value = d.toISOString().split('T')[0];
-  }
-}
-
 async function saveData(payload) {
   try {
     let res = await fetch(WEBAPP, { method: "POST", body: JSON.stringify(payload) });
@@ -926,108 +908,51 @@ async function saveData(payload) {
 }
 
 async function generateGST() {
+  let items = [];
+  document.querySelectorAll("#gstTable tbody tr").forEach(tr => {
+    let product = tr.querySelector(".product-search").value;
+    if (product) {
+      items.push({
+        product: product,
+        modelNo: tr.querySelector(".modelNo").value,
+        productModel: tr.querySelector(".pmodel").value,
+        hsn: tr.querySelector(".hsn").value,
+        qty: tr.querySelector(".qty").value,
+        rate: tr.querySelector(".rate").value,
+        gross: tr.querySelector(".gross").value,
+        gst: tr.querySelector(".gst").value
+      });
+    }
+  });
+
   let payload = {
-    type: "gstInvoice", customerName: document.getElementById("c_name").value,
-    invoiceNo: document.getElementById("gstInvoiceNo").value, relation: document.getElementById("relation").value,
-    date: document.getElementById("gstDate").value, village: document.getElementById("village").value,
-    district: document.getElementById("district").value, state: document.getElementById("state").value,
-    pincode: document.getElementById("pincode").value, email: document.getElementById("email").value,
-    mobile: document.getElementById("phone").value, aadhaar: document.getElementById("aadhaar").value,
-    pan: document.getElementById("pan").value, bankName: document.getElementById("bankName").value,
-    branch: document.getElementById("branch").value, accountNo: document.getElementById("accountNo").value,
-    ifsc: document.getElementById("ifsc").value, gstin: document.getElementById("gstin").value,
-    words: document.getElementById("gstWords").value, basicAmount: document.getElementById("basicAmt").value,
-    finalTotal: document.getElementById("finalTotal").value
+    type: "gstInvoice", 
+    customerName: document.getElementById("c_name").value,
+    invoiceNo: document.getElementById("gstInvoiceNo").value, 
+    relation: document.getElementById("relation").value,
+    date: document.getElementById("gstDate").value, 
+    village: document.getElementById("village").value,
+    district: document.getElementById("district").value, 
+    state: document.getElementById("state").value,
+    pincode: document.getElementById("pincode").value, 
+    email: document.getElementById("email").value,
+    mobile: document.getElementById("phone").value, 
+    aadhaar: document.getElementById("aadhaar").value,
+    pan: document.getElementById("pan").value, 
+    bankName: document.getElementById("bankName").value,
+    branch: document.getElementById("branch").value, 
+    accountNo: document.getElementById("accountNo").value,
+    ifsc: document.getElementById("ifsc").value, 
+    gstin: document.getElementById("gstin").value,
+    words: document.getElementById("gstWords").value, 
+    basicAmount: document.getElementById("basicAmt").value,
+    finalTotal: document.getElementById("finalTotal").value,
+    items: items
   };
+
   let result = await saveData(payload);
   if(result.status) alert("GST Invoice Generated & Saved Successfully!");
   else alert("Error saving GST Invoice: " + result.message);
-}
-
-async function generate() {
-  let payload = {
-    type: "repurchase", date: document.getElementById("date").value,
-    invoiceNo: document.getElementById("invoiceNo").value, customerName: document.getElementById("name").value,
-    address: document.getElementById("address").value, phone: document.getElementById("repurchasePhone").value,
-    total: document.getElementById("total").value, words: document.getElementById("words").value
-  };
-  let result = await saveData(payload);
-  if(result.status) alert("Repurchase Bill Generated & Saved Successfully!");
-  else alert("Error saving Repurchase Bill: " + result.message);
-}
-
-async function generateVoucher() {
-  let payload = {
-    type: "voucher", voucherNo: document.getElementById("voucherNo").value,
-    joiningDate: document.getElementById("joiningDate").value, redeemDate: document.getElementById("redeemDate").value,
-    customerName: document.getElementById("voucherCustomerName").value, relation: document.getElementById("voucherRelation").value,
-    mobile: document.getElementById("voucherMobile").value, village: document.getElementById("voucherVillage").value,
-    district: document.getElementById("voucherDistrict").value, state: document.getElementById("voucherState").value,
-    pincode: document.getElementById("voucherPincode").value, email: document.getElementById("voucherEmail").value,
-    aadhaar: document.getElementById("voucherAadhaar").value, pan: document.getElementById("voucherPAN").value,
-    bankName: document.getElementById("voucherBankName").value, branch: document.getElementById("voucherBranch").value,
-    accountNo: document.getElementById("voucherAccountNo").value, ifsc: document.getElementById("voucherIFSC").value,
-    salesRepId: document.getElementById("salesRepId").value
-  };
-  let result = await saveData(payload);
-  if(result.status) alert("Voucher Generated & Saved Successfully!");
-  else alert("Error saving Voucher: " + result.message);
-}
-
-async function generateRenewalVoucher() {
-  let payload = {
-    type: "renewal", renewalNo: document.getElementById("renewalVoucherNo").value,
-    joiningDate: document.getElementById("renewalJoiningDate").value, redeemDate: document.getElementById("renewalRedeemDate").value,
-    customerName: document.getElementById("renewalCustomerName").value, relation: document.getElementById("renewalRelation").value,
-    mobile: document.getElementById("renewalMobile").value, village: document.getElementById("renewalVillage").value,
-    district: document.getElementById("renewalDistrict").value, state: document.getElementById("renewalState").value,
-    pincode: document.getElementById("renewalPincode").value, email: document.getElementById("renewalEmail").value,
-    aadhaar: document.getElementById("renewalAadhaar").value, pan: document.getElementById("renewalPan").value,
-    bankName: document.getElementById("renewalBankName").value, branch: document.getElementById("renewalBranch").value,
-    accountNo: document.getElementById("renewalAccountNo").value, ifsc: document.getElementById("renewalIfsc").value
-  };
-  let result = await saveData(payload);
-  if(result.status) alert("Renewal Voucher Generated & Saved Successfully!");
-  else alert("Error saving Renewal Voucher: " + result.message);
-}
-
-async function generateWithoutGSTInvoice() {
-  let payload = {
-    type: "withoutGST", invoiceNo: document.getElementById("withoutGSTInvoiceNo").value,
-    date: document.getElementById("withoutDate").value, customerName: document.getElementById("withoutCustomerName").value,
-    relation: document.getElementById("withoutRelation").value, village: document.getElementById("withoutVillage").value,
-    district: document.getElementById("withoutDistrict").value, state: document.getElementById("withoutState").value,
-    pincode: document.getElementById("withoutPincode").value, mobile: document.getElementById("withoutMobile").value,
-    email: document.getElementById("withoutEmail").value
-  };
-  let result = await saveData(payload);
-  if(result.status) alert("Without GST Invoice Generated & Saved Successfully!");
-  else alert("Error saving Without GST Invoice: " + result.message);
-}
-
-async function changePassword() {
-  let oldPassword = document.getElementById("oldPass").value;
-  let newPassword = document.getElementById("newPass").value;
-  let confirmPass = document.getElementById("confirmPass").value;
-
-  if (newPassword !== confirmPass) {
-    alert("New Passwords do not match!");
-    return;
-  }
-
-  let user = JSON.parse(localStorage.getItem("user"));
-  let payload = {
-    type: "password", username: user ? user.username : "",
-    oldPassword: oldPassword, newPassword: newPassword
-  };
-
-  let result = await saveData(payload);
-  if (result.status) {
-    alert("Password updated successfully!");
-    closePasswordPopup();
-  } else {
-    alert("Failed to update password.");
-  }
 }
 </script>
 </body>
