@@ -1,32 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BTP Billing System | Beulah Traders Private Limited</title>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="https://btpbilling.github.io/btpbilling/sitemap.xml">
+  <meta name="description" content="BTP Billing System for GST Invoice, Without GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing.">
+  <meta name="keywords" content="BTP Billing, Beulah Traders, GST Billing, Repurchase Billing, Voucher, Renewal">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://btpbilling.github.io/btpbilling/">
+  <meta property="og:title" content="BTP Billing System">
+  <meta property="og:description" content="GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing System">
+  <meta property="og:url" content="https://btpbilling.github.io/btpbilling/">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<meta name="description"
-content="BTP Billing System for GST Invoice, Without GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing.">
-
-<meta name="keywords"
-content="BTP Billing, Beulah Traders, GST Billing, Repurchase Billing, Voucher, Renewal">
-<meta name="robots" content="index, follow">
-
-<link rel="canonical"
-href="https://btpbilling.github.io/btpbilling/">
-
-<meta property="og:title"
-content="BTP Billing System">
-
-<meta property="og:description"
-content="GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing System">
-
-<meta property="og:url"
-content="https://btpbilling.github.io/btpbilling/">
-<meta charset="UTF-8">
- 
-
-<style>
+  <style>
   /* GLOBAL STYLES */
   body { 
     margin: 0; 
@@ -211,6 +199,7 @@ content="https://btpbilling.github.io/btpbilling/">
   .popup-box { width: 380px; background: white; border-radius: 20px; padding: 25px; position: relative; }
   .close-btn { position: absolute; right: 18px; top: 15px; font-size: 24px; cursor: pointer; color: #666; }
 </style>
+</head>
 
 <body>
 
@@ -673,16 +662,16 @@ function onProductSelect(input) {
 }
 
 // ==========================================
-// 1. HELPER: NUMBER TO WORDS (CLIENT SIDE)
+// 1. HELPER: NUMBER TO WORDS (CLIENT-SIDE)
 // ==========================================
 function convertNumberToWords(amount) {
+  let num = Math.floor(Math.abs(amount));
+  if (isNaN(num) || num === 0) return "Zero Rupees Only";
+
   let words = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", 
                "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
   let tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
-  
-  let num = Math.floor(amount);
-  if (num === 0) return "Zero Rupees Only";
-  
+
   function numToWords(n) {
     if (n < 20) return words[n];
     if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 !== 0 ? " " + words[n % 10] : "");
@@ -691,25 +680,38 @@ function convertNumberToWords(amount) {
     if (n < 10000000) return numToWords(Math.floor(n / 100000)) + " Lakh" + (n % 100000 !== 0 ? " " + numToWords(n % 100000) : "");
     return numToWords(Math.floor(n / 10000000)) + " Crore" + (n % 10000000 !== 0 ? " " + numToWords(n % 10000000) : "");
   }
-  
+
   return numToWords(num) + " Rupees Only";
 }
 
+// Utility function to safely set element value if it exists
+function safeSetValue(id, val) {
+  let el = document.getElementById(id);
+  if (el) el.value = val;
+}
+
 // ==========================================
-// 2. GST INVOICE CALCULATION & LISTENERS
+// 2. GST INVOICE MODULE CALCULATIONS
 // ==========================================
 function calculateGSTRow(row) {
+  if (!row) return;
+
   let qty = parseFloat(row.querySelector(".qty")?.value) || 0;
   let rate = parseFloat(row.querySelector(".rate")?.value) || 0;
   let gross = qty * rate;
-  
+
   let gstP = parseFloat(row.querySelector(".gst")?.value) || 0;
   let cgstP = parseFloat(row.querySelector(".cgstp")?.value) || (gstP / 2);
   let sgstP = parseFloat(row.querySelector(".sgstp")?.value) || (gstP / 2);
   let igstP = parseFloat(row.querySelector(".igstp")?.value) || 0;
 
-  if (row.querySelector(".cgstp")) row.querySelector(".cgstp").value = cgstP;
-  if (row.querySelector(".sgstp")) row.querySelector(".sgstp").value = sgstP;
+  // Auto-sync split percentages
+  if (row.querySelector(".cgstp") && !row.querySelector(".cgstp").value) {
+    row.querySelector(".cgstp").value = cgstP;
+  }
+  if (row.querySelector(".sgstp") && !row.querySelector(".sgstp").value) {
+    row.querySelector(".sgstp").value = sgstP;
+  }
 
   let cgstAmt = (gross * cgstP) / 100;
   let sgstAmt = (gross * sgstP) / 100;
@@ -737,43 +739,40 @@ function calculateGSTTotals() {
     totalTaxable += parseFloat(row.querySelector(".taxable")?.value) || 0;
   });
 
-  document.getElementById("totalQty").value = totalQty;
-  document.getElementById("totalGross").value = totalGross.toFixed(2);
-  document.getElementById("totalCGST").value = totalCGST.toFixed(2);
-  document.getElementById("totalSGST").value = totalSGST.toFixed(2);
-  document.getElementById("totalIGST").value = totalIGST.toFixed(2);
-  document.getElementById("totalTaxable").value = totalTaxable.toFixed(2);
+  safeSetValue("totalQty", totalQty);
+  safeSetValue("totalGross", totalGross.toFixed(2));
+  safeSetValue("totalCGST", totalCGST.toFixed(2));
+  safeSetValue("totalSGST", totalSGST.toFixed(2));
+  safeSetValue("totalIGST", totalIGST.toFixed(2));
+  safeSetValue("totalTaxable", totalTaxable.toFixed(2));
 
-  // Bind to summary panel fields
-  document.getElementById("basicAmt").value = totalGross.toFixed(2);
-  document.getElementById("sgstAmt").value = totalSGST.toFixed(2);
-  document.getElementById("cgstAmt").value = totalCGST.toFixed(2);
-  document.getElementById("igstAmt").value = totalIGST.toFixed(2);
-  
+  // Sync to Summary Panel
+  safeSetValue("basicAmt", totalGross.toFixed(2));
+  safeSetValue("sgstAmt", totalSGST.toFixed(2));
+  safeSetValue("cgstAmt", totalCGST.toFixed(2));
+  safeSetValue("igstAmt", totalIGST.toFixed(2));
+
   let totalGST = totalCGST + totalSGST + totalIGST;
-  document.getElementById("totalGST").value = totalGST.toFixed(2);
-  
+  safeSetValue("totalGST", totalGST.toFixed(2));
+
   let finalTotal = Math.round(totalTaxable);
-  document.getElementById("finalTotal").value = finalTotal.toFixed(2);
-  document.getElementById("gstWords").value = convertNumberToWords(finalTotal);
+  safeSetValue("finalTotal", finalTotal.toFixed(2));
+  safeSetValue("gstWords", convertNumberToWords(finalTotal));
 }
 
-// Global dynamic listener for GST table inputs
-document.addEventListener("input", function(e) {
-  if (e.target.closest("#gstTable tbody")) {
-    calculateGSTRow(e.target.closest("tr"));
-  }
-});
-
 // ==========================================
-// 3. REPURCHASE CALCULATION & LISTENERS
+// 3. REPURCHASE MODULE CALCULATIONS
 // ==========================================
 function calculateRepurchaseRow(row) {
+  if (!row) return;
+
   let weight = parseFloat(row.querySelector(".weight")?.value) || 0;
   let rate = parseFloat(row.querySelector(".rate")?.value) || 0;
   let amount = weight * rate;
 
-  row.querySelector(".amount").value = amount.toFixed(2);
+  if (row.querySelector(".amount")) {
+    row.querySelector(".amount").value = amount.toFixed(2);
+  }
   calculateRepurchaseTotals();
 }
 
@@ -784,59 +783,60 @@ function calculateRepurchaseTotals() {
   });
 
   let roundedTotal = Math.round(grandTotal);
-  document.getElementById("total").value = roundedTotal.toFixed(2);
-  document.getElementById("words").value = convertNumberToWords(roundedTotal);
+  safeSetValue("total", roundedTotal.toFixed(2));
+  safeSetValue("words", convertNumberToWords(roundedTotal));
 }
 
-document.addEventListener("input", function(e) {
-  if (e.target.closest("#repurchaseBody")) {
-    calculateRepurchaseRow(e.target.closest("tr"));
-  }
-});
-
 // ==========================================
-// 4. VOUCHER & RENEWAL CALCULATIONS
+// 4. VOUCHER MODULE CALCULATIONS
 // ==========================================
 function calculateVoucher() {
   let kits = parseFloat(document.getElementById("kits")?.value) || 0;
   let totalPoints = kits * 6000;
   let monthlyRedeem = totalPoints / 12;
-  let monthlyWithDeduction = monthlyRedeem * 0.98; // 2% deduction
+  let monthlyWithDeduction = monthlyRedeem * 0.98; // 2% Deduction
   let totalWithDeduction = monthlyWithDeduction * 12;
 
-  document.getElementById("rewardPoints").value = totalPoints;
-  document.getElementById("monthlyRedeem").value = monthlyRedeem.toFixed(2);
-  document.getElementById("monthlywithCoupon").value = monthlyWithDeduction.toFixed(2);
-  document.getElementById("monthlyWords").value = convertNumberToWords(Math.round(monthlyWithDeduction));
-  document.getElementById("totalCoupon").value = totalWithDeduction.toFixed(2);
-  document.getElementById("totalWords").value = convertNumberToWords(Math.round(totalWithDeduction));
+  safeSetValue("rewardPoints", totalPoints);
+  safeSetValue("monthlyRedeem", monthlyRedeem.toFixed(2));
+  safeSetValue("monthlywithCoupon", monthlyWithDeduction.toFixed(2));
+  safeSetValue("monthlyWords", convertNumberToWords(Math.round(monthlyWithDeduction)));
+  safeSetValue("totalCoupon", totalWithDeduction.toFixed(2));
+  safeSetValue("totalWords", convertNumberToWords(Math.round(totalWithDeduction)));
 }
 
+// ==========================================
+// 5. RENEWAL MODULE CALCULATIONS
+// ==========================================
 function calculateRenewal() {
   let kits = parseFloat(document.getElementById("renewalKits")?.value) || 0;
   let totalPoints = kits * 6000;
   let monthlyRedeem = totalPoints / 12;
-  let monthlyWithDeduction = monthlyRedeem * 0.98; // 2% deduction
+  let monthlyWithDeduction = monthlyRedeem * 0.98; // 2% Deduction
   let totalWithDeduction = monthlyWithDeduction * 12;
 
-  document.getElementById("renewalRewardPoints").value = totalPoints;
-  document.getElementById("renewalMonthlyRedeem").value = monthlyRedeem.toFixed(2);
-  document.getElementById("renewalMonthlywithCoupon").value = monthlyWithDeduction.toFixed(2);
-  document.getElementById("renewalMonthlyWords").value = convertNumberToWords(Math.round(monthlyWithDeduction));
-  document.getElementById("renewalTotalCoupon").value = totalWithDeduction.toFixed(2);
-  document.getElementById("renewalTotalWords").value = convertNumberToWords(Math.round(totalWithDeduction));
+  safeSetValue("renewalRewardPoints", totalPoints);
+  safeSetValue("renewalMonthlyRedeem", monthlyRedeem.toFixed(2));
+  safeSetValue("renewalMonthlywithCoupon", monthlyWithDeduction.toFixed(2));
+  safeSetValue("renewalMonthlyWords", convertNumberToWords(Math.round(monthlyWithDeduction)));
+  safeSetValue("renewalTotalCoupon", totalWithDeduction.toFixed(2));
+  safeSetValue("renewalTotalWords", convertNumberToWords(Math.round(totalWithDeduction)));
 }
 
 // ==========================================
-// 5. WITHOUT GST CALCULATION & LISTENERS
+// 6. WITHOUT GST MODULE CALCULATIONS
 // ==========================================
 function calculateWithoutGSTRow(element) {
   let row = element.closest("tr");
+  if (!row) return;
+
   let qty = parseFloat(row.querySelector(".withoutQty")?.value) || 0;
   let rate = parseFloat(row.querySelector(".withoutRate")?.value) || 0;
   let amount = qty * rate;
 
-  row.querySelector(".withoutAmount").value = amount.toFixed(2);
+  if (row.querySelector(".withoutAmount")) {
+    row.querySelector(".withoutAmount").value = amount.toFixed(2);
+  }
   calculateWithoutGSTTotals();
 }
 
@@ -847,29 +847,66 @@ function calculateWithoutGSTTotals() {
   });
 
   let roundedTotal = Math.round(grandTotal);
-  document.getElementById("withoutGSTGrandTotal").value = roundedTotal.toFixed(2);
-  document.getElementById("withoutBasicAmount").value = grandTotal.toFixed(2);
-  document.getElementById("withoutTotalAmount").value = roundedTotal.toFixed(2);
-  document.getElementById("withoutAmountWords").value = convertNumberToWords(roundedTotal);
+  safeSetValue("withoutGSTGrandTotal", roundedTotal.toFixed(2));
+  safeSetValue("withoutBasicAmount", grandTotal.toFixed(2));
+  safeSetValue("withoutTotalAmount", roundedTotal.toFixed(2));
+  safeSetValue("withoutAmountWords", convertNumberToWords(roundedTotal));
 }
 
 function addWithoutGSTRow() {
   let tbody = document.getElementById("withoutGSTBody");
+  if (!tbody) return;
+
   let rowCount = tbody.querySelectorAll("tr").length + 1;
   let tr = document.createElement("tr");
   tr.innerHTML = `
     <td class="withoutSL">${rowCount}</td>
-    <td><input class="withoutProduct" list="productList" onchange="loadWithoutGSTProduct(this)"><div class="product-list"></div></td>
+    <td><input class="withoutProduct" list="productList"><div class="product-list"></div></td>
     <td><input class="withoutModelNo" readonly></td>
     <td><input class="withoutProductModel" readonly></td>
     <td><input class="withoutHSN" readonly></td>
-    <td><input class="withoutQty" type="number" min="1" placeholder="Qty" oninput="calculateWithoutGSTRow(this)"></td>
+    <td><input class="withoutQty" type="number" min="1" value="1" placeholder="Qty" oninput="calculateWithoutGSTRow(this)"></td>
     <td><input class="withoutRate" type="number" value="0" oninput="calculateWithoutGSTRow(this)"></td>
     <td><input class="withoutAmount" value="0.00" readonly></td>
   `;
   tbody.appendChild(tr);
+  calculateWithoutGSTTotals();
 }
 
+// ==========================================
+// 7. GLOBAL EVENT LISTENERS FOR AUTOMATIC REAL-TIME UPDATES
+// ==========================================
+document.addEventListener("DOMContentLoaded", function() {
+  // Global Event Listener for input changes across all sections
+  document.addEventListener("input", function(e) {
+    let target = e.target;
+
+    // GST Section Dynamic Trigger
+    if (target.closest("#gstTable")) {
+      calculateGSTRow(target.closest("tr"));
+    }
+
+    // Repurchase Section Dynamic Trigger
+    if (target.closest("#repurchaseBody")) {
+      calculateRepurchaseRow(target.closest("tr"));
+    }
+
+    // Voucher Section Dynamic Trigger
+    if (target.id === "kits") {
+      calculateVoucher();
+    }
+
+    // Renewal Section Dynamic Trigger
+    if (target.id === "renewalKits") {
+      calculateRenewal();
+    }
+
+    // Without GST Section Dynamic Trigger
+    if (target.closest("#withoutGSTBody")) {
+      calculateWithoutGSTRow(target);
+    }
+  });
+});
 // =====================================================
 // AUTHENTICATION & LOGIN
 // =====================================================
@@ -1350,7 +1387,3 @@ async function changePassword() {
   }
 }
 </script>
- 
-
-</body>
-</html>
