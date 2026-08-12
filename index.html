@@ -266,6 +266,13 @@
         </tfoot>
       </table>
       <br><button onclick="addRow()">+ Add Row</button><br><br>
+
+      <select class="metal-category">
+  <option value="" disabled selected>Select Category</option>
+  <option value="GOLD">GOLD</option>
+  <option value="SILVER">SILVER</option>
+  <option value="DIAMOND">DIAMOND</option>
+</select>
       <label>Amount In Words</label>
       <input id="words" style="width:100%;" readonly><br><br>
       <div style="display:flex; gap:10px;">
@@ -273,6 +280,8 @@
         <button onclick="printFormattedPage('billingPage')" style="background:#4cc9f0; color:#fff;">Print / PDF</button>
         <button onclick="shareWhatsApp('Repurchase Bill')" style="background:#25d366; color:#fff;">WhatsApp</button>
       </div>
+
+      
     </div>
 
     <!-- VOUCHER PAGE -->
