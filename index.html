@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>BTP Billing System | Beulah Traders Private Limited</title>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="https://btpbilling.github.io/btpbilling/sitemap.xml">
+
   <meta name="description" content="BTP Billing System for GST Invoice, Without GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing.">
   <meta name="keywords" content="BTP Billing, Beulah Traders, GST Billing, Repurchase Billing, Voucher, Renewal">
   <meta name="robots" content="index, follow">
@@ -12,193 +12,196 @@
   <meta property="og:title" content="BTP Billing System">
   <meta property="og:description" content="GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing System">
   <meta property="og:url" content="https://btpbilling.github.io/btpbilling/">
+  <meta charset="UTF-8">
+
+  <!-- Chart.js for Dashboard Graphs -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-  /* GLOBAL STYLES */
-  body { 
-    margin: 0; 
-    padding: 0; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    background: #f4f7fb; 
-  }
+    /* GLOBAL STYLES */
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background: #f4f7fb; 
+    }
 
-  /* PROFILE STYLING */
-  .profile {
-    width: 145px; 
-    height: 145px; 
-    border-radius: 50%; 
-    object-fit: cover; 
-    margin: 15px auto;
-    border: 5px solid rgba(255,255,255,0.85);
-    box-shadow: 0 10px 30px rgba(255,182,193,0.35), 0 0 15px rgba(255,255,255,0.6);
-    transition: 0.4s; 
-    animation: profileFloat 4s ease-in-out infinite;
-    display: block;
-  }
-  @keyframes profileFloat {
-    0% { transform: translateY(0px); } 
-    50% { transform: translateY(-8px); } 
-    100% { transform: translateY(0px); }
-  }
-  .profile:hover { transform: scale(1.05); }
+    /* PROFILE STYLING */
+    .profile {
+      width: 145px; 
+      height: 145px; 
+      border-radius: 50%; 
+      object-fit: cover; 
+      margin: 15px auto;
+      border: 5px solid rgba(255,255,255,0.85);
+      box-shadow: 0 10px 30px rgba(255,182,193,0.35), 0 0 15px rgba(255,255,255,0.6);
+      transition: 0.4s; 
+      animation: profileFloat 4s ease-in-out infinite;
+      display: block;
+    }
+    @keyframes profileFloat {
+      0% { transform: translateY(0px); } 
+      50% { transform: translateY(-8px); } 
+      100% { transform: translateY(0px); }
+    }
+    .profile:hover { transform: scale(1.05); }
 
-  /* LOGIN PAGE STRUCTURE */
-  .login { display: flex; width: 100%; height: 100vh; overflow: hidden; position: relative; background: #fff; }
-  .left {
-    width: 50%; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden;
-    background: linear-gradient(135deg, #fff7f8 0%, #ffeef1 35%, #fff1eb 100%);
-  }
-  .left::before {
-    content: ""; position: absolute; inset: 0;
-    background: linear-gradient(to bottom, rgba(15, 2, 102, 0.85), rgba(106,90,205,0.5), rgba(106,90,205,0.85));
-    z-index: 1;
-  }
-  .left-content {
-    position: relative; z-index: 5; width: 420px; padding: 35px 30px; border-radius: 32px;
-    background: rgba(255,255,255,0.32); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.45);
-    box-shadow: 0 15px 40px rgba(255,182,193,0.18);
-    text-align: center; color: #fff;
-  }
-  .left-content h1 { font-size: 20px; letter-spacing: 1px; margin: 5px 0; }
-  .left-content h2 { margin-bottom: 10px; font-weight: 500; font-size: 20px; }
-  .left-content p { margin: 4px 0; letter-spacing: 0.5px; font-size: 13px; opacity: 0.95; }
+    /* LOGIN PAGE STRUCTURE */
+    .login { display: flex; width: 100%; height: 100vh; overflow: hidden; position: relative; background: #fff; }
+    .left {
+      width: 50%; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden;
+      background: linear-gradient(135deg, #fff7f8 0%, #ffeef1 35%, #fff1eb 100%);
+    }
+    .left::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(15, 2, 102, 0.85), rgba(106,90,205,0.5), rgba(106,90,205,0.85));
+      z-index: 1;
+    }
+    .left-content {
+      position: relative; z-index: 5; width: 420px; padding: 35px 30px; border-radius: 32px;
+      background: rgba(255,255,255,0.32); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.45);
+      box-shadow: 0 15px 40px rgba(255,182,193,0.18);
+      text-align: center; color: #fff;
+    }
+    .left-content h1 { font-size: 20px; letter-spacing: 1px; margin: 5px 0; }
+    .left-content h2 { margin-bottom: 10px; font-weight: 500; font-size: 20px; }
+    .left-content p { margin: 4px 0; letter-spacing: 0.5px; font-size: 13px; opacity: 0.95; }
 
-  .right {
-    width: 50%; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;
-    background: url("https://images.unsplash.com/photo-1519681393784-d120267933ba") no-repeat center center; background-size: cover;
-  }
-  .login-box {
-    width: 340px; padding: 35px; border-radius: 28px; background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255,255,255,0.25);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.25); text-align: center; color: #2f2f2f;
-  }
-  .login-logo { width: 110px; display: block; margin: 0 auto 10px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.2)); }
-  .login-box input {
-    width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 10px;
-    background: rgba(255,255,255,0.85); color: #000; outline: none; font-size: 14px; box-sizing: border-box;
-  }
-  .login-box button {
-    width: 100%; padding: 13px; border: none; border-radius: 30px; background: white; color: #111;
-    font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px;
-  }
-  .login-box button:hover { background: #ff758c; color: #fff; }
+    .right {
+      width: 50%; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;
+      background: url("https://images.unsplash.com/photo-1519681393784-d120267933ba") no-repeat center center; background-size: cover;
+    }
+    .login-box {
+      width: 340px; padding: 35px; border-radius: 28px; background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.25);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25); text-align: center; color: #2f2f2f;
+    }
+    .login-logo { width: 110px; display: block; margin: 0 auto 10px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.2)); }
+    .login-box input {
+      width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 10px;
+      background: rgba(255,255,255,0.85); color: #000; outline: none; font-size: 14px; box-sizing: border-box;
+    }
+    .login-box button {
+      width: 100%; padding: 13px; border: none; border-radius: 30px; background: white; color: #111;
+      font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px;
+    }
+    .login-box button:hover { background: #ff758c; color: #fff; }
 
-  /* NAVIGATION & SIDEBAR */
-  .sidebar {
-    width: 230px; height: 100vh; position: fixed; top: 0; left: 0; z-index: 999; padding: 20px 15px;
-    background: linear-gradient(180deg, #f86370 0%, #ffe9e4 45%, #f75700 100%);
-    border-right: 1px solid rgba(255,255,255,0.6); box-shadow: 8px 0 30px rgba(255,182,193,0.15); box-sizing: border-box;
-  }
-  .company-logo-box { width: 100%; margin: 0 auto 20px; padding: 15px; border-radius: 20px; background: rgba(255,255,255,0.55); text-align: center; box-sizing: border-box; }
-  .company-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; }
-  
-  .menu-item {
-    display: block; width: 100%; padding: 12px 15px; border-radius: 12px; margin: 10px 0; cursor: pointer;
-    transition: 0.35s; user-select: none; font-size: 14px; letter-spacing: 0.5px; font-weight: 700; color: #444; box-sizing: border-box;
-  }
-  .menu-item.active {
-    background: linear-gradient(135deg, #ff9fb2, #ffb38a); color: white; font-weight: 800;
-    box-shadow: 0 8px 18px rgba(255,182,193,0.28);
-  }
+    /* NAVIGATION & SIDEBAR */
+    .sidebar {
+      width: 230px; height: 100vh; position: fixed; top: 0; left: 0; z-index: 999; padding: 20px 15px;
+      background: linear-gradient(180deg, #f86370 0%, #ffe9e4 45%, #f75700 100%);
+      border-right: 1px solid rgba(255,255,255,0.6); box-shadow: 8px 0 30px rgba(255,182,193,0.15); box-sizing: border-box;
+    }
+    .company-logo-box { width: 100%; margin: 0 auto 20px; padding: 15px; border-radius: 20px; background: rgba(255,255,255,0.55); text-align: center; box-sizing: border-box; }
+    .company-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; }
+    
+    .menu-item {
+      display: block; width: 100%; padding: 12px 15px; border-radius: 12px; margin: 10px 0; cursor: pointer;
+      transition: 0.35s; user-select: none; font-size: 14px; letter-spacing: 0.5px; font-weight: 700; color: #444; box-sizing: border-box;
+    }
+    .menu-item.active {
+      background: linear-gradient(135deg, #ff9fb2, #ffb38a); color: white; font-weight: 800;
+      box-shadow: 0 8px 18px rgba(255,182,193,0.28);
+    }
 
-  /* MAIN CONTENT AREA */
-  .main {
-    margin-left: 230px; min-height: 100vh; padding: 20px 25px; position: relative; z-index: 5;
-    background: linear-gradient(135deg, rgba(255,245,247,0.95), rgba(244,247,251,0.95)); box-sizing: border-box;
-  }
-  .topbar {
-    display: flex; justify-content: space-between; align-items: center; background: white;
-    padding: 12px 20px; border-radius: 14px; margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.06);
-  }
-  .page-heading { font-size: 24px; font-weight: 800; color: #ff4f81; text-transform: uppercase; }
-  .workflow-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-  .action-btn {
-    padding: 6px 12px; border: none; border-radius: 6px; background: #ff4d6d; color: #fff;
-    font-weight: bold; cursor: pointer; font-size: 11px; transition: 0.2s;
-  }
-  .action-btn:hover { background: #d90429; }
+    /* MAIN CONTENT AREA */
+    .main {
+      margin-left: 230px; min-height: 100vh; padding: 20px 25px; position: relative; z-index: 5;
+      background: linear-gradient(135deg, rgba(255,245,247,0.95), rgba(244,247,251,0.95)); box-sizing: border-box;
+    }
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center; background: white;
+      padding: 12px 20px; border-radius: 14px; margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+    .page-heading { font-size: 24px; font-weight: 800; color: #ff4f81; text-transform: uppercase; }
+    .workflow-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+    .action-btn {
+      padding: 6px 12px; border: none; border-radius: 6px; background: #ff4d6d; color: #fff;
+      font-weight: bold; cursor: pointer; font-size: 11px; transition: 0.2s;
+    }
+    .action-btn:hover { background: #d90429; }
 
-  /* PERFECT DASHBOARD CARD FIXED LAYOUT & HEIGHTS */
-  .dashboardCards {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    margin-bottom: 25px;
-    align-items: stretch;
-  }
-  .small-card {
-    flex: 1;
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 18px 20px;
-    height: 180px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    position: relative;
-    overflow: hidden;
-  }
-  .small-card h3 {
-    margin: 0 0 8px 0;
-    font-size: 15px;
-    color: #555;
-    font-weight: 600;
-  }
-  .chart-card {
-    flex: 1.2;
-    align-items: center;
-  }
-  .chart-container {
-    position: relative;
-    width: 100%;
-    height: 120px;
-  }
+    /* DASHBOARD CARD FIXED LAYOUT & HEIGHTS */
+    .dashboardCards {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      margin-bottom: 25px;
+      align-items: stretch;
+    }
+    .small-card {
+      flex: 1;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 18px 20px;
+      height: 180px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      position: relative;
+      overflow: hidden;
+    }
+    .small-card h3 {
+      margin: 0 0 8px 0;
+      font-size: 15px;
+      color: #555;
+      font-weight: 600;
+    }
+    .chart-card {
+      flex: 1.2;
+      align-items: center;
+    }
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 120px;
+    }
 
-  /* FORMS & TABLES */
-  .card {
-    background: rgba(255,255,255,0.85); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255,255,255,0.4); padding: 25px; border-radius: 20px;
-    box-shadow: 0 10px 35px rgba(0,0,0,0.06); margin-top: 10px;
-  }
-  table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 10px; overflow: hidden; }
-  th { background: #ff758c; color: #ffffff; padding: 10px; font-size: 13px; }
-  td { padding: 8px; border-bottom: 1px solid #eee; text-align: center; }
-  button {
-    padding: 10px 15px; border: none; border-radius: 8px; background: #ff758c; color: #fff;
-    cursor: pointer; transition: 0.3s; font-weight: 600;
-  }
-  button:hover { background: #ff4d6d; }
-  input, textarea {
-    padding: 9px; margin: 4px 0; border: 1px solid #ccc; border-radius: 8px; outline: none;
-    background: #fff; color: #000; box-sizing: border-box; font-size: 13px;
-  }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    /* FORMS & TABLES */
+    .card {
+      background: rgba(255,255,255,0.85); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.4); padding: 25px; border-radius: 20px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.06); margin-top: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 10px; overflow: hidden; }
+    th { background: #ff758c; color: #ffffff; padding: 10px; font-size: 13px; }
+    td { padding: 8px; border-bottom: 1px solid #eee; text-align: center; }
+    button {
+      padding: 10px 15px; border: none; border-radius: 8px; background: #ff758c; color: #fff;
+      cursor: pointer; transition: 0.3s; font-weight: 600;
+    }
+    button:hover { background: #ff4d6d; }
+    input, textarea {
+      padding: 9px; margin: 4px 0; border: 1px solid #ccc; border-radius: 8px; outline: none;
+      background: #fff; color: #000; box-sizing: border-box; font-size: 13px;
+    }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-  /* PROFILE DROPDOWN & POPUP */
-  .profile-box { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid #ff758c; }
-  .profile-box img { width: 100%; height: 100%; object-fit: cover; }
-  
-  .dropdown {
-    position: absolute; top: 55px; right: 0; width: 250px; background: white; border-radius: 16px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15); overflow: hidden; opacity: 0; visibility: hidden;
-    transform: translateY(-10px); transition: 0.35s; z-index: 9999;
-  }
-  .dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
-  .dropdown-top { display: flex; align-items: center; gap: 12px; padding: 15px; background: linear-gradient(45deg,#ff758c,#ff7eb3); color: #fff; }
-  .drop-item { padding: 12px 18px; cursor: pointer; transition: 0.3s; font-size: 14px; color: #333; }
-  .drop-item:hover { background: #fff1f3; color: #ff4d6d; }
+    /* PROFILE DROPDOWN & POPUP */
+    .profile-box { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid #ff758c; }
+    .profile-box img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .dropdown {
+      position: absolute; top: 55px; right: 0; width: 250px; background: white; border-radius: 16px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15); overflow: hidden; opacity: 0; visibility: hidden;
+      transform: translateY(-10px); transition: 0.35s; z-index: 9999;
+    }
+    .dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown-top { display: flex; align-items: center; gap: 12px; padding: 15px; background: linear-gradient(45deg,#ff758c,#ff7eb3); color: #fff; }
+    .drop-item { padding: 12px 18px; cursor: pointer; transition: 0.3s; font-size: 14px; color: #333; }
+    .drop-item:hover { background: #fff1f3; color: #ff4d6d; }
 
-  .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; justify-content: center; align-items: center; z-index: 99999; }
-  .popup-box { width: 380px; background: white; border-radius: 20px; padding: 25px; position: relative; }
-  .close-btn { position: absolute; right: 18px; top: 15px; font-size: 24px; cursor: pointer; color: #666; }
-</style>
+    .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; justify-content: center; align-items: center; z-index: 99999; }
+    .popup-box { width: 380px; background: white; border-radius: 20px; padding: 25px; position: relative; }
+    .close-btn { position: absolute; right: 18px; top: 15px; font-size: 24px; cursor: pointer; color: #666; }
+  </style>
 </head>
 
 <body>
@@ -287,7 +290,7 @@
       </div>
     </div>
 
-    <!-- PERFECT CARDS WITH FIXED CONSTANT DIMENSIONS -->
+    <!-- CARDS WITH CONSTANT DIMENSIONS -->
     <div id="invoiceCards" class="dashboardCards" style="display:none;">
       <div class="small-card"><h3>GST Bills Today</h3><p id="gstBills" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">0</p></div>
       <div class="small-card"><h3>GST Amount</h3><p id="gstAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
@@ -354,7 +357,7 @@
           <td>Mobile</td><td><input id="phone"></td>
         </tr>
         <tr>
-          <td>State</td><td><input id="state"></td>
+          <td>State</td><td><input id="state" value="Telangana"></td>
           <td>Pincode</td><td><input id="pincode"></td>
           <td>GST IN (Optional)</td><td><input id="gstin" placeholder="Optional"></td>
         </tr>
@@ -463,6 +466,7 @@
         <div><label>Voucher No</label><input id="voucherNo" style="width:100%;" onblur="handleManualInvoice('voucher', this.value)"></div>
         <div><label>Joining Date</label><input type="date" id="joiningDate" style="width:100%;" onchange="setRedeemDate()"></div>
         <div><label>Redeem Release Date</label><input id="redeemDate" style="width:100%;" readonly></div>
+        <div><label>Kits Count</label><input id="kits" type="number" style="width:100%;" oninput="calculateVoucher()"></div>
         <div><label>Customer Name</label><input id="voucherCustomerName" style="width:100%;"></div>
         <div><label>Relation</label><input id="voucherRelation" style="width:100%;"></div>
         <div><label>Mobile</label><input id="voucherMobile" style="width:100%;"></div>
@@ -478,6 +482,10 @@
         <div><label>Account No</label><input id="voucherAccountNo" style="width:100%;"></div>
         <div><label>IFSC</label><input id="voucherIFSC" style="width:100%;"></div>
         <div><label>Sales Rep ID</label><input id="salesRepId" style="width:100%;"></div>
+        <div><label>Reward Points</label><input id="rewardPoints" style="width:100%;" readonly></div>
+        <div><label>Monthly Redeem</label><input id="monthlyRedeem" style="width:100%;" readonly></div>
+        <div><label>Monthly Coupon Net</label><input id="monthlywithCoupon" style="width:100%;" readonly></div>
+        <div><label>Total 12M Coupon</label><input id="totalCoupon" style="width:100%;" readonly></div>
       </div>
       <br>
       <div style="display:flex; gap:10px;">
@@ -494,6 +502,7 @@
         <div><label>Renewal Voucher No</label><input id="renewalVoucherNo" style="width:100%;" onblur="handleManualInvoice('renewal', this.value)"></div>
         <div><label>Joining Date</label><input type="date" id="renewalJoiningDate" style="width:100%;"></div>
         <div><label>Redeem Release Date</label><input type="date" id="renewalRedeemDate" style="width:100%;"></div>
+        <div><label>Renewal Kits</label><input id="renewalKits" type="number" style="width:100%;" oninput="calculateRenewal()"></div>
         <div><label>Customer Name</label><input type="text" id="renewalCustomerName" style="width:100%;"></div>
         <div><label>Relation</label><input type="text" id="renewalRelation" style="width:100%;"></div>
         <div><label>Mobile Number</label><input type="text" id="renewalMobile" style="width:100%;"></div>
@@ -508,6 +517,9 @@
         <div><label>Branch Name</label><input id="renewalBranch" style="width:100%;"></div>
         <div><label>Account Number</label><input id="renewalAccountNo" style="width:100%;"></div>
         <div><label>IFSC Code</label><input id="renewalIfsc" style="text-transform:uppercase; width:100%;"></div>
+        <div><label>Reward Points</label><input id="renewalRewardPoints" style="width:100%;" readonly></div>
+        <div><label>Monthly Coupon Net</label><input id="renewalMonthlywithCoupon" style="width:100%;" readonly></div>
+        <div><label>Total 12M Coupon</label><input id="renewalTotalCoupon" style="width:100%;" readonly></div>
       </div>
       <br>
       <div style="display:flex; gap:10px;">
@@ -532,6 +544,23 @@
         <div><label>Mobile Number</label><input id="withoutMobile" style="width:100%;"></div>
         <div><label>Email</label><input id="withoutEmail" style="width:100%;"></div>
       </div>
+
+      <table id="withoutGSTTable" style="margin-top:15px;">
+        <thead>
+          <tr>
+            <th>SL</th><th>Product</th><th>Model No</th><th>Product Model</th><th>HSN</th><th>Qty</th><th>Rate</th><th>Amount</th>
+          </tr>
+        </thead>
+        <tbody id="withoutGSTBody"></tbody>
+      </table>
+      <br><button onclick="addWithoutGSTRow()">+ Add Row</button><br><br>
+
+      <div class="grid2">
+        <div><label>Basic Amount</label><input id="withoutBasicAmount" style="width:100%;" readonly></div>
+        <div><label>Total Amount</label><input id="withoutTotalAmount" style="width:100%;" readonly></div>
+        <div style="grid-column: span 2;"><label>Amount in Words</label><input id="withoutAmountWords" style="width:100%;" readonly></div>
+      </div>
+
       <br>
       <div style="display:flex; gap:10px;">
         <button type="button" onclick="generateWithoutGSTInvoice()">Generate Invoice</button>
@@ -569,6 +598,10 @@
   </div>
 </div>
 
+<script src="script.js"></script>
+</body>
+</html>
+
 <script>
 const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
@@ -595,6 +628,7 @@ window.onload = function() {
   fetchProducts().then(() => {
     for (let i = 0; i < 3; i++) { addRow(); }
     for (let i = 0; i < 3; i++) { addGSTRow(); }
+    for (let i = 0; i < 3; i++) { addWithoutGSTRow(); }
   });
   
   loadGSTInvoiceNo();
@@ -650,28 +684,44 @@ function onProductSelect(input) {
     let row = input.closest("tr");
     
     // Fill row fields automatically
-    row.querySelector(".modelNo").value = item.modelNo || "";
-    row.querySelector(".pmodel").value = item.productModel || "";
-    row.querySelector(".hsn").value = item.hsn || "";
-    row.querySelector(".gst").value = item.gst || 0;
-    row.querySelector(".rate").value = item.rate || 0;
+    if(row.querySelector(".modelNo")) row.querySelector(".modelNo").value = item.modelNo || "";
+    if(row.querySelector(".pmodel")) row.querySelector(".pmodel").value = item.productModel || "";
+    if(row.querySelector(".hsn")) row.querySelector(".hsn").value = item.hsn || "";
+    if(row.querySelector(".gst")) row.querySelector(".gst").value = item.gst || 0;
+    if(row.querySelector(".rate")) row.querySelector(".rate").value = item.rate || 0;
     
     // Auto-calculate totals
-    calculateGSTRow(input);
+    if(row.closest("#gstTable")) calculateGSTRow(input);
+  }
+}
+
+function loadWithoutGSTProduct(input) {
+  let selectedName = input.value.trim().toLowerCase();
+  if (!selectedName) return;
+
+  let item = productList.find(p => String(p.name).trim().toLowerCase() === selectedName);
+  if (item) {
+    let row = input.closest("tr");
+    if(row.querySelector(".withoutModelNo")) row.querySelector(".withoutModelNo").value = item.modelNo || "";
+    if(row.querySelector(".withoutProductModel")) row.querySelector(".withoutProductModel").value = item.productModel || "";
+    if(row.querySelector(".withoutHSN")) row.querySelector(".withoutHSN").value = item.hsn || "";
+    if(row.querySelector(".withoutRate")) row.querySelector(".withoutRate").value = item.rate || 0;
+    
+    calculateWithoutGSTRow(input);
   }
 }
 
 // ==========================================
-// 1. HELPER: NUMBER TO WORDS (CLIENT-SIDE)
+// 1. HELPER: NUMBER TO WORDS (CLIENT SIDE)
 // ==========================================
 function convertNumberToWords(amount) {
-  let num = Math.floor(Math.abs(amount));
-  if (isNaN(num) || num === 0) return "Zero Rupees Only";
-
   let words = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", 
                "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
   let tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
-
+  
+  let num = Math.floor(amount);
+  if (num === 0) return "Zero Rupees Only";
+  
   function numToWords(n) {
     if (n < 20) return words[n];
     if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 !== 0 ? " " + words[n % 10] : "");
@@ -680,38 +730,37 @@ function convertNumberToWords(amount) {
     if (n < 10000000) return numToWords(Math.floor(n / 100000)) + " Lakh" + (n % 100000 !== 0 ? " " + numToWords(n % 100000) : "");
     return numToWords(Math.floor(n / 10000000)) + " Crore" + (n % 10000000 !== 0 ? " " + numToWords(n % 10000000) : "");
   }
-
+  
   return numToWords(num) + " Rupees Only";
 }
 
-// Utility function to safely set element value if it exists
-function safeSetValue(id, val) {
-  let el = document.getElementById(id);
-  if (el) el.value = val;
-}
-
 // ==========================================
-// 2. GST INVOICE MODULE CALCULATIONS
+// 2. GST INVOICE CALCULATION & LISTENERS
 // ==========================================
-function calculateGSTRow(row) {
-  if (!row) return;
-
+function calculateGSTRow(element) {
+  let row = element.closest ? element.closest("tr") : element;
   let qty = parseFloat(row.querySelector(".qty")?.value) || 0;
   let rate = parseFloat(row.querySelector(".rate")?.value) || 0;
   let gross = qty * rate;
-
+  
   let gstP = parseFloat(row.querySelector(".gst")?.value) || 0;
-  let cgstP = parseFloat(row.querySelector(".cgstp")?.value) || (gstP / 2);
-  let sgstP = parseFloat(row.querySelector(".sgstp")?.value) || (gstP / 2);
-  let igstP = parseFloat(row.querySelector(".igstp")?.value) || 0;
+  let state = document.getElementById("state")?.value || "";
+  let isTelangana = state.trim().toLowerCase() === "telangana" || state.trim() === "";
 
-  // Auto-sync split percentages
-  if (row.querySelector(".cgstp") && !row.querySelector(".cgstp").value) {
-    row.querySelector(".cgstp").value = cgstP;
+  let cgstP = 0, sgstP = 0, igstP = 0;
+  if (isTelangana) {
+    cgstP = gstP / 2;
+    sgstP = gstP / 2;
+    igstP = 0;
+  } else {
+    cgstP = 0;
+    sgstP = 0;
+    igstP = gstP;
   }
-  if (row.querySelector(".sgstp") && !row.querySelector(".sgstp").value) {
-    row.querySelector(".sgstp").value = sgstP;
-  }
+
+  if (row.querySelector(".cgstp")) row.querySelector(".cgstp").value = cgstP;
+  if (row.querySelector(".sgstp")) row.querySelector(".sgstp").value = sgstP;
+  if (row.querySelector(".igstp")) row.querySelector(".igstp").value = igstP;
 
   let cgstAmt = (gross * cgstP) / 100;
   let sgstAmt = (gross * sgstP) / 100;
@@ -739,40 +788,44 @@ function calculateGSTTotals() {
     totalTaxable += parseFloat(row.querySelector(".taxable")?.value) || 0;
   });
 
-  safeSetValue("totalQty", totalQty);
-  safeSetValue("totalGross", totalGross.toFixed(2));
-  safeSetValue("totalCGST", totalCGST.toFixed(2));
-  safeSetValue("totalSGST", totalSGST.toFixed(2));
-  safeSetValue("totalIGST", totalIGST.toFixed(2));
-  safeSetValue("totalTaxable", totalTaxable.toFixed(2));
+  document.getElementById("totalQty").value = totalQty;
+  document.getElementById("totalGross").value = totalGross.toFixed(2);
+  document.getElementById("totalCGST").value = totalCGST.toFixed(2);
+  document.getElementById("totalSGST").value = totalSGST.toFixed(2);
+  document.getElementById("totalIGST").value = totalIGST.toFixed(2);
+  document.getElementById("totalTaxable").value = totalTaxable.toFixed(2);
 
-  // Sync to Summary Panel
-  safeSetValue("basicAmt", totalGross.toFixed(2));
-  safeSetValue("sgstAmt", totalSGST.toFixed(2));
-  safeSetValue("cgstAmt", totalCGST.toFixed(2));
-  safeSetValue("igstAmt", totalIGST.toFixed(2));
-
+  // Bind to summary panel fields
+  document.getElementById("basicAmt").value = totalGross.toFixed(2);
+  document.getElementById("sgstAmt").value = totalSGST.toFixed(2);
+  document.getElementById("cgstAmt").value = totalCGST.toFixed(2);
+  document.getElementById("igstAmt").value = totalIGST.toFixed(2);
+  
   let totalGST = totalCGST + totalSGST + totalIGST;
-  safeSetValue("totalGST", totalGST.toFixed(2));
-
+  document.getElementById("totalGST").value = totalGST.toFixed(2);
+  
   let finalTotal = Math.round(totalTaxable);
-  safeSetValue("finalTotal", finalTotal.toFixed(2));
-  safeSetValue("gstWords", convertNumberToWords(finalTotal));
+  document.getElementById("finalTotal").value = finalTotal.toFixed(2);
+  document.getElementById("gstWords").value = convertNumberToWords(finalTotal);
 }
 
-// ==========================================
-// 3. REPURCHASE MODULE CALCULATIONS
-// ==========================================
-function calculateRepurchaseRow(row) {
-  if (!row) return;
+// Global dynamic listener for GST table inputs
+document.addEventListener("input", function(e) {
+  if (e.target.closest("#gstTable tbody")) {
+    calculateGSTRow(e.target);
+  }
+});
 
+// ==========================================
+// 3. REPURCHASE CALCULATION & LISTENERS
+// ==========================================
+function calculateRepurchaseRow(element) {
+  let row = element.closest ? element.closest("tr") : element;
   let weight = parseFloat(row.querySelector(".weight")?.value) || 0;
   let rate = parseFloat(row.querySelector(".rate")?.value) || 0;
   let amount = weight * rate;
 
-  if (row.querySelector(".amount")) {
-    row.querySelector(".amount").value = amount.toFixed(2);
-  }
+  if (row.querySelector(".amount")) row.querySelector(".amount").value = amount.toFixed(2);
   calculateRepurchaseTotals();
 }
 
@@ -783,60 +836,59 @@ function calculateRepurchaseTotals() {
   });
 
   let roundedTotal = Math.round(grandTotal);
-  safeSetValue("total", roundedTotal.toFixed(2));
-  safeSetValue("words", convertNumberToWords(roundedTotal));
+  document.getElementById("total").value = roundedTotal.toFixed(2);
+  document.getElementById("words").value = convertNumberToWords(roundedTotal);
 }
 
+document.addEventListener("input", function(e) {
+  if (e.target.closest("#repurchaseBody")) {
+    calculateRepurchaseRow(e.target);
+  }
+});
+
 // ==========================================
-// 4. VOUCHER MODULE CALCULATIONS
+// 4. VOUCHER & RENEWAL CALCULATIONS
 // ==========================================
 function calculateVoucher() {
   let kits = parseFloat(document.getElementById("kits")?.value) || 0;
   let totalPoints = kits * 6000;
   let monthlyRedeem = totalPoints / 12;
-  let monthlyWithDeduction = monthlyRedeem * 0.98; // 2% Deduction
+  let monthlyWithDeduction = monthlyRedeem * 0.98; // 2% deduction
   let totalWithDeduction = monthlyWithDeduction * 12;
 
-  safeSetValue("rewardPoints", totalPoints);
-  safeSetValue("monthlyRedeem", monthlyRedeem.toFixed(2));
-  safeSetValue("monthlywithCoupon", monthlyWithDeduction.toFixed(2));
-  safeSetValue("monthlyWords", convertNumberToWords(Math.round(monthlyWithDeduction)));
-  safeSetValue("totalCoupon", totalWithDeduction.toFixed(2));
-  safeSetValue("totalWords", convertNumberToWords(Math.round(totalWithDeduction)));
+  if(document.getElementById("rewardPoints")) document.getElementById("rewardPoints").value = totalPoints;
+  if(document.getElementById("monthlyRedeem")) document.getElementById("monthlyRedeem").value = monthlyRedeem.toFixed(2);
+  if(document.getElementById("monthlywithCoupon")) document.getElementById("monthlywithCoupon").value = monthlyWithDeduction.toFixed(2);
+  if(document.getElementById("monthlyWords")) document.getElementById("monthlyWords").value = convertNumberToWords(Math.round(monthlyWithDeduction));
+  if(document.getElementById("totalCoupon")) document.getElementById("totalCoupon").value = totalWithDeduction.toFixed(2);
+  if(document.getElementById("totalWords")) document.getElementById("totalWords").value = convertNumberToWords(Math.round(totalWithDeduction));
 }
 
-// ==========================================
-// 5. RENEWAL MODULE CALCULATIONS
-// ==========================================
 function calculateRenewal() {
   let kits = parseFloat(document.getElementById("renewalKits")?.value) || 0;
   let totalPoints = kits * 6000;
   let monthlyRedeem = totalPoints / 12;
-  let monthlyWithDeduction = monthlyRedeem * 0.98; // 2% Deduction
+  let monthlyWithDeduction = monthlyRedeem * 0.98; // 2% deduction
   let totalWithDeduction = monthlyWithDeduction * 12;
 
-  safeSetValue("renewalRewardPoints", totalPoints);
-  safeSetValue("renewalMonthlyRedeem", monthlyRedeem.toFixed(2));
-  safeSetValue("renewalMonthlywithCoupon", monthlyWithDeduction.toFixed(2));
-  safeSetValue("renewalMonthlyWords", convertNumberToWords(Math.round(monthlyWithDeduction)));
-  safeSetValue("renewalTotalCoupon", totalWithDeduction.toFixed(2));
-  safeSetValue("renewalTotalWords", convertNumberToWords(Math.round(totalWithDeduction)));
+  if(document.getElementById("renewalRewardPoints")) document.getElementById("renewalRewardPoints").value = totalPoints;
+  if(document.getElementById("renewalMonthlyRedeem")) document.getElementById("renewalMonthlyRedeem").value = monthlyRedeem.toFixed(2);
+  if(document.getElementById("renewalMonthlywithCoupon")) document.getElementById("renewalMonthlywithCoupon").value = monthlyWithDeduction.toFixed(2);
+  if(document.getElementById("renewalMonthlyWords")) document.getElementById("renewalMonthlyWords").value = convertNumberToWords(Math.round(monthlyWithDeduction));
+  if(document.getElementById("renewalTotalCoupon")) document.getElementById("renewalTotalCoupon").value = totalWithDeduction.toFixed(2);
+  if(document.getElementById("renewalTotalWords")) document.getElementById("renewalTotalWords").value = convertNumberToWords(Math.round(totalWithDeduction));
 }
 
 // ==========================================
-// 6. WITHOUT GST MODULE CALCULATIONS
+// 5. WITHOUT GST CALCULATION & LISTENERS
 // ==========================================
 function calculateWithoutGSTRow(element) {
   let row = element.closest("tr");
-  if (!row) return;
-
   let qty = parseFloat(row.querySelector(".withoutQty")?.value) || 0;
   let rate = parseFloat(row.querySelector(".withoutRate")?.value) || 0;
   let amount = qty * rate;
 
-  if (row.querySelector(".withoutAmount")) {
-    row.querySelector(".withoutAmount").value = amount.toFixed(2);
-  }
+  row.querySelector(".withoutAmount").value = amount.toFixed(2);
   calculateWithoutGSTTotals();
 }
 
@@ -847,66 +899,30 @@ function calculateWithoutGSTTotals() {
   });
 
   let roundedTotal = Math.round(grandTotal);
-  safeSetValue("withoutGSTGrandTotal", roundedTotal.toFixed(2));
-  safeSetValue("withoutBasicAmount", grandTotal.toFixed(2));
-  safeSetValue("withoutTotalAmount", roundedTotal.toFixed(2));
-  safeSetValue("withoutAmountWords", convertNumberToWords(roundedTotal));
+  if(document.getElementById("withoutGSTGrandTotal")) document.getElementById("withoutGSTGrandTotal").value = roundedTotal.toFixed(2);
+  if(document.getElementById("withoutBasicAmount")) document.getElementById("withoutBasicAmount").value = grandTotal.toFixed(2);
+  if(document.getElementById("withoutTotalAmount")) document.getElementById("withoutTotalAmount").value = roundedTotal.toFixed(2);
+  if(document.getElementById("withoutAmountWords")) document.getElementById("withoutAmountWords").value = convertNumberToWords(roundedTotal);
 }
 
 function addWithoutGSTRow() {
   let tbody = document.getElementById("withoutGSTBody");
-  if (!tbody) return;
-
+  if(!tbody) return;
   let rowCount = tbody.querySelectorAll("tr").length + 1;
   let tr = document.createElement("tr");
   tr.innerHTML = `
     <td class="withoutSL">${rowCount}</td>
-    <td><input class="withoutProduct" list="productList"><div class="product-list"></div></td>
-    <td><input class="withoutModelNo" readonly></td>
-    <td><input class="withoutProductModel" readonly></td>
-    <td><input class="withoutHSN" readonly></td>
-    <td><input class="withoutQty" type="number" min="1" value="1" placeholder="Qty" oninput="calculateWithoutGSTRow(this)"></td>
-    <td><input class="withoutRate" type="number" value="0" oninput="calculateWithoutGSTRow(this)"></td>
-    <td><input class="withoutAmount" value="0.00" readonly></td>
+    <td><input class="withoutProduct" list="productList" onchange="loadWithoutGSTProduct(this)"><div class="product-list"></div></td>
+    <td><input class="withoutModelNo" readonly style="width:60px;"></td>
+    <td><input class="withoutProductModel" readonly style="width:60px;"></td>
+    <td><input class="withoutHSN" readonly style="width:50px;"></td>
+    <td><input class="withoutQty" type="number" min="1" placeholder="Qty" style="width:40px;" oninput="calculateWithoutGSTRow(this)"></td>
+    <td><input class="withoutRate" type="number" value="0" style="width:50px;" oninput="calculateWithoutGSTRow(this)"></td>
+    <td><input class="withoutAmount" value="0.00" readonly style="width:60px;"></td>
   `;
   tbody.appendChild(tr);
-  calculateWithoutGSTTotals();
 }
 
-// ==========================================
-// 7. GLOBAL EVENT LISTENERS FOR AUTOMATIC REAL-TIME UPDATES
-// ==========================================
-document.addEventListener("DOMContentLoaded", function() {
-  // Global Event Listener for input changes across all sections
-  document.addEventListener("input", function(e) {
-    let target = e.target;
-
-    // GST Section Dynamic Trigger
-    if (target.closest("#gstTable")) {
-      calculateGSTRow(target.closest("tr"));
-    }
-
-    // Repurchase Section Dynamic Trigger
-    if (target.closest("#repurchaseBody")) {
-      calculateRepurchaseRow(target.closest("tr"));
-    }
-
-    // Voucher Section Dynamic Trigger
-    if (target.id === "kits") {
-      calculateVoucher();
-    }
-
-    // Renewal Section Dynamic Trigger
-    if (target.id === "renewalKits") {
-      calculateRenewal();
-    }
-
-    // Without GST Section Dynamic Trigger
-    if (target.closest("#withoutGSTBody")) {
-      calculateWithoutGSTRow(target);
-    }
-  });
-});
 // =====================================================
 // AUTHENTICATION & LOGIN
 // =====================================================
@@ -1070,10 +1086,12 @@ async function loadDashboardMetrics(moduleType) {
 }
 
 function renderChart(canvasId, type, labels, seriesData) {
+  let canvas = document.getElementById(canvasId);
+  if (!canvas) return;
   if (chartInstances[canvasId]) {
     chartInstances[canvasId].destroy();
   }
-  const ctx = document.getElementById(canvasId).getContext("2d");
+  const ctx = canvas.getContext("2d");
   chartInstances[canvasId] = new Chart(ctx, {
     type: type,
     data: {
@@ -1227,18 +1245,32 @@ async function generateGST() {
     }
   });
 
+  let user = JSON.parse(localStorage.getItem("user")) || {};
+
   let payload = {
-    type: "gstInvoice", customerName: document.getElementById("c_name").value,
-    invoiceNo: document.getElementById("gstInvoiceNo").value, relation: document.getElementById("relation").value,
-    date: document.getElementById("gstDate").value, village: document.getElementById("village").value,
-    district: document.getElementById("district").value, state: document.getElementById("state").value,
-    pincode: document.getElementById("pincode").value, email: document.getElementById("email").value,
-    mobile: document.getElementById("phone").value, aadhaar: document.getElementById("aadhaar").value,
-    pan: document.getElementById("pan").value, bankName: document.getElementById("bankName").value,
-    branch: document.getElementById("branch").value, accountNo: document.getElementById("accountNo").value,
-    ifsc: document.getElementById("ifsc").value, gstin: document.getElementById("gstin").value,
-    words: document.getElementById("gstWords").value, basicAmount: document.getElementById("basicAmt").value,
-    finalTotal: document.getElementById("finalTotal").value, items: items
+    type: "gstInvoice",
+    customerName: document.getElementById("c_name").value,
+    invoiceNo: document.getElementById("gstInvoiceNo").value,
+    relation: document.getElementById("relation").value,
+    date: document.getElementById("gstDate").value,
+    village: document.getElementById("village").value,
+    district: document.getElementById("district").value,
+    state: document.getElementById("state").value,
+    pincode: document.getElementById("pincode").value,
+    email: document.getElementById("email").value,
+    mobile: document.getElementById("phone").value,
+    aadhaar: document.getElementById("aadhaar").value,
+    pan: document.getElementById("pan").value,
+    bankName: document.getElementById("bankName").value,
+    branch: document.getElementById("branch").value,
+    accountNo: document.getElementById("accountNo").value,
+    ifsc: document.getElementById("ifsc").value,
+    gstin: document.getElementById("gstin").value,
+    words: document.getElementById("gstWords").value,
+    basicAmount: document.getElementById("basicAmt").value,
+    finalTotal: document.getElementById("finalTotal").value,
+    createdBy: user.username || "System",
+    items: items
   };
   let result = await saveData(payload);
   if(result.status) alert("GST Invoice Generated & Saved Successfully!");
@@ -1276,6 +1308,7 @@ async function generateVoucher() {
 }
 
 async function generateRenewalVoucher() {
+  let user = JSON.parse(localStorage.getItem("user")) || {};
   let payload = {
     type: "renewal", renewalNo: document.getElementById("renewalVoucherNo").value,
     joiningDate: document.getElementById("renewalJoiningDate").value, redeemDate: document.getElementById("renewalRedeemDate").value,
@@ -1285,7 +1318,8 @@ async function generateRenewalVoucher() {
     pincode: document.getElementById("renewalPincode").value, email: document.getElementById("renewalEmail").value,
     aadhaar: document.getElementById("renewalAadhaar").value, pan: document.getElementById("renewalPan").value,
     bankName: document.getElementById("renewalBankName").value, branch: document.getElementById("renewalBranch").value,
-    accountNo: document.getElementById("renewalAccountNo").value, ifsc: document.getElementById("renewalIfsc").value
+    accountNo: document.getElementById("renewalAccountNo").value, ifsc: document.getElementById("renewalIfsc").value,
+    createdBy: user.username || "System"
   };
   let result = await saveData(payload);
   if(result.status) alert("Renewal Voucher Generated & Saved Successfully!");
@@ -1387,3 +1421,7 @@ async function changePassword() {
   }
 }
 </script>
+ 
+
+</body>
+</html>
