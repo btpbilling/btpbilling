@@ -206,9 +206,10 @@
       </div>
 
       <div id="stepOTP" style="display:none;">
-        <p style="font-size:12px; margin-bottom:5px;">Enter the OTP sent to your registered email:</p>
+        <p style="font-size:12px; margin-bottom:5px;">Enter OTP sent to email (Valid for 10 mins):</p>
         <input id="otpInput" placeholder="Enter 6-digit OTP"><br>
         <button onclick="verifyOTPAndLogin()">Verify & Login</button>
+        <button onclick="requestOTP()" style="background:#6c757d; margin-top:5px;">Resend OTP</button>
       </div>
     </div>
   </div>
@@ -438,7 +439,12 @@
         <div><label>Branch</label><input id="voucherBranch" style="width:100%;"></div>
         <div><label>Account No</label><input id="voucherAccountNo" style="width:100%;"></div>
         <div><label>IFSC</label><input id="voucherIFSC" style="width:100%;"></div>
-        <div><label>Sales Rep ID</label><input id="salesRepId" style="width:100%;" onblur="fetchSalesRepName(this.value, 'salesRepNameDisplay')"><span id="salesRepNameDisplay" style="font-size:12px; font-weight:bold; color:#ff4d6d;"></span></div>
+        <div>
+          <label>Sales Rep ID</label>
+          <input id="salesRepId" style="width:100%;" onblur="fetchSalesRepName(this.value, 'salesRepNameDisplay', 'salesRepNameInput')">
+          <input id="salesRepNameInput" style="width:100%; margin-top:4px;" placeholder="Sales Rep Name" readonly>
+          <span id="salesRepNameDisplay" style="font-size:12px; font-weight:bold; color:#ff4d6d;"></span>
+        </div>
         <div><label>Reward Points</label><input id="rewardPoints" style="width:100%;" readonly></div>
         <div><label>Monthly Redeem</label><input id="monthlyRedeem" style="width:100%;" readonly></div>
         <div><label>Monthly Coupon Net</label><input id="monthlywithCoupon" style="width:100%;" readonly></div>
@@ -457,10 +463,15 @@
       <h2>Coupon Points Renewal</h2>
       <div class="grid2">
         <div><label>Renewal Voucher No</label><input id="renewalVoucherNo" style="width:100%;" onblur="handleManualInvoice('renewal', this.value)"></div>
-        <div><label>Joining Date</label><input id="renewalJoiningDate" style="width:100%;" placeholder="DD-MMM-YYYY"></div>
-        <div><label>Redeem Release Date</label><input id="renewalRedeemDate" style="width:100%;" placeholder="DD-MMM-YYYY"></div>
+        <div><label>Joining Date</label><input id="renewalJoiningDate" style="width:100%;" placeholder="DD-MMM-YYYY" onchange="setRenewalRedeemDate()"></div>
+        <div><label>Redeem Release Date</label><input id="renewalRedeemDate" style="width:100%;" placeholder="DD-MMM-YYYY" readonly></div>
         <div><label>Renewal Kits</label><input id="renewalKits" type="number" style="width:100%;" oninput="calculateRenewal()"></div>
-        <div><label>Sales Rep ID</label><input id="renewalSalesRepId" style="width:100%;" onblur="fetchSalesRepName(this.value, 'renewalSalesRepNameDisplay')"><span id="renewalSalesRepNameDisplay" style="font-size:12px; font-weight:bold; color:#ff4d6d;"></span></div>
+        <div>
+          <label>Sales Rep ID</label>
+          <input id="renewalSalesRepId" style="width:100%;" onblur="fetchSalesRepName(this.value, 'renewalSalesRepNameDisplay', 'renewalSalesRepNameInput')">
+          <input id="renewalSalesRepNameInput" style="width:100%; margin-top:4px;" placeholder="Sales Rep Name" readonly>
+          <span id="renewalSalesRepNameDisplay" style="font-size:12px; font-weight:bold; color:#ff4d6d;"></span>
+        </div>
         <div><label>Customer Name</label><input type="text" id="renewalCustomerName" style="width:100%;"></div>
         <div><label>Relation</label><input type="text" id="renewalRelation" style="width:100%;"></div>
         <div><label>Mobile Number</label><input type="text" id="renewalMobile" style="width:100%;"></div>
@@ -558,14 +569,13 @@
 
 <script src="script.js"></script>
 
-
 <script> 
 const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
 let chartInstances = {};
 let productList = [];
 
-// Formats date into DD-MMM-YYYY string (e.g. 14-AUG-2026)
+// Formats date into DD-MMM-YYYY string (e.g., 14-AUG-2026)
 function getFormattedDate(d = new Date()) {
   const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
   const dateObj = new Date(d);
@@ -598,6 +608,10 @@ window.onload = function() {
     let el = document.getElementById(id);
     if (el) el.value = todayFormatted;
   });
+
+  // Calculate default release dates
+  setRedeemDate();
+  setRenewalRedeemDate();
 
   fetchProducts().then(() => {
     for (let i = 0; i < 3; i++) { addRow(); }
@@ -652,17 +666,21 @@ async function searchAndFillCustomer(mobile) {
   } catch(e) { console.error("Customer search error:", e); }
 }
 
-// Fetch Sales Representative Name
-async function fetchSalesRepName(salesId, targetDisplayId) {
+// Fetch Sales Representative Name and update input + display field
+async function fetchSalesRepName(salesId, targetDisplayId, targetInputId) {
   if (!salesId) return;
   try {
     let res = await fetch(`${WEBAPP}?api=1&salesId=1&id=${encodeURIComponent(salesId)}`);
     let data = await res.json();
     let displayEl = document.getElementById(targetDisplayId);
-    if (data.status && displayEl) {
-      displayEl.innerText = " " + data.name;
-    } else if (displayEl) {
-      displayEl.innerText = " (ID Not Found)";
+    let inputEl = document.getElementById(targetInputId);
+
+    if (data.status) {
+      if (inputEl) inputEl.value = data.name;
+      if (displayEl) displayEl.innerText = " " + data.name;
+    } else {
+      if (inputEl) inputEl.value = "ID Not Found";
+      if (displayEl) displayEl.innerText = " (ID Not Found)";
     }
   } catch(e) { console.error("Sales Rep fetch error:", e); }
 }
@@ -810,7 +828,7 @@ document.addEventListener("input", function(e) {
   if (e.target.closest("#gstTable tbody")) calculateGSTRow(e.target);
 });
 
-// REPURCHASE CALCULATIONS WITH GOLD/SILVER SELECTOR
+// REPURCHASE CALCULATIONS
 function calculateRepurchaseRow(element) {
   let row = element.closest ? element.closest("tr") : element;
   let weight = parseFloat(row.querySelector(".weight")?.value) || 0;
@@ -907,7 +925,7 @@ function addWithoutGSTRow() {
 async function requestOTP() {
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
-  if (!username || !password) { alert("Please enter both username and password."); return; }
+  if (!username) { alert("Please enter username."); return; }
 
   currentOTPUsername = username;
   try {
@@ -1240,6 +1258,7 @@ async function generateWithoutGSTInvoice() {
   } else { alert("Error saving Without GST Invoice: " + result.message); }
 }
 
+// Automatically calculates Release Date (12 Months after Joining Date)
 function setRedeemDate() {
   let jDate = document.getElementById("joiningDate").value;
   if(jDate) {
@@ -1247,6 +1266,17 @@ function setRedeemDate() {
     if (!isNaN(d.getTime())) {
       d.setMonth(d.getMonth() + 12);
       document.getElementById("redeemDate").value = getFormattedDate(d);
+    }
+  }
+}
+
+function setRenewalRedeemDate() {
+  let jDate = document.getElementById("renewalJoiningDate").value;
+  if(jDate) {
+    let d = new Date(jDate);
+    if (!isNaN(d.getTime())) {
+      d.setMonth(d.getMonth() + 12);
+      document.getElementById("renewalRedeemDate").value = getFormattedDate(d);
     }
   }
 }
