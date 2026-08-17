@@ -11,6 +11,7 @@
   <meta property="og:description" content="GST Invoice, Repurchase Billing, Voucher Management and Renewal Billing System">
   <meta property="og:url" content="https://btpbilling.github.io/btpbilling/">
  
+
   <style>
     /* GLOBAL STYLES */
     body { 
@@ -119,7 +120,7 @@
     }
     .action-btn:hover { background: #d90429; }
 
-    /* DASHBOARD CARDS */
+    /* DASHBOARD CARD FIXED LAYOUT */
     .dashboardCards {
       width: 100%; display: flex; flex-direction: row; gap: 20px; margin-bottom: 25px; align-items: stretch;
     }
@@ -559,18 +560,14 @@
 </div>
 
  
-
- 
  
 <script> 
 // BTP Billing System - Main Client-Side Logic (script.js)
 
-// BTP Billing System - Main Client-Side Logic
 const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
 let productList = [];
 let isVoucherSyncedFromGST = false;
-let latestGeneratedPdfs = { gst: "", voucher: "", repurchase: "", renewal: "", withoutGST: "" };
 
 function getFormattedDate(d = new Date()) {
   const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
@@ -637,7 +634,9 @@ async function loadNextInvoiceNumbers() {
     let resWithout = await fetch(`${WEBAPP}?api=1&nextWithoutGSTNo=1`);
     let dataWithout = await resWithout.json();
     if (dataWithout.invoiceNo) document.getElementById("withoutGSTInvoiceNo").value = dataWithout.invoiceNo;
-  } catch(e) { console.error("Error loading invoice numbers:", e); }
+  } catch(e) {
+    console.error("Error loading initial invoice numbers:", e);
+  }
 }
 
 async function searchAndFillCustomer(mobile) {
@@ -1146,10 +1145,7 @@ async function generateGST() {
   let result = await saveData(payload);
   if(result.status) {
     alert("GST Invoice Generated & Saved Successfully!");
-    if(result.pdfUrl) {
-      latestGeneratedPdfs.gst = result.pdfUrl;
-      window.open(result.pdfUrl, "_blank");
-    }
+    if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if(result.nextInvoiceNo) document.getElementById("gstInvoiceNo").value = result.nextInvoiceNo;
   } else { alert("Error saving GST Invoice: " + result.message); }
 }
@@ -1176,10 +1172,7 @@ async function generate() {
   let result = await saveData(payload);
   if(result.status) {
     alert("Repurchase Bill Generated & Saved Successfully!");
-    if(result.pdfUrl) {
-      latestGeneratedPdfs.repurchase = result.pdfUrl;
-      window.open(result.pdfUrl, "_blank");
-    }
+    if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if(result.nextInvoiceNo) document.getElementById("invoiceNo").value = result.nextInvoiceNo;
   } else { alert("Error saving Repurchase Bill: " + result.message); }
 }
@@ -1236,10 +1229,7 @@ async function generateVoucher() {
   let result = await saveData(payload);
   if(result.status) {
     alert("Voucher Generated & Saved Successfully!");
-    if(result.pdfUrl) {
-      latestGeneratedPdfs.voucher = result.pdfUrl;
-      window.open(result.pdfUrl, "_blank");
-    }
+    if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if(result.nextInvoiceNo) document.getElementById("voucherNo").value = result.nextInvoiceNo;
     isVoucherSyncedFromGST = false;
   } else { alert("Error saving Voucher: " + result.message); }
@@ -1267,10 +1257,7 @@ async function generateRenewalVoucher() {
   let result = await saveData(payload);
   if(result.status) {
     alert("Renewal Voucher Generated & Saved Successfully!");
-    if(result.pdfUrl) {
-      latestGeneratedPdfs.renewal = result.pdfUrl;
-      window.open(result.pdfUrl, "_blank");
-    }
+    if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if(result.nextInvoiceNo) document.getElementById("renewalVoucherNo").value = result.nextInvoiceNo;
   } else { alert("Error saving Renewal Voucher: " + result.message); }
 }
@@ -1304,10 +1291,7 @@ async function generateWithoutGSTInvoice() {
   let result = await saveData(payload);
   if(result.status) {
     alert("Without GST Invoice Generated & Saved Successfully!");
-    if(result.pdfUrl) {
-      latestGeneratedPdfs.withoutGST = result.pdfUrl;
-      window.open(result.pdfUrl, "_blank");
-    }
+    if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if(result.nextInvoiceNo) document.getElementById("withoutGSTInvoiceNo").value = result.nextInvoiceNo;
   } else { alert("Error saving Without GST Invoice: " + result.message); }
 }
@@ -1355,86 +1339,10 @@ function printFormattedPage(pageId) {
 }
 
 function shareWhatsApp(type) {
-  let name = "";
-  let relation = "";
-  let mobile = "";
-  let email = "";
-  let salesRepId = "";
-  let salesRepName = "";
-
-  let msg = "Greetings from Beulah Traders Private Limited 🎉\n\n";
-
-  if (type === "Voucher") {
-    name = document.getElementById("voucherCustomerName").value || "Customer";
-    relation = document.getElementById("voucherRelation").value || "";
-    mobile = document.getElementById("voucherMobile").value || "";
-    email = document.getElementById("voucherEmail").value || "";
-    salesRepId = document.getElementById("salesRepId").value || "";
-    salesRepName = document.getElementById("salesRepNameInput").value || "";
-
-    msg += `Dear ${name},\n\n`;
-    msg += `Customer Details:\n`;
-    msg += `Name     : ${name}\n`;
-    msg += `Relation : ${relation}\n`;
-    msg += `Mobile   : ${mobile}\n`;
-    msg += `Email    : ${email}\n\n`;
-
-    msg += `Sales Representative:\n`;
-    msg += `ID       : ${salesRepId}\n`;
-    msg += `Name     : ${salesRepName}\n\n`;
-
-    if (isVoucherSyncedFromGST || document.getElementById("gstInvoiceNo").value) {
-      let invNo = document.getElementById("gstInvoiceNo").value;
-      let invDate = document.getElementById("gstDate").value;
-      let invAmt = document.getElementById("finalTotal").value;
-      let invWords = document.getElementById("gstWords").value;
-      let invQty = document.getElementById("totalQty").value;
-
-      msg += `Invoice Details:\n`;
-      msg += `Invoice No   : ${invNo}\n`;
-      msg += `Invoice Date : ${invDate}\n`;
-      msg += `Invoice Amount: ₹${invAmt}\n`;
-      msg += `In Words     : ${invWords}\n`;
-      msg += `PRODUCT DETAILS:\n`;
-
-      document.querySelectorAll("#gstTable tbody tr").forEach(tr => {
-        let pName = tr.querySelector(".product-search")?.value;
-        let qty = tr.querySelector(".qty")?.value;
-        let rate = tr.querySelector(".rate")?.value;
-        let gross = tr.querySelector(".gross")?.value;
-        if (pName) {
-          msg += `• ${pName} | Qty: ${qty} | Rate: ₹${rate} | Amount: ₹${gross}\n`;
-        }
-      });
-      msg += `Total Quantity: ${invQty}\n\n`;
-    }
-
-    let vouchNo = document.getElementById("voucherNo").value;
-    let kits = document.getElementById("kits").value;
-    let redeemDate = document.getElementById("redeemDate").value;
-    let perMonth = document.getElementById("monthlywithCoupon").value;
-    let total12M = document.getElementById("totalCoupon").value;
-
-    msg += `Voucher Details:\n`;
-    msg += `Voucher No               : ${vouchNo}\n`;
-    msg += `No.Of Kits               : ${kits}\n`;
-    msg += `Redeem Points Release Date: ${redeemDate}\n`;
-    msg += `Coupon Per Month          : ${perMonth} Points\n`;
-    msg += `Coupon Total (12 Months)  : ${total12M} Points\n\n`;
-
-    msg += `Documents:\n`;
-    msg += `Invoice PDF : ${latestGeneratedPdfs.gst || "Available in Drive"}\n`;
-    msg += `Voucher PDF : ${latestGeneratedPdfs.voucher || "Available in Drive"}\n\n`;
-
-  } else {
-    name = document.getElementById("c_name") ? document.getElementById("c_name").value : "Customer";
-    mobile = document.getElementById("phone") ? document.getElementById("phone").value : "";
-    msg += `Dear ${name},\n\nYour ${type} details from Beulah Traders Private Limited have been processed successfully.\n\n`;
-  }
-
-  msg += `Best Regards,\nBeulah Traders Private Limited\nTEPPALI SAIDULU\n📞 8978816673`;
-
-  let url = `https://api.whatsapp.com/send?phone=${mobile}&text=${encodeURIComponent(msg)}`;
+  let name = document.getElementById("c_name") ? document.getElementById("c_name").value : "Customer";
+  let phone = document.getElementById("phone") ? document.getElementById("phone").value : "";
+  let msg = `Hello ${name}, your ${type} details from Beulah Traders Private Limited have been processed successfully. Thank you!`;
+  let url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
   window.open(url, "_blank");
 }
 
