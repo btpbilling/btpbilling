@@ -185,7 +185,7 @@
 </style>
    
 </head>
-
+ 
 <body>
 
 <datalist id="masterProductList"></datalist>
@@ -227,7 +227,7 @@
   </div>
 </div>
 
-<!-- MAIN APPLICATION -->
+<!-- APP PAGE -->
 <div id="app" style="display:none;">
 
   <div class="sidebar">
@@ -275,7 +275,7 @@
       </div>
     </div>
 
-    <!-- METRIC CARDS -->
+    <!-- CARDS -->
     <div id="invoiceCards" class="dashboardCards" style="display:none;">
       <div class="small-card"><h3>GST Bills Today</h3><p id="gstBills" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">0</p></div>
       <div class="small-card"><h3>GST Amount</h3><p id="gstAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
@@ -301,7 +301,7 @@
       <div class="small-card"><h3>Amount</h3><p id="withoutGSTAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
     </div>
 
-    <!-- GST INVOICE PAGE -->
+    <!-- GST PAGE -->
     <div id="gstPage" class="card" style="display:none;">
       <h2>BEULAH TRADERS PRIVATE LIMITED<br><span style="font-size:16px; color:#666;">Invoice with GST</span></h2>
       <table style="width:100%; margin-bottom:15px;">
@@ -487,7 +487,7 @@
         <div><label>State</label><input type="text" id="renewalState" style="width:100%;"></div>
         <div><label>Pincode</label><input type="text" id="renewalPincode" style="width:100%;"></div>
         <div><label>Email</label><input type="text" id="renewalEmail" style="width:100%;"></div>
-        <div><label>Aadhaar Number</label><input id="renewalAadhaar" style="width:100%;"></div>
+        <div><label>Aadhaar Number</label><input id="renewalAadhaar" maxlength="12" style="width:100%;"></div>
         <div><label>PAN Number</label><input id="renewalPan" style="text-transform:uppercase; width:100%;"></div>
         <div><label>Bank Name</label><input id="renewalBankName" style="width:100%;"></div>
         <div><label>Branch Name</label><input id="renewalBranch" style="width:100%;"></div>
@@ -574,74 +574,68 @@
   </div>
 </div>
 
+<script src="script.js"></script>
  
  
 <script> 
+
+
 // BTP Billing System - Unified Client-Side Logic
+
+// ============================================================================
+// BTP BILLING SYSTEM - FULL FRONTEND JAVASCRIPT (script.js)
+// ============================================================================
 
 const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
 let productList = [];
 let isVoucherSyncedFromGST = false;
 
-// DATE FORMATTING & REDEEM DATE RULE LOGIC
-function formatDateDDMMMYYYY(d) {
-  if (!d) return "";
-  let dateObj = (d instanceof Date) ? d : parseCustomDate(d);
-  if (!dateObj || isNaN(dateObj.getTime())) return String(d);
-  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-  const day = String(dateObj.getDate()).padStart(2, "0");
-  const month = months[dateObj.getMonth()];
-  const year = dateObj.getFullYear();
-  return `${day}-${month}-${year}`;
-}
-
-function parseCustomDate(dateStr) {
-  if (!dateStr) return null;
-  if (dateStr instanceof Date) return dateStr;
-  let parts = String(dateStr).trim().split(/[-/.]/);
-  if (parts.length === 3) {
-    let day = parseInt(parts[0], 10);
-    let monthInput = parts[1];
-    let year = parseInt(parts[2], 10);
-    if (year < 100) year += 2000;
-    
-    let month = -1;
-    const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-    if (isNaN(monthInput)) {
-      month = months.indexOf(monthInput.toLowerCase().substring(0, 3));
-    } else {
-      month = parseInt(monthInput, 10) - 1;
-    }
-    if (month >= 0 && month <= 11 && !isNaN(day) && !isNaN(year)) {
-      return new Date(year, month, day);
-    }
-  }
-  let fallback = new Date(dateStr);
-  return isNaN(fallback.getTime()) ? null : fallback;
-}
-
-// Custom Rule: Add 2 Months and map Day (1-15 -> 15th, 16-31 -> 30th/31st)
+// Custom Redeem Date Logic: 1st-15th -> 15th, 16th-31st -> 30th/31st (2 months ahead)
 function calculateRedeemReleaseDate(invoiceDateStr) {
-  let dt = parseCustomDate(invoiceDateStr);
-  if (!dt) return "";
-  let day = dt.getDate();
-  let targetMonth = dt.getMonth() + 2; // +2 Months
-  let targetYear = dt.getFullYear();
+  if (!invoiceDateStr) return "";
+  let parts = invoiceDateStr.split('-');
+  let d, m, y;
+  
+  if (parts.length === 3) {
+    if (isNaN(parts[1])) {
+      const monthsMap = { "JAN":0, "FEB":1, "MAR":2, "APR":3, "MAY":4, "JUN":5, "JUL":6, "AUG":7, "SEP":8, "OCT":9, "NOV":10, "DEC":11 };
+      d = parseInt(parts[0], 10);
+      m = monthsMap[parts[1].toUpperCase()];
+      y = parseInt(parts[2], 10);
+    } else {
+      d = parseInt(parts[0], 10);
+      m = parseInt(parts[1], 10) - 1;
+      y = parseInt(parts[2], 10);
+    }
+  } else {
+    let dt = new Date(invoiceDateStr);
+    if (isNaN(dt.getTime())) return "";
+    d = dt.getDate();
+    m = dt.getMonth();
+    y = dt.getFullYear();
+  }
 
+  let targetMonth = m + 2;
+  let targetYear = y;
   if (targetMonth > 11) {
     targetMonth -= 12;
     targetYear += 1;
   }
 
-  let targetDay = 15;
-  if (day >= 16) {
-    // Last day of target month (30th, 31st, 28th/29th Feb)
-    targetDay = new Date(targetYear, targetMonth + 1, 0).getDate();
-  }
+  let targetDay = (d <= 15) ? 15 : new Date(targetYear, targetMonth + 1, 0).getDate();
+  const monthsArr = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  return `${String(targetDay).padStart(2, '0')}-${monthsArr[targetMonth]}-${targetYear}`;
+}
 
-  let resultDate = new Date(targetYear, targetMonth, targetDay);
-  return formatDateDDMMMYYYY(resultDate);
+function getFormattedDate(d = new Date()) {
+  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  const dateObj = new Date(d);
+  if (isNaN(dateObj.getTime())) return "";
+  const day = String(dateObj.getDate()).padStart(2, "0");
+  const month = months[dateObj.getMonth()];
+  const year = dateObj.getFullYear();
+  return `${day}-${month}-${year}`;
 }
 
 window.onload = function() {
@@ -652,14 +646,15 @@ window.onload = function() {
     document.getElementById("app").style.display = "none";
   } else {
     let user = localStorage.getItem("user");
-    if (user) showApp();
-    else {
+    if (user) {
+      showApp();
+    } else {
       document.getElementById("loginPage").style.display = "flex";
       document.getElementById("app").style.display = "none";
     }
   }
 
-  const todayFormatted = formatDateDDMMMYYYY(new Date());
+  const todayFormatted = getFormattedDate();
   ["gstDate", "date", "joiningDate", "renewalJoiningDate", "withoutDate"].forEach(id => {
     let el = document.getElementById(id);
     if (el) el.value = todayFormatted;
@@ -698,21 +693,7 @@ async function loadNextInvoiceNumbers() {
     let resWithout = await fetch(`${WEBAPP}?api=1&nextWithoutGSTNo=1`);
     let dataWithout = await resWithout.json();
     if (dataWithout.invoiceNo) document.getElementById("withoutGSTInvoiceNo").value = dataWithout.invoiceNo;
-  } catch(e) { console.error("Error loading next sequence numbers:", e); }
-}
-
-function setRedeemDate() {
-  let jDate = document.getElementById("joiningDate").value;
-  if(jDate) {
-    document.getElementById("redeemDate").value = calculateRedeemReleaseDate(jDate);
-  }
-}
-
-function setRenewalRedeemDate() {
-  let jDate = document.getElementById("renewalJoiningDate").value;
-  if(jDate) {
-    document.getElementById("renewalRedeemDate").value = calculateRedeemReleaseDate(jDate);
-  }
+  } catch(e) { console.error("Error loading invoice numbers:", e); }
 }
 
 async function searchAndFillCustomer(mobile) {
@@ -805,6 +786,7 @@ function convertNumberToWords(amount) {
   let tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
   let num = Math.floor(amount);
   if (num === 0) return "Zero Rupees Only";
+  
   function numToWords(n) {
     if (n < 20) return words[n];
     if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 !== 0 ? " " + words[n % 10] : "");
@@ -821,13 +803,13 @@ function calculateGSTRow(element) {
   let qty = parseFloat(row.querySelector(".qty")?.value) || 0;
   let rate = parseFloat(row.querySelector(".rate")?.value) || 0;
   let gross = qty * rate;
+  
   let gstP = parseFloat(row.querySelector(".gst")?.value) || 0;
   let state = document.getElementById("state")?.value || "";
   let isTelangana = state.trim().toLowerCase() === "telangana" || state.trim() === "";
 
   let cgstP = 0, sgstP = 0, igstP = 0;
-  if (isTelangana) { cgstP = gstP / 2; sgstP = gstP / 2; } 
-  else { igstP = gstP; }
+  if (isTelangana) { cgstP = gstP / 2; sgstP = gstP / 2; } else { igstP = gstP; }
 
   if (row.querySelector(".cgstp")) row.querySelector(".cgstp").value = cgstP;
   if (row.querySelector(".sgstp")) row.querySelector(".sgstp").value = sgstP;
@@ -849,6 +831,7 @@ function calculateGSTRow(element) {
 
 function calculateGSTTotals() {
   let totalQty = 0, totalGross = 0, totalCGST = 0, totalSGST = 0, totalIGST = 0, totalTaxable = 0;
+
   document.querySelectorAll("#gstTable tbody tr").forEach(row => {
     totalQty += parseFloat(row.querySelector(".qty")?.value) || 0;
     totalGross += parseFloat(row.querySelector(".gross")?.value) || 0;
@@ -880,7 +863,6 @@ function calculateGSTTotals() {
 
 document.addEventListener("input", function(e) {
   if (e.target.closest("#gstTable tbody")) calculateGSTRow(e.target);
-  if (e.target.closest("#repurchaseBody")) calculateRepurchaseRow(e.target);
 });
 
 function calculateRepurchaseRow(element) {
@@ -903,6 +885,10 @@ function calculateRepurchaseTotals() {
   document.getElementById("total").value = roundedTotal.toFixed(2);
   document.getElementById("words").value = convertNumberToWords(roundedTotal);
 }
+
+document.addEventListener("input", function(e) {
+  if (e.target.closest("#repurchaseBody")) calculateRepurchaseRow(e.target);
+});
 
 function calculateVoucher() {
   let kits = parseFloat(document.getElementById("kits")?.value) || 0;
@@ -969,6 +955,106 @@ function addWithoutGSTRow() {
   tbody.appendChild(tr);
 }
 
+async function requestOTP() {
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  if (!username) { alert("Please enter username."); return; }
+
+  currentOTPUsername = username;
+  try {
+    const response = await fetch(`${WEBAPP}?api=1&sendOTP=1&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+    const result = await response.json();
+    if (result.status) {
+      alert(result.message || "OTP sent successfully!");
+      document.getElementById("stepCredentials").style.display = "none";
+      document.getElementById("stepOTP").style.display = "block";
+    } else {
+      alert(result.message || "Invalid credentials.");
+    }
+  } catch (error) { alert("Server error requesting OTP."); }
+}
+
+async function verifyOTPAndLogin() {
+  let otp = document.getElementById("otpInput").value.trim();
+  if (!otp) { alert("Please enter the OTP."); return; }
+
+  try {
+    const res = await fetch(`${WEBAPP}?api=1&verifyOTP=1&username=${encodeURIComponent(currentOTPUsername)}&otp=${encodeURIComponent(otp)}`);
+    const data = await res.json();
+    if (data.status) {
+      localStorage.setItem("user", JSON.stringify(data.user || { name: currentOTPUsername, username: currentOTPUsername }));
+      sessionStorage.setItem("active_session", "true");
+      showApp();
+    } else { alert(data.message || "Invalid OTP!"); }
+  } catch (err) { alert("Error verifying OTP."); }
+}
+
+function showApp() {
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  
+  let user = JSON.parse(localStorage.getItem("user"));
+  if (user) {
+    const defaultPhoto = "https://i.imgur.com/t9HFQvX.png";
+    const profilePic = user.photo || user.profilePic || defaultPhoto;
+
+    document.getElementById("usernameDisplay").innerText = user.name || "User";
+    document.getElementById("dropName").innerText = user.name || "User";
+    document.getElementById("profileUsername").value = user.username || "";
+    document.getElementById("profileEmail").value = user.email || "";
+    document.getElementById("profilePhone").value = user.phone || "";
+    document.getElementById("profilePopupName").innerText = user.name || "User";
+
+    document.getElementById("topProfile").src = profilePic;
+    document.getElementById("dropProfile").src = profilePic;
+    document.getElementById("profilePopupImg").src = profilePic;
+  }
+  showGST();
+}
+
+function hideAll() {
+  ["billingPage","gstPage","voucherPage","renewalPage","withoutGSTPage"].forEach(id => document.getElementById(id).style.display = "none");
+}
+function hideCards() {
+  ["repurchaseCards","invoiceCards","voucherCards","renewalCards","withoutGSTCards"].forEach(id => document.getElementById(id).style.display = "none");
+}
+function setTitle(name) { document.getElementById("pageTitle").innerText = name; }
+function setActive(el) {
+  document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active"));
+  el.classList.add("active");
+}
+
+function showGST() { hideAll(); hideCards(); document.getElementById("gstPage").style.display="block"; document.getElementById("invoiceCards").style.display="flex"; setTitle("GST Invoice"); loadDashboardMetrics("gst"); }
+function showVoucher() { hideAll(); hideCards(); document.getElementById("voucherPage").style.display="block"; document.getElementById("voucherCards").style.display="flex"; setTitle("Voucher"); loadDashboardMetrics("voucher"); }
+function showBilling() { hideAll(); hideCards(); document.getElementById("billingPage").style.display="block"; document.getElementById("repurchaseCards").style.display="flex"; setTitle("Repurchase"); loadDashboardMetrics("repurchase"); }
+function showRenewal() { hideAll(); hideCards(); document.getElementById("renewalPage").style.display="block"; document.getElementById("renewalCards").style.display="flex"; setTitle("Renewal Voucher"); loadDashboardMetrics("renewal"); }
+function showWithoutGST() { hideAll(); hideCards(); document.getElementById("withoutGSTPage").style.display="block"; document.getElementById("withoutGSTCards").style.display="flex"; setTitle("Without GST Invoice"); loadDashboardMetrics("withoutGST"); }
+
+async function loadDashboardMetrics(moduleType) {
+  try {
+    let res = await fetch(WEBAPP + "?api=1&action=dashboard");
+    let data = await res.json();
+    if (!data) return;
+
+    if (moduleType === "gst") {
+      document.getElementById("gstBills").innerText = data.gstBills || 0;
+      document.getElementById("gstAmount").innerText = "₹" + (data.gstAmount || 0);
+    } else if (moduleType === "repurchase") {
+      document.getElementById("todayBills").innerText = data.repurchaseBills || 0;
+      document.getElementById("todayAmount").innerText = "₹" + (data.repurchaseAmount || 0);
+    } else if (moduleType === "voucher") {
+      document.getElementById("voucherCount").innerText = data.voucherCount || 0;
+      document.getElementById("voucherAmount").innerText = "₹" + (data.voucherAmount || 0);
+    } else if (moduleType === "renewal") {
+      document.getElementById("renewalCount").innerText = data.renewalCount || 0;
+      document.getElementById("renewalAmount").innerText = "₹" + (data.renewalAmount || 0);
+    } else if (moduleType === "withoutGST") {
+      document.getElementById("withoutGSTBillCount").innerText = data.withoutGSTBills || 0;
+      document.getElementById("withoutGSTAmount").innerText = "₹" + (data.withoutGSTAmount || 0);
+    }
+  } catch(e) { console.error("Error loading metrics:", e); }
+}
+
 function syncGSTToVoucher() {
   isVoucherSyncedFromGST = true;
   document.getElementById("voucherCustomerName").value = document.getElementById("c_name").value;
@@ -985,12 +1071,8 @@ function syncGSTToVoucher() {
   document.getElementById("voucherBranch").value = document.getElementById("branch").value;
   document.getElementById("voucherAccountNo").value = document.getElementById("accountNo").value;
   document.getElementById("voucherIFSC").value = document.getElementById("ifsc").value;
-  
-  let gstDate = document.getElementById("gstDate").value;
-  if (gstDate) {
-    document.getElementById("joiningDate").value = gstDate;
-    setRedeemDate();
-  }
+  document.getElementById("joiningDate").value = document.getElementById("gstDate").value;
+  setRedeemDate();
   alert("GST Data Synced to Voucher Form!");
 }
 
@@ -998,8 +1080,7 @@ function syncGSTToRepurchase() {
   document.getElementById("name").value = document.getElementById("c_name").value;
   document.getElementById("address").value = document.getElementById("village").value + ", " + document.getElementById("district").value;
   document.getElementById("repurchasePhone").value = document.getElementById("phone").value;
-  let gstDate = document.getElementById("gstDate").value;
-  if (gstDate) document.getElementById("date").value = gstDate;
+  document.getElementById("date").value = document.getElementById("gstDate").value;
   alert("GST Data Synced to Repurchase Form!");
 }
 
@@ -1018,12 +1099,8 @@ function syncGSTToRenewal() {
   document.getElementById("renewalBranch").value = document.getElementById("branch").value;
   document.getElementById("renewalAccountNo").value = document.getElementById("accountNo").value;
   document.getElementById("renewalIfsc").value = document.getElementById("ifsc").value;
-  
-  let gstDate = document.getElementById("gstDate").value;
-  if (gstDate) {
-    document.getElementById("renewalJoiningDate").value = gstDate;
-    setRenewalRedeemDate();
-  }
+  document.getElementById("renewalJoiningDate").value = document.getElementById("gstDate").value;
+  setRenewalRedeemDate();
   alert("GST Data Synced to Renewal Form!");
 }
 
@@ -1119,7 +1196,12 @@ async function generateGST() {
     basicAmount: document.getElementById("basicAmt").value,
     finalTotal: document.getElementById("finalTotal").value,
     totalQty: document.getElementById("totalQty").value,
-    paymentMode: getSelectedPaymentMode("gst"),
+    cash: document.getElementById("cash").checked,
+    cheque: document.getElementById("cheque").checked,
+    upi: document.getElementById("upi").checked,
+    netbanking: document.getElementById("netbanking").checked,
+    card: document.getElementById("card").checked,
+    hypothecation: document.getElementById("hypothecation").checked,
     createdBy: user.username || "System",
     items: items
   };
@@ -1158,6 +1240,21 @@ async function generate() {
 }
 
 async function generateVoucher() {
+  let gstItems = [];
+  if (isVoucherSyncedFromGST) {
+    document.querySelectorAll("#gstTable tbody tr").forEach(tr => {
+      let product = tr.querySelector(".product-search").value;
+      if (product) {
+        gstItems.push({
+          product: product,
+          qty: tr.querySelector(".qty").value,
+          rate: tr.querySelector(".rate").value,
+          gross: tr.querySelector(".gross").value
+        });
+      }
+    });
+  }
+
   let payload = {
     type: "voucher",
     voucherNo: document.getElementById("voucherNo").value,
@@ -1180,10 +1277,17 @@ async function generateVoucher() {
     ifsc: document.getElementById("voucherIFSC").value,
     salesRepId: document.getElementById("salesRepId").value,
     salesRepName: document.getElementById("salesRepNameInput").value,
+    rewardPoints: document.getElementById("rewardPoints").value,
     monthlyRedeem: document.getElementById("monthlyRedeem").value,
-    monthlyWithCoupon: document.getElementById("monthlywithCoupon").value,
+    monthlyCoupon: document.getElementById("monthlywithCoupon").value,
     totalCoupon: document.getElementById("totalCoupon").value,
-    category: getSelectedCategory("voucher")
+    isSyncedWithGST: isVoucherSyncedFromGST,
+    gstInvoiceNo: document.getElementById("gstInvoiceNo").value,
+    gstInvoiceDate: document.getElementById("gstDate").value,
+    gstInvoiceAmount: document.getElementById("finalTotal").value,
+    gstWords: document.getElementById("gstWords").value,
+    gstTotalQty: document.getElementById("totalQty").value,
+    gstItems: gstItems
   };
 
   let result = await saveData(payload);
@@ -1191,6 +1295,7 @@ async function generateVoucher() {
     alert("Voucher Generated & Saved Successfully!");
     if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if(result.nextInvoiceNo) document.getElementById("voucherNo").value = result.nextInvoiceNo;
+    isVoucherSyncedFromGST = false;
   } else { alert("Error saving Voucher: " + result.message); }
 }
 
@@ -1209,9 +1314,9 @@ async function generateRenewalVoucher() {
     accountNo: document.getElementById("renewalAccountNo").value, ifsc: document.getElementById("renewalIfsc").value,
     salesRepId: document.getElementById("renewalSalesRepId").value,
     salesRepName: document.getElementById("renewalSalesRepNameInput").value,
+    rewardPoints: document.getElementById("renewalRewardPoints").value,
     monthlyCoupon: document.getElementById("renewalMonthlywithCoupon").value,
     totalCoupon: document.getElementById("renewalTotalCoupon").value,
-    category: getSelectedCategory("renewal"),
     createdBy: user.username || "System"
   };
   let result = await saveData(payload);
@@ -1245,8 +1350,10 @@ async function generateWithoutGSTInvoice() {
     relation: document.getElementById("withoutRelation").value, village: document.getElementById("withoutVillage").value,
     district: document.getElementById("withoutDistrict").value, state: document.getElementById("withoutState").value,
     pincode: document.getElementById("withoutPincode").value, mobile: document.getElementById("withoutMobile").value,
-    email: document.getElementById("withoutEmail").value, totalAmount: document.getElementById("withoutTotalAmount").value,
-    paymentMode: getSelectedPaymentMode("withoutGST"),
+    email: document.getElementById("withoutEmail").value, 
+    basicAmount: document.getElementById("withoutBasicAmount").value,
+    totalAmount: document.getElementById("withoutTotalAmount").value,
+    words: document.getElementById("withoutAmountWords").value,
     items: items
   };
   let result = await saveData(payload);
@@ -1257,20 +1364,30 @@ async function generateWithoutGSTInvoice() {
   } else { alert("Error saving Without GST Invoice: " + result.message); }
 }
 
-function getSelectedPaymentMode(section) {
-  if (section === "gst") {
-    if (document.getElementById("cash")?.checked) return "Cash";
-    if (document.getElementById("cheque")?.checked) return "Cheque";
-    if (document.getElementById("upi")?.checked) return "UPI";
-    if (document.getElementById("netbanking")?.checked) return "Net Banking";
-    if (document.getElementById("card")?.checked) return "Credit/Debit Card";
-    if (document.getElementById("hypothecation")?.checked) return "Hypothecation";
+function setRedeemDate() {
+  let jDate = document.getElementById("joiningDate").value;
+  if(jDate) {
+    document.getElementById("redeemDate").value = calculateRedeemReleaseDate(jDate);
   }
-  return "Cash";
 }
 
-function getSelectedCategory(section) {
-  return "Renewal";
+function setRenewalRedeemDate() {
+  let jDate = document.getElementById("renewalJoiningDate").value;
+  if(jDate) {
+    document.getElementById("renewalRedeemDate").value = calculateRedeemReleaseDate(jDate);
+  }
+}
+
+function handleManualInvoice(type, manualVal) {
+  if (!manualVal) return;
+  const match = manualVal.match(/^(.*\/)(\d+)(\/\d{2}-\d{2})$/);
+  if (match) {
+    let prefix = match[1];
+    let num = parseInt(match[2], 10) + 1;
+    let suffix = match[3];
+    let nextVal = prefix + String(num).padStart(match[2].length, "0") + suffix;
+    console.log(`Manual input handled. Sequential next for ${type}: ${nextVal}`);
+  }
 }
 
 function printFormattedPage(pageId) {
@@ -1289,11 +1406,6 @@ function shareWhatsApp(type) {
   window.open(url, "_blank");
 }
 
-function handleManualInvoice(type, manualVal) {
-  if (!manualVal) return;
-  console.log(`Manual input set for ${type}: ${manualVal}`);
-}
-
 function toggleMenu(e) { e.stopPropagation(); document.getElementById("dropdownMenu").classList.toggle("show"); }
 function openProfile() { document.getElementById("profilePopup").style.display = "flex"; }
 function closeProfile() { document.getElementById("profilePopup").style.display = "none"; }
@@ -1307,6 +1419,26 @@ function logout() {
     document.getElementById("app").style.display = "none";
     document.getElementById("loginPage").style.display = "flex";
   }
+}
+
+async function changePassword() {
+  let oldPassword = document.getElementById("oldPass").value;
+  let newPassword = document.getElementById("newPass").value;
+  let confirmPass = document.getElementById("confirmPass").value;
+
+  if (newPassword !== confirmPass) { alert("New Passwords do not match!"); return; }
+
+  let user = JSON.parse(localStorage.getItem("user"));
+  let payload = {
+    type: "password", username: user ? user.username : "",
+    oldPassword: oldPassword, newPassword: newPassword
+  };
+
+  let result = await saveData(payload);
+  if (result.status) {
+    alert("Password updated successfully!");
+    closePasswordPopup();
+  } else { alert("Failed to update password."); }
 }
 </script>
 
