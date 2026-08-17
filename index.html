@@ -13,162 +13,177 @@
  
 
   <style>
-    /* GLOBAL STYLES */
-    body { 
-      margin: 0; 
-      padding: 0; 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background: #f4f7fb; 
-    }
+ 
+  body { 
+    margin: 0; 
+    padding: 0; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: #f4f7fb; 
+  }
 
-    /* PROFILE STYLING - UNCROPPED FIT */
-    .profile {
-      width: 145px; 
-      height: 145px; 
-      border-radius: 50%; 
-      object-fit: contain; 
-      background-color: #ffffff;
-      margin: 15px auto;
-      border: 5px solid rgba(255,255,255,0.85);
-      box-shadow: 0 10px 30px rgba(255,182,193,0.35), 0 0 15px rgba(255,255,255,0.6);
-      transition: 0.4s; 
-      animation: profileFloat 4s ease-in-out infinite;
-      display: block;
+  /* MEDIA PRINT RULE FOR TEMPLATE-ONLY PRINTING */
+  @media print {
+    body * {
+      visibility: hidden;
     }
-    @keyframes profileFloat {
-      0% { transform: translateY(0px); } 
-      50% { transform: translateY(-8px); } 
-      100% { transform: translateY(0px); }
+    .card:not([style*="display: none"]), 
+    .card:not([style*="display: none"]) * {
+      visibility: visible;
     }
-    .profile:hover { transform: scale(1.05); }
+    .card:not([style*="display: none"]) {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      margin: 0;
+      padding: 10px;
+      box-shadow: none;
+      border: none;
+      background: #fff;
+    }
+    .sidebar, .topbar, .dashboardCards, button, .workflow-actions {
+      display: none !important;
+    }
+  }
 
-    /* LOGIN PAGE STRUCTURE */
-    .login { display: flex; width: 100%; height: 100vh; overflow: hidden; position: relative; background: #fff; }
-    .left {
-      width: 50%; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden;
-      background: linear-gradient(135deg, #fff7f8 0%, #ffeef1 35%, #fff1eb 100%);
-    }
-    .left::before {
-      content: ""; position: absolute; inset: 0;
-      background: linear-gradient(to bottom, rgba(15, 2, 102, 0.85), rgba(106,90,205,0.5), rgba(106,90,205,0.85));
-      z-index: 1;
-    }
-    .left-content {
-      position: relative; z-index: 5; width: 420px; padding: 35px 30px; border-radius: 32px;
-      background: rgba(255,255,255,0.32); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.45);
-      box-shadow: 0 15px 40px rgba(255,182,193,0.18);
-      text-align: center; color: #fff;
-    }
-    .left-content h1 { font-size: 20px; letter-spacing: 1px; margin: 5px 0; }
-    .left-content h2 { margin-bottom: 10px; font-weight: 500; font-size: 20px; }
-    .left-content p { margin: 4px 0; letter-spacing: 0.5px; font-size: 13px; opacity: 0.95; }
+  /* PROFILE STYLING */
+  .profile {
+    width: 145px; 
+    height: 145px; 
+    border-radius: 50%; 
+    object-fit: contain; 
+    background-color: #ffffff;
+    margin: 15px auto;
+    border: 5px solid rgba(255,255,255,0.85);
+    box-shadow: 0 10px 30px rgba(255,182,193,0.35);
+    transition: 0.4s; 
+    animation: profileFloat 4s ease-in-out infinite;
+    display: block;
+  }
+  @keyframes profileFloat {
+    0% { transform: translateY(0px); } 
+    50% { transform: translateY(-8px); } 
+    100% { transform: translateY(0px); }
+  }
 
-    .right {
-      width: 50%; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;
-      background: url("https://images.unsplash.com/photo-1519681393784-d120267933ba") no-repeat center center; background-size: cover;
-    }
-    .login-box {
-      width: 340px; padding: 35px; border-radius: 28px; background: rgba(255,255,255,0.2);
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255,255,255,0.25);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.25); text-align: center; color: #2f2f2f;
-    }
-    .login-logo { width: 110px; display: block; margin: 0 auto 10px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.2)); }
-    .login-box input {
-      width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 10px;
-      background: rgba(255,255,255,0.85); color: #000; outline: none; font-size: 14px; box-sizing: border-box;
-    }
-    .login-box button {
-      width: 100%; padding: 13px; border: none; border-radius: 30px; background: white; color: #111;
-      font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px;
-    }
-    .login-box button:hover { background: #ff758c; color: #fff; }
+  /* LOGIN PAGE STRUCTURE */
+  .login { display: flex; width: 100%; height: 100vh; overflow: hidden; position: relative; background: #fff; }
+  .left {
+    width: 50%; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden;
+    background: linear-gradient(135deg, #fff7f8 0%, #ffeef1 35%, #fff1eb 100%);
+  }
+  .left::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(15, 2, 102, 0.85), rgba(106,90,205,0.5), rgba(106,90,205,0.85));
+    z-index: 1;
+  }
+  .left-content {
+    position: relative; z-index: 5; width: 420px; padding: 35px 30px; border-radius: 32px;
+    background: rgba(255,255,255,0.32); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.45);
+    box-shadow: 0 15px 40px rgba(255,182,193,0.18);
+    text-align: center; color: #fff;
+  }
 
-    /* NAVIGATION & SIDEBAR */
-    .sidebar {
-      width: 230px; height: 100vh; position: fixed; top: 0; left: 0; z-index: 999; padding: 20px 15px;
-      background: linear-gradient(180deg, #f86370 0%, #ffe9e4 45%, #f75700 100%);
-      border-right: 1px solid rgba(255,255,255,0.6); box-shadow: 8px 0 30px rgba(255,182,193,0.15); box-sizing: border-box;
-    }
-    .company-logo-box { width: 100%; margin: 0 auto 20px; padding: 15px; border-radius: 20px; background: rgba(255,255,255,0.55); text-align: center; box-sizing: border-box; }
-    .company-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: contain; background: #fff; }
-    
-    .menu-item {
-      display: block; width: 100%; padding: 12px 15px; border-radius: 12px; margin: 10px 0; cursor: pointer;
-      transition: 0.35s; user-select: none; font-size: 14px; letter-spacing: 0.5px; font-weight: 700; color: #444; box-sizing: border-box;
-    }
-    .menu-item.active {
-      background: linear-gradient(135deg, #ff9fb2, #ffb38a); color: white; font-weight: 800;
-      box-shadow: 0 8px 18px rgba(255,182,193,0.28);
-    }
+  .right {
+    width: 50%; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;
+    background: url("https://images.unsplash.com/photo-1519681393784-d120267933ba") no-repeat center center; background-size: cover;
+  }
+  .login-box {
+    width: 340px; padding: 35px; border-radius: 28px; background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25); text-align: center; color: #2f2f2f;
+  }
+  .login-logo { width: 110px; display: block; margin: 0 auto 10px; }
+  .login-box input {
+    width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 10px;
+    background: rgba(255,255,255,0.85); color: #000; outline: none; font-size: 14px; box-sizing: border-box;
+  }
+  .login-box button {
+    width: 100%; padding: 13px; border: none; border-radius: 30px; background: white; color: #111;
+    font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px;
+  }
+  .login-box button:hover { background: #ff758c; color: #fff; }
 
-    /* MAIN CONTENT AREA */
-    .main {
-      margin-left: 230px; min-height: 100vh; padding: 20px 25px; position: relative; z-index: 5;
-      background: linear-gradient(135deg, rgba(255,245,247,0.95), rgba(244,247,251,0.95)); box-sizing: border-box;
-    }
-    .topbar {
-      display: flex; justify-content: space-between; align-items: center; background: white;
-      padding: 12px 20px; border-radius: 14px; margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.06);
-    }
-    .page-heading { font-size: 24px; font-weight: 800; color: #ff4f81; text-transform: uppercase; }
-    .workflow-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-    .action-btn {
-      padding: 6px 12px; border: none; border-radius: 6px; background: #ff4d6d; color: #fff;
-      font-weight: bold; cursor: pointer; font-size: 11px; transition: 0.2s;
-    }
-    .action-btn:hover { background: #d90429; }
+  /* SIDEBAR & NAVIGATION */
+  .sidebar {
+    width: 230px; height: 100vh; position: fixed; top: 0; left: 0; z-index: 999; padding: 20px 15px;
+    background: linear-gradient(180deg, #f86370 0%, #ffe9e4 45%, #f75700 100%);
+    border-right: 1px solid rgba(255,255,255,0.6); box-shadow: 8px 0 30px rgba(255,182,193,0.15); box-sizing: border-box;
+  }
+  .company-logo-box { width: 100%; margin: 0 auto 20px; padding: 15px; border-radius: 20px; background: rgba(255,255,255,0.55); text-align: center; box-sizing: border-box; }
+  .company-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: contain; background: #fff; }
+  
+  .menu-item {
+    display: block; width: 100%; padding: 12px 15px; border-radius: 12px; margin: 10px 0; cursor: pointer;
+    transition: 0.35s; font-size: 14px; font-weight: 700; color: #444; box-sizing: border-box;
+  }
+  .menu-item.active {
+    background: linear-gradient(135deg, #ff9fb2, #ffb38a); color: white; font-weight: 800;
+    box-shadow: 0 8px 18px rgba(255,182,193,0.28);
+  }
 
-    /* DASHBOARD CARD FIXED LAYOUT */
-    .dashboardCards {
-      width: 100%; display: flex; flex-direction: row; gap: 20px; margin-bottom: 25px; align-items: stretch;
-    }
-    .small-card {
-      flex: 1; background: #ffffff; border-radius: 16px; padding: 18px 20px; height: 180px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06); box-sizing: border-box; display: flex;
-      flex-direction: column; justify-content: center; align-items: flex-start; position: relative; overflow: hidden;
-    }
-    .small-card h3 { margin: 0 0 8px 0; font-size: 15px; color: #555; font-weight: 600; }
+  /* LAYOUT STRUCTURE */
+  .main {
+    margin-left: 230px; min-height: 100vh; padding: 20px 25px; position: relative; z-index: 5;
+    background: linear-gradient(135deg, rgba(255,245,247,0.95), rgba(244,247,251,0.95)); box-sizing: border-box;
+  }
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center; background: white;
+    padding: 12px 20px; border-radius: 14px; margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+  }
+  .page-heading { font-size: 24px; font-weight: 800; color: #ff4f81; text-transform: uppercase; }
+  .workflow-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .action-btn {
+    padding: 6px 12px; border: none; border-radius: 6px; background: #ff4d6d; color: #fff;
+    font-weight: bold; cursor: pointer; font-size: 11px; transition: 0.2s;
+  }
+  .action-btn:hover { background: #d90429; }
 
-    /* FORMS & TABLES */
-    .card {
-      background: rgba(255,255,255,0.85); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255,255,255,0.4); padding: 25px; border-radius: 20px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.06); margin-top: 10px;
-    }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 10px; overflow: hidden; }
-    th { background: #ff758c; color: #ffffff; padding: 10px; font-size: 13px; }
-    td { padding: 8px; border-bottom: 1px solid #eee; text-align: center; }
-    button {
-      padding: 10px 15px; border: none; border-radius: 8px; background: #ff758c; color: #fff;
-      cursor: pointer; transition: 0.3s; font-weight: 600;
-    }
-    button:hover { background: #ff4d6d; }
-    input, select, textarea {
-      padding: 9px; margin: 4px 0; border: 1px solid #ccc; border-radius: 8px; outline: none;
-      background: #fff; color: #000; box-sizing: border-box; font-size: 13px;
-    }
-    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+  /* CARDS & TABLES */
+  .dashboardCards { width: 100%; display: flex; flex-direction: row; gap: 20px; margin-bottom: 25px; align-items: stretch; }
+  .small-card {
+    flex: 1; background: #ffffff; border-radius: 16px; padding: 18px 20px; height: 180px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06); box-sizing: border-box; display: flex;
+    flex-direction: column; justify-content: center; align-items: flex-start;
+  }
+  .card {
+    background: rgba(255,255,255,0.85); backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.4); padding: 25px; border-radius: 20px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.06); margin-top: 10px;
+  }
+  table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 10px; overflow: hidden; }
+  th { background: #ff758c; color: #ffffff; padding: 10px; font-size: 13px; }
+  td { padding: 8px; border-bottom: 1px solid #eee; text-align: center; }
+  button {
+    padding: 10px 15px; border: none; border-radius: 8px; background: #ff758c; color: #fff;
+    cursor: pointer; transition: 0.3s; font-weight: 600;
+  }
+  button:hover { background: #ff4d6d; }
+  input, select, textarea {
+    padding: 9px; margin: 4px 0; border: 1px solid #ccc; border-radius: 8px; outline: none;
+    background: #fff; color: #000; box-sizing: border-box; font-size: 13px;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-    /* PROFILE DROPDOWN & POPUP */
-    .profile-box { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid #ff758c; background:#fff; }
-    .profile-box img { width: 100%; height: 100%; object-fit: contain; }
-    
-    .dropdown {
-      position: absolute; top: 55px; right: 0; width: 250px; background: white; border-radius: 16px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.15); overflow: hidden; opacity: 0; visibility: hidden;
-      transform: translateY(-10px); transition: 0.35s; z-index: 9999;
-    }
-    .dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
-    .dropdown-top { display: flex; align-items: center; gap: 12px; padding: 15px; background: linear-gradient(45deg,#ff758c,#ff7eb3); color: #fff; }
-    .drop-item { padding: 12px 18px; cursor: pointer; transition: 0.3s; font-size: 14px; color: #333; }
-    .drop-item:hover { background: #fff1f3; color: #ff4d6d; }
-
-    .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; justify-content: center; align-items: center; z-index: 99999; }
-    .popup-box { width: 380px; background: white; border-radius: 20px; padding: 25px; position: relative; }
-    .close-btn { position: absolute; right: 18px; top: 15px; font-size: 24px; cursor: pointer; color: #666; }
-  </style>
+  /* POPUP MENU */
+  .profile-box { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid #ff758c; background:#fff; }
+  .profile-box img { width: 100%; height: 100%; object-fit: contain; }
+  .dropdown {
+    position: absolute; top: 55px; right: 0; width: 250px; background: white; border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15); overflow: hidden; opacity: 0; visibility: hidden;
+    transform: translateY(-10px); transition: 0.35s; z-index: 9999;
+  }
+  .dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
+  .dropdown-top { display: flex; align-items: center; gap: 12px; padding: 15px; background: linear-gradient(45deg,#ff758c,#ff7eb3); color: #fff; }
+  .drop-item { padding: 12px 18px; cursor: pointer; transition: 0.3s; font-size: 14px; color: #333; }
+  .drop-item:hover { background: #fff1f3; color: #ff4d6d; }
+  .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; justify-content: center; align-items: center; z-index: 99999; }
+  .popup-box { width: 380px; background: white; border-radius: 20px; padding: 25px; position: relative; }
+  .close-btn { position: absolute; right: 18px; top: 15px; font-size: 24px; cursor: pointer; color: #666; }
+</style>
+   
 </head>
 
 <body>
@@ -212,7 +227,7 @@
   </div>
 </div>
 
-<!-- APP PAGE -->
+<!-- MAIN APPLICATION -->
 <div id="app" style="display:none;">
 
   <div class="sidebar">
@@ -260,7 +275,7 @@
       </div>
     </div>
 
-    <!-- CARDS -->
+    <!-- METRIC CARDS -->
     <div id="invoiceCards" class="dashboardCards" style="display:none;">
       <div class="small-card"><h3>GST Bills Today</h3><p id="gstBills" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">0</p></div>
       <div class="small-card"><h3>GST Amount</h3><p id="gstAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
@@ -286,7 +301,7 @@
       <div class="small-card"><h3>Amount</h3><p id="withoutGSTAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
     </div>
 
-    <!-- GST PAGE -->
+    <!-- GST INVOICE PAGE -->
     <div id="gstPage" class="card" style="display:none;">
       <h2>BEULAH TRADERS PRIVATE LIMITED<br><span style="font-size:16px; color:#666;">Invoice with GST</span></h2>
       <table style="width:100%; margin-bottom:15px;">
@@ -472,7 +487,7 @@
         <div><label>State</label><input type="text" id="renewalState" style="width:100%;"></div>
         <div><label>Pincode</label><input type="text" id="renewalPincode" style="width:100%;"></div>
         <div><label>Email</label><input type="text" id="renewalEmail" style="width:100%;"></div>
-        <div><label>Aadhaar Number</label><input id="renewalAadhaar" maxlength="12" style="width:100%;"></div>
+        <div><label>Aadhaar Number</label><input id="renewalAadhaar" style="width:100%;"></div>
         <div><label>PAN Number</label><input id="renewalPan" style="text-transform:uppercase; width:100%;"></div>
         <div><label>Bank Name</label><input id="renewalBankName" style="width:100%;"></div>
         <div><label>Branch Name</label><input id="renewalBranch" style="width:100%;"></div>
@@ -562,21 +577,71 @@
  
  
 <script> 
-// BTP Billing System - Main Client-Side Logic (script.js)
+// BTP Billing System - Unified Client-Side Logic
 
 const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
 let productList = [];
 let isVoucherSyncedFromGST = false;
 
-function getFormattedDate(d = new Date()) {
+// DATE FORMATTING & REDEEM DATE RULE LOGIC
+function formatDateDDMMMYYYY(d) {
+  if (!d) return "";
+  let dateObj = (d instanceof Date) ? d : parseCustomDate(d);
+  if (!dateObj || isNaN(dateObj.getTime())) return String(d);
   const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-  const dateObj = new Date(d);
-  if (isNaN(dateObj.getTime())) return "";
   const day = String(dateObj.getDate()).padStart(2, "0");
   const month = months[dateObj.getMonth()];
   const year = dateObj.getFullYear();
   return `${day}-${month}-${year}`;
+}
+
+function parseCustomDate(dateStr) {
+  if (!dateStr) return null;
+  if (dateStr instanceof Date) return dateStr;
+  let parts = String(dateStr).trim().split(/[-/.]/);
+  if (parts.length === 3) {
+    let day = parseInt(parts[0], 10);
+    let monthInput = parts[1];
+    let year = parseInt(parts[2], 10);
+    if (year < 100) year += 2000;
+    
+    let month = -1;
+    const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+    if (isNaN(monthInput)) {
+      month = months.indexOf(monthInput.toLowerCase().substring(0, 3));
+    } else {
+      month = parseInt(monthInput, 10) - 1;
+    }
+    if (month >= 0 && month <= 11 && !isNaN(day) && !isNaN(year)) {
+      return new Date(year, month, day);
+    }
+  }
+  let fallback = new Date(dateStr);
+  return isNaN(fallback.getTime()) ? null : fallback;
+}
+
+// Custom Rule: Add 2 Months and map Day (1-15 -> 15th, 16-31 -> 30th/31st)
+function calculateRedeemReleaseDate(invoiceDateStr) {
+  let dt = parseCustomDate(invoiceDateStr);
+  if (!dt) return "";
+  let day = dt.getDate();
+  let targetMonth = dt.getMonth() + 2; // +2 Months
+  let targetYear = dt.getFullYear();
+
+  if (targetMonth > 11) {
+    targetMonth -= 12;
+    targetYear += 1;
+  }
+
+  let targetDay = 15;
+  if (day >= 16) {
+    // Last day of target month (30th, 31st, 28th/29th Feb)
+    targetDay = new Date(targetYear, targetMonth + 1, 0).getDate();
+  }
+
+  let resultDate = new Date(targetYear, targetMonth, targetDay);
+  return formatDateDDMMMYYYY(resultDate);
 }
 
 window.onload = function() {
@@ -587,15 +652,14 @@ window.onload = function() {
     document.getElementById("app").style.display = "none";
   } else {
     let user = localStorage.getItem("user");
-    if (user) {
-      showApp();
-    } else {
+    if (user) showApp();
+    else {
       document.getElementById("loginPage").style.display = "flex";
       document.getElementById("app").style.display = "none";
     }
   }
 
-  const todayFormatted = getFormattedDate();
+  const todayFormatted = formatDateDDMMMYYYY(new Date());
   ["gstDate", "date", "joiningDate", "renewalJoiningDate", "withoutDate"].forEach(id => {
     let el = document.getElementById(id);
     if (el) el.value = todayFormatted;
@@ -634,8 +698,20 @@ async function loadNextInvoiceNumbers() {
     let resWithout = await fetch(`${WEBAPP}?api=1&nextWithoutGSTNo=1`);
     let dataWithout = await resWithout.json();
     if (dataWithout.invoiceNo) document.getElementById("withoutGSTInvoiceNo").value = dataWithout.invoiceNo;
-  } catch(e) {
-    console.error("Error loading initial invoice numbers:", e);
+  } catch(e) { console.error("Error loading next sequence numbers:", e); }
+}
+
+function setRedeemDate() {
+  let jDate = document.getElementById("joiningDate").value;
+  if(jDate) {
+    document.getElementById("redeemDate").value = calculateRedeemReleaseDate(jDate);
+  }
+}
+
+function setRenewalRedeemDate() {
+  let jDate = document.getElementById("renewalJoiningDate").value;
+  if(jDate) {
+    document.getElementById("renewalRedeemDate").value = calculateRedeemReleaseDate(jDate);
   }
 }
 
@@ -727,10 +803,8 @@ function convertNumberToWords(amount) {
   let words = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", 
                "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
   let tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
-  
   let num = Math.floor(amount);
   if (num === 0) return "Zero Rupees Only";
-  
   function numToWords(n) {
     if (n < 20) return words[n];
     if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 !== 0 ? " " + words[n % 10] : "");
@@ -747,17 +821,13 @@ function calculateGSTRow(element) {
   let qty = parseFloat(row.querySelector(".qty")?.value) || 0;
   let rate = parseFloat(row.querySelector(".rate")?.value) || 0;
   let gross = qty * rate;
-  
   let gstP = parseFloat(row.querySelector(".gst")?.value) || 0;
   let state = document.getElementById("state")?.value || "";
   let isTelangana = state.trim().toLowerCase() === "telangana" || state.trim() === "";
 
   let cgstP = 0, sgstP = 0, igstP = 0;
-  if (isTelangana) {
-    cgstP = gstP / 2; sgstP = gstP / 2;
-  } else {
-    igstP = gstP;
-  }
+  if (isTelangana) { cgstP = gstP / 2; sgstP = gstP / 2; } 
+  else { igstP = gstP; }
 
   if (row.querySelector(".cgstp")) row.querySelector(".cgstp").value = cgstP;
   if (row.querySelector(".sgstp")) row.querySelector(".sgstp").value = sgstP;
@@ -779,7 +849,6 @@ function calculateGSTRow(element) {
 
 function calculateGSTTotals() {
   let totalQty = 0, totalGross = 0, totalCGST = 0, totalSGST = 0, totalIGST = 0, totalTaxable = 0;
-
   document.querySelectorAll("#gstTable tbody tr").forEach(row => {
     totalQty += parseFloat(row.querySelector(".qty")?.value) || 0;
     totalGross += parseFloat(row.querySelector(".gross")?.value) || 0;
@@ -811,6 +880,7 @@ function calculateGSTTotals() {
 
 document.addEventListener("input", function(e) {
   if (e.target.closest("#gstTable tbody")) calculateGSTRow(e.target);
+  if (e.target.closest("#repurchaseBody")) calculateRepurchaseRow(e.target);
 });
 
 function calculateRepurchaseRow(element) {
@@ -833,10 +903,6 @@ function calculateRepurchaseTotals() {
   document.getElementById("total").value = roundedTotal.toFixed(2);
   document.getElementById("words").value = convertNumberToWords(roundedTotal);
 }
-
-document.addEventListener("input", function(e) {
-  if (e.target.closest("#repurchaseBody")) calculateRepurchaseRow(e.target);
-});
 
 function calculateVoucher() {
   let kits = parseFloat(document.getElementById("kits")?.value) || 0;
@@ -903,106 +969,6 @@ function addWithoutGSTRow() {
   tbody.appendChild(tr);
 }
 
-async function requestOTP() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-  if (!username) { alert("Please enter username."); return; }
-
-  currentOTPUsername = username;
-  try {
-    const response = await fetch(`${WEBAPP}?api=1&sendOTP=1&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
-    const result = await response.json();
-    if (result.status) {
-      alert(result.message || "OTP sent successfully!");
-      document.getElementById("stepCredentials").style.display = "none";
-      document.getElementById("stepOTP").style.display = "block";
-    } else {
-      alert(result.message || "Invalid credentials.");
-    }
-  } catch (error) { alert("Server error requesting OTP."); }
-}
-
-async function verifyOTPAndLogin() {
-  let otp = document.getElementById("otpInput").value.trim();
-  if (!otp) { alert("Please enter the OTP."); return; }
-
-  try {
-    const res = await fetch(`${WEBAPP}?api=1&verifyOTP=1&username=${encodeURIComponent(currentOTPUsername)}&otp=${encodeURIComponent(otp)}`);
-    const data = await res.json();
-    if (data.status) {
-      localStorage.setItem("user", JSON.stringify(data.user || { name: currentOTPUsername, username: currentOTPUsername }));
-      sessionStorage.setItem("active_session", "true");
-      showApp();
-    } else { alert(data.message || "Invalid OTP!"); }
-  } catch (err) { alert("Error verifying OTP."); }
-}
-
-function showApp() {
-  document.getElementById("loginPage").style.display = "none";
-  document.getElementById("app").style.display = "block";
-  
-  let user = JSON.parse(localStorage.getItem("user"));
-  if (user) {
-    const defaultPhoto = "https://i.imgur.com/t9HFQvX.png";
-    const profilePic = user.photo || user.profilePic || defaultPhoto;
-
-    document.getElementById("usernameDisplay").innerText = user.name || "User";
-    document.getElementById("dropName").innerText = user.name || "User";
-    document.getElementById("profileUsername").value = user.username || "";
-    document.getElementById("profileEmail").value = user.email || "";
-    document.getElementById("profilePhone").value = user.phone || "";
-    document.getElementById("profilePopupName").innerText = user.name || "User";
-
-    document.getElementById("topProfile").src = profilePic;
-    document.getElementById("dropProfile").src = profilePic;
-    document.getElementById("profilePopupImg").src = profilePic;
-  }
-  showGST();
-}
-
-function hideAll() {
-  ["billingPage","gstPage","voucherPage","renewalPage","withoutGSTPage"].forEach(id => document.getElementById(id).style.display = "none");
-}
-function hideCards() {
-  ["repurchaseCards","invoiceCards","voucherCards","renewalCards","withoutGSTCards"].forEach(id => document.getElementById(id).style.display = "none");
-}
-function setTitle(name) { document.getElementById("pageTitle").innerText = name; }
-function setActive(el) {
-  document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active"));
-  el.classList.add("active");
-}
-
-function showGST() { hideAll(); hideCards(); document.getElementById("gstPage").style.display="block"; document.getElementById("invoiceCards").style.display="flex"; setTitle("GST Invoice"); loadDashboardMetrics("gst"); }
-function showVoucher() { hideAll(); hideCards(); document.getElementById("voucherPage").style.display="block"; document.getElementById("voucherCards").style.display="flex"; setTitle("Voucher"); loadDashboardMetrics("voucher"); }
-function showBilling() { hideAll(); hideCards(); document.getElementById("billingPage").style.display="block"; document.getElementById("repurchaseCards").style.display="flex"; setTitle("Repurchase"); loadDashboardMetrics("repurchase"); }
-function showRenewal() { hideAll(); hideCards(); document.getElementById("renewalPage").style.display="block"; document.getElementById("renewalCards").style.display="flex"; setTitle("Renewal Voucher"); loadDashboardMetrics("renewal"); }
-function showWithoutGST() { hideAll(); hideCards(); document.getElementById("withoutGSTPage").style.display="block"; document.getElementById("withoutGSTCards").style.display="flex"; setTitle("Without GST Invoice"); loadDashboardMetrics("withoutGST"); }
-
-async function loadDashboardMetrics(moduleType) {
-  try {
-    let res = await fetch(WEBAPP + "?api=1&action=dashboard");
-    let data = await res.json();
-    if (!data) return;
-
-    if (moduleType === "gst") {
-      document.getElementById("gstBills").innerText = data.gstBills || 0;
-      document.getElementById("gstAmount").innerText = "₹" + (data.gstAmount || 0);
-    } else if (moduleType === "repurchase") {
-      document.getElementById("todayBills").innerText = data.repurchaseBills || 0;
-      document.getElementById("todayAmount").innerText = "₹" + (data.repurchaseAmount || 0);
-    } else if (moduleType === "voucher") {
-      document.getElementById("voucherCount").innerText = data.voucherCount || 0;
-      document.getElementById("voucherAmount").innerText = "₹" + (data.voucherAmount || 0);
-    } else if (moduleType === "renewal") {
-      document.getElementById("renewalCount").innerText = data.renewalCount || 0;
-      document.getElementById("renewalAmount").innerText = "₹" + (data.renewalAmount || 0);
-    } else if (moduleType === "withoutGST") {
-      document.getElementById("withoutGSTBillCount").innerText = data.withoutGSTBills || 0;
-      document.getElementById("withoutGSTAmount").innerText = "₹" + (data.withoutGSTAmount || 0);
-    }
-  } catch(e) { console.error("Error loading dashboard metrics:", e); }
-}
-
 function syncGSTToVoucher() {
   isVoucherSyncedFromGST = true;
   document.getElementById("voucherCustomerName").value = document.getElementById("c_name").value;
@@ -1019,6 +985,12 @@ function syncGSTToVoucher() {
   document.getElementById("voucherBranch").value = document.getElementById("branch").value;
   document.getElementById("voucherAccountNo").value = document.getElementById("accountNo").value;
   document.getElementById("voucherIFSC").value = document.getElementById("ifsc").value;
+  
+  let gstDate = document.getElementById("gstDate").value;
+  if (gstDate) {
+    document.getElementById("joiningDate").value = gstDate;
+    setRedeemDate();
+  }
   alert("GST Data Synced to Voucher Form!");
 }
 
@@ -1026,6 +998,8 @@ function syncGSTToRepurchase() {
   document.getElementById("name").value = document.getElementById("c_name").value;
   document.getElementById("address").value = document.getElementById("village").value + ", " + document.getElementById("district").value;
   document.getElementById("repurchasePhone").value = document.getElementById("phone").value;
+  let gstDate = document.getElementById("gstDate").value;
+  if (gstDate) document.getElementById("date").value = gstDate;
   alert("GST Data Synced to Repurchase Form!");
 }
 
@@ -1044,6 +1018,12 @@ function syncGSTToRenewal() {
   document.getElementById("renewalBranch").value = document.getElementById("branch").value;
   document.getElementById("renewalAccountNo").value = document.getElementById("accountNo").value;
   document.getElementById("renewalIfsc").value = document.getElementById("ifsc").value;
+  
+  let gstDate = document.getElementById("gstDate").value;
+  if (gstDate) {
+    document.getElementById("renewalJoiningDate").value = gstDate;
+    setRenewalRedeemDate();
+  }
   alert("GST Data Synced to Renewal Form!");
 }
 
@@ -1139,6 +1119,7 @@ async function generateGST() {
     basicAmount: document.getElementById("basicAmt").value,
     finalTotal: document.getElementById("finalTotal").value,
     totalQty: document.getElementById("totalQty").value,
+    paymentMode: getSelectedPaymentMode("gst"),
     createdBy: user.username || "System",
     items: items
   };
@@ -1165,8 +1146,7 @@ async function generate() {
     type: "repurchase", date: document.getElementById("date").value,
     invoiceNo: document.getElementById("invoiceNo").value, customerName: document.getElementById("name").value,
     address: document.getElementById("address").value, phone: document.getElementById("repurchasePhone").value,
-    items: items, weight: items[0]?.weight || "", rate: items[0]?.rate || "",
-    total: document.getElementById("total").value, words: document.getElementById("words").value,
+    items: items, total: document.getElementById("total").value, words: document.getElementById("words").value,
     createdBy: user.username || "System"
   };
   let result = await saveData(payload);
@@ -1178,21 +1158,6 @@ async function generate() {
 }
 
 async function generateVoucher() {
-  let gstItems = [];
-  if (isVoucherSyncedFromGST) {
-    document.querySelectorAll("#gstTable tbody tr").forEach(tr => {
-      let product = tr.querySelector(".product-search").value;
-      if (product) {
-        gstItems.push({
-          product: product,
-          qty: tr.querySelector(".qty").value,
-          rate: tr.querySelector(".rate").value,
-          gross: tr.querySelector(".gross").value
-        });
-      }
-    });
-  }
-
   let payload = {
     type: "voucher",
     voucherNo: document.getElementById("voucherNo").value,
@@ -1216,14 +1181,9 @@ async function generateVoucher() {
     salesRepId: document.getElementById("salesRepId").value,
     salesRepName: document.getElementById("salesRepNameInput").value,
     monthlyRedeem: document.getElementById("monthlyRedeem").value,
+    monthlyWithCoupon: document.getElementById("monthlywithCoupon").value,
     totalCoupon: document.getElementById("totalCoupon").value,
-    isSyncedWithGST: isVoucherSyncedFromGST,
-    gstInvoiceNo: document.getElementById("gstInvoiceNo").value,
-    gstInvoiceDate: document.getElementById("gstDate").value,
-    gstInvoiceAmount: document.getElementById("finalTotal").value,
-    gstWords: document.getElementById("gstWords").value,
-    gstTotalQty: document.getElementById("totalQty").value,
-    gstItems: gstItems
+    category: getSelectedCategory("voucher")
   };
 
   let result = await saveData(payload);
@@ -1231,7 +1191,6 @@ async function generateVoucher() {
     alert("Voucher Generated & Saved Successfully!");
     if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if(result.nextInvoiceNo) document.getElementById("voucherNo").value = result.nextInvoiceNo;
-    isVoucherSyncedFromGST = false;
   } else { alert("Error saving Voucher: " + result.message); }
 }
 
@@ -1252,6 +1211,7 @@ async function generateRenewalVoucher() {
     salesRepName: document.getElementById("renewalSalesRepNameInput").value,
     monthlyCoupon: document.getElementById("renewalMonthlywithCoupon").value,
     totalCoupon: document.getElementById("renewalTotalCoupon").value,
+    category: getSelectedCategory("renewal"),
     createdBy: user.username || "System"
   };
   let result = await saveData(payload);
@@ -1286,6 +1246,7 @@ async function generateWithoutGSTInvoice() {
     district: document.getElementById("withoutDistrict").value, state: document.getElementById("withoutState").value,
     pincode: document.getElementById("withoutPincode").value, mobile: document.getElementById("withoutMobile").value,
     email: document.getElementById("withoutEmail").value, totalAmount: document.getElementById("withoutTotalAmount").value,
+    paymentMode: getSelectedPaymentMode("withoutGST"),
     items: items
   };
   let result = await saveData(payload);
@@ -1296,38 +1257,20 @@ async function generateWithoutGSTInvoice() {
   } else { alert("Error saving Without GST Invoice: " + result.message); }
 }
 
-function setRedeemDate() {
-  let jDate = document.getElementById("joiningDate").value;
-  if(jDate) {
-    let d = new Date(jDate);
-    if (!isNaN(d.getTime())) {
-      d.setMonth(d.getMonth() + 12);
-      document.getElementById("redeemDate").value = getFormattedDate(d);
-    }
+function getSelectedPaymentMode(section) {
+  if (section === "gst") {
+    if (document.getElementById("cash")?.checked) return "Cash";
+    if (document.getElementById("cheque")?.checked) return "Cheque";
+    if (document.getElementById("upi")?.checked) return "UPI";
+    if (document.getElementById("netbanking")?.checked) return "Net Banking";
+    if (document.getElementById("card")?.checked) return "Credit/Debit Card";
+    if (document.getElementById("hypothecation")?.checked) return "Hypothecation";
   }
+  return "Cash";
 }
 
-function setRenewalRedeemDate() {
-  let jDate = document.getElementById("renewalJoiningDate").value;
-  if(jDate) {
-    let d = new Date(jDate);
-    if (!isNaN(d.getTime())) {
-      d.setMonth(d.getMonth() + 12);
-      document.getElementById("renewalRedeemDate").value = getFormattedDate(d);
-    }
-  }
-}
-
-function handleManualInvoice(type, manualVal) {
-  if (!manualVal) return;
-  const match = manualVal.match(/^(.*\/)(\d+)(\/\d{2}-\d{2})$/);
-  if (match) {
-    let prefix = match[1];
-    let num = parseInt(match[2], 10) + 1;
-    let suffix = match[3];
-    let nextVal = prefix + String(num).padStart(match[2].length, "0") + suffix;
-    console.log(`Manual input handled. Sequential next for ${type}: ${nextVal}`);
-  }
+function getSelectedCategory(section) {
+  return "Renewal";
 }
 
 function printFormattedPage(pageId) {
@@ -1346,6 +1289,11 @@ function shareWhatsApp(type) {
   window.open(url, "_blank");
 }
 
+function handleManualInvoice(type, manualVal) {
+  if (!manualVal) return;
+  console.log(`Manual input set for ${type}: ${manualVal}`);
+}
+
 function toggleMenu(e) { e.stopPropagation(); document.getElementById("dropdownMenu").classList.toggle("show"); }
 function openProfile() { document.getElementById("profilePopup").style.display = "flex"; }
 function closeProfile() { document.getElementById("profilePopup").style.display = "none"; }
@@ -1359,26 +1307,6 @@ function logout() {
     document.getElementById("app").style.display = "none";
     document.getElementById("loginPage").style.display = "flex";
   }
-}
-
-async function changePassword() {
-  let oldPassword = document.getElementById("oldPass").value;
-  let newPassword = document.getElementById("newPass").value;
-  let confirmPass = document.getElementById("confirmPass").value;
-
-  if (newPassword !== confirmPass) { alert("New Passwords do not match!"); return; }
-
-  let user = JSON.parse(localStorage.getItem("user"));
-  let payload = {
-    type: "password", username: user ? user.username : "",
-    oldPassword: oldPassword, newPassword: newPassword
-  };
-
-  let result = await saveData(payload);
-  if (result.status) {
-    alert("Password updated successfully!");
-    closePasswordPopup();
-  } else { alert("Failed to update password."); }
 }
 </script>
 
