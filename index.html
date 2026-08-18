@@ -429,7 +429,7 @@
       <h2>BEULAH TRADERS PRIVATE LIMITED<br><span style="font-size:16px; color:#666;">Coupon Points Voucher</span></h2>
       <div class="grid2">
         <div><label>Voucher No</label><input id="voucherNo" style="width:100%;" onblur="handleManualInvoice('voucher', this.value)"></div>
-        <div><label>Joining Date</label><input id="joiningDate" style="width:100%;" placeholder="DD-MMM-YYYY" onchange="setRedeemDate()"></div>
+        <div><label>Joining Date</label><input id="joiningDate" style="width:100%;" placeholder="DD-MMM-YYYY" onchange="calculateCustomRedeemDate('joiningDate', 'redeemDate')"></div>
         <div><label>Redeem Release Date</label><input id="redeemDate" style="width:100%;" placeholder="DD-MMM-YYYY" readonly></div>
         <div><label>Kits Count</label><input id="kits" type="number" style="width:100%;" oninput="calculateVoucher()"></div>
         <div><label>Customer Name</label><input id="voucherCustomerName" style="width:100%;"></div>
@@ -456,6 +456,10 @@
         <div><label>Monthly Redeem</label><input id="monthlyRedeem" style="width:100%;" readonly></div>
         <div><label>Monthly Coupon Net</label><input id="monthlywithCoupon" style="width:100%;" readonly></div>
         <div><label>Total 12M Coupon</label><input id="totalCoupon" style="width:100%;" readonly></div>
+        <div style="grid-column: span 2;">
+          <label>Remarks</label>
+          <textarea id="voucherRemarks" style="width:100%; height:60px;"></textarea>
+        </div>
       </div>
       <br>
       <div style="display:flex; gap:10px;">
@@ -470,8 +474,18 @@
       <h2>Coupon Points Renewal</h2>
       <div class="grid2">
         <div><label>Renewal Voucher No</label><input id="renewalVoucherNo" style="width:100%;" onblur="handleManualInvoice('renewal', this.value)"></div>
-        <div><label>Joining Date</label><input id="renewalJoiningDate" style="width:100%;" placeholder="DD-MMM-YYYY" onchange="setRenewalRedeemDate()"></div>
+        <div><label>Joining Date</label><input id="renewalJoiningDate" style="width:100%;" placeholder="DD-MMM-YYYY" onchange="calculateCustomRedeemDate('renewalJoiningDate', 'renewalRedeemDate')"></div>
         <div><label>Redeem Release Date</label><input id="renewalRedeemDate" style="width:100%;" placeholder="DD-MMM-YYYY" readonly></div>
+        <div>
+          <label>Renewal Type</label>
+          <select id="renewalTypeSelect" style="width:100%;">
+            <option value="Renewal">Renewal</option>
+            <option value="Upgrade">Upgrade</option>
+            <option value="Purchase">Purchase</option>
+            <option value="New Joining">New Joining</option>
+            <option value="Reactivation">Reactivation</option>
+          </select>
+        </div>
         <div><label>Renewal Kits</label><input id="renewalKits" type="number" style="width:100%;" oninput="calculateRenewal()"></div>
         <div>
           <label>Sales Rep ID</label>
@@ -496,6 +510,10 @@
         <div><label>Reward Points</label><input id="renewalRewardPoints" style="width:100%;" readonly></div>
         <div><label>Monthly Coupon Net</label><input id="renewalMonthlywithCoupon" style="width:100%;" readonly></div>
         <div><label>Total 12M Coupon</label><input id="renewalTotalCoupon" style="width:100%;" readonly></div>
+        <div style="grid-column: span 2;">
+          <label>Remarks</label>
+          <textarea id="renewalRemarks" style="width:100%; height:60px;"></textarea>
+        </div>
       </div>
       <br>
       <div style="display:flex; gap:10px;">
@@ -519,6 +537,15 @@
         <div><label>Pincode</label><input id="withoutPincode" style="width:100%;"></div>
         <div><label>Mobile Number</label><input id="withoutMobile" style="width:100%;"></div>
         <div><label>Email</label><input id="withoutEmail" style="width:100%;"></div>
+      </div>
+
+      <div style="margin:10px 0;">
+        <label><input type="checkbox" id="w_cash"> Cash</label> &nbsp;
+        <label><input type="checkbox" id="w_cheque"> Cheque</label> &nbsp;
+        <label><input type="checkbox" id="w_upi"> UPI / PhonePe / GPay</label> &nbsp;
+        <label><input type="checkbox" id="w_netbanking"> Net Banking</label> &nbsp;
+        <label><input type="checkbox" id="w_card"> Credit / Debit Card</label> &nbsp;
+        <label><input type="checkbox" id="w_neft"> NEFT / RTGS</label>
       </div>
 
       <table id="withoutGSTTable" style="margin-top:15px;">
@@ -574,58 +601,60 @@
   </div>
 </div>
 
+ 
+
 <script src="script.js"></script>
  
  
 <script> 
+ 
+// BTP Billing System - Main Client-Side Logic (JS.html)
 
-
-// BTP Billing System - Unified Client-Side Logic
-
-// ============================================================================
-// BTP BILLING SYSTEM - FULL FRONTEND JAVASCRIPT (script.js)
-// ============================================================================
-
-const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
+const WEBAPP = ScriptApp ? "" : "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
 let productList = [];
 let isVoucherSyncedFromGST = false;
 
-// Custom Redeem Date Logic: 1st-15th -> 15th, 16th-31st -> 30th/31st (2 months ahead)
-function calculateRedeemReleaseDate(invoiceDateStr) {
-  if (!invoiceDateStr) return "";
-  let parts = invoiceDateStr.split('-');
-  let d, m, y;
-  
+function parseCustomDate(dateStr) {
+  if (!dateStr) return null;
+  const parts = dateStr.trim().split(/[\/\-\s]+/);
   if (parts.length === 3) {
-    if (isNaN(parts[1])) {
-      const monthsMap = { "JAN":0, "FEB":1, "MAR":2, "APR":3, "MAY":4, "JUN":5, "JUL":6, "AUG":7, "SEP":8, "OCT":9, "NOV":10, "DEC":11 };
-      d = parseInt(parts[0], 10);
-      m = monthsMap[parts[1].toUpperCase()];
-      y = parseInt(parts[2], 10);
-    } else {
-      d = parseInt(parts[0], 10);
-      m = parseInt(parts[1], 10) - 1;
-      y = parseInt(parts[2], 10);
+    let day = parseInt(parts[0], 10);
+    let month = parseInt(parts[1], 10) - 1;
+    let year = parseInt(parts[2], 10);
+    if (isNaN(month)) {
+      const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+      month = months.indexOf(parts[1].toLowerCase());
     }
-  } else {
-    let dt = new Date(invoiceDateStr);
-    if (isNaN(dt.getTime())) return "";
-    d = dt.getDate();
-    m = dt.getMonth();
-    y = dt.getFullYear();
+    if (year < 100) year += 2000;
+    if (!isNaN(day) && !isNaN(month) && !isNaN(year) && month >= 0) {
+      return new Date(year, month, day);
+    }
   }
+  const d = new Date(dateStr);
+  return isNaN(d.getTime()) ? null : d;
+}
 
-  let targetMonth = m + 2;
-  let targetYear = y;
+function calculateCustomRedeemDate(joiningInputId, redeemInputId) {
+  const inputEl = document.getElementById(joiningInputId);
+  const targetEl = document.getElementById(redeemInputId);
+  if (!inputEl || !targetEl || !inputEl.value) return;
+
+  const joinDate = parseCustomDate(inputEl.value);
+  if (!joinDate) return;
+
+  let day = joinDate.getDate();
+  let targetMonth = joinDate.getMonth() + 2; 
+  let targetYear = joinDate.getFullYear();
+
   if (targetMonth > 11) {
     targetMonth -= 12;
     targetYear += 1;
   }
 
-  let targetDay = (d <= 15) ? 15 : new Date(targetYear, targetMonth + 1, 0).getDate();
-  const monthsArr = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-  return `${String(targetDay).padStart(2, '0')}-${monthsArr[targetMonth]}-${targetYear}`;
+  let targetDay = (day <= 15) ? 15 : new Date(targetYear, targetMonth + 1, 0).getDate();
+  const redeemDate = new Date(targetYear, targetMonth, targetDay);
+  targetEl.value = getFormattedDate(redeemDate);
 }
 
 function getFormattedDate(d = new Date()) {
@@ -660,8 +689,8 @@ window.onload = function() {
     if (el) el.value = todayFormatted;
   });
 
-  setRedeemDate();
-  setRenewalRedeemDate();
+  calculateCustomRedeemDate("joiningDate", "redeemDate");
+  calculateCustomRedeemDate("renewalJoiningDate", "renewalRedeemDate");
 
   fetchProducts().then(() => {
     for (let i = 0; i < 3; i++) { addRow(); }
@@ -674,33 +703,31 @@ window.onload = function() {
 
 async function loadNextInvoiceNumbers() {
   try {
-    let resGST = await fetch(`${WEBAPP}?api=1&nextGSTInvoice=1`);
-    let dataGST = await resGST.json();
-    if (dataGST.invoiceNo) document.getElementById("gstInvoiceNo").value = dataGST.invoiceNo;
+    google.script.run.withSuccessHandler(data => {
+      if (data.invoiceNo) document.getElementById("gstInvoiceNo").value = data.invoiceNo;
+    }).getNextGSTInvoiceNo();
 
-    let resRep = await fetch(`${WEBAPP}?api=1&nextInvoice=1`);
-    let dataRep = await resRep.json();
-    if (dataRep.invoiceNo) document.getElementById("invoiceNo").value = dataRep.invoiceNo;
+    google.script.run.withSuccessHandler(data => {
+      if (data.invoiceNo) document.getElementById("invoiceNo").value = data.invoiceNo;
+    }).getNextRepurchaseNo();
 
-    let resVouch = await fetch(`${WEBAPP}?api=1&nextVoucherNo=1`);
-    let dataVouch = await resVouch.json();
-    if (dataVouch.voucherNo) document.getElementById("voucherNo").value = dataVouch.voucherNo;
+    google.script.run.withSuccessHandler(data => {
+      if (data.voucherNo) document.getElementById("voucherNo").value = data.voucherNo;
+    }).getNextVoucherNo();
 
-    let resRen = await fetch(`${WEBAPP}?api=1&nextRenewalNo=1`);
-    let dataRen = await resRen.json();
-    if (dataRen.renewalNo) document.getElementById("renewalVoucherNo").value = dataRen.renewalNo;
+    google.script.run.withSuccessHandler(data => {
+      if (data.renewalNo) document.getElementById("renewalVoucherNo").value = data.renewalNo;
+    }).getNextRenewalNo();
 
-    let resWithout = await fetch(`${WEBAPP}?api=1&nextWithoutGSTNo=1`);
-    let dataWithout = await resWithout.json();
-    if (dataWithout.invoiceNo) document.getElementById("withoutGSTInvoiceNo").value = dataWithout.invoiceNo;
-  } catch(e) { console.error("Error loading invoice numbers:", e); }
+    google.script.run.withSuccessHandler(data => {
+      if (data.invoiceNo) document.getElementById("withoutGSTInvoiceNo").value = data.invoiceNo;
+    }).getNextWithoutGSTNo();
+  } catch(e) { console.error("Error loading initial invoice numbers:", e); }
 }
 
 async function searchAndFillCustomer(mobile) {
   if (!mobile) return;
-  try {
-    let res = await fetch(`${WEBAPP}?api=1&customerSearch=1&mobile=${encodeURIComponent(mobile)}`);
-    let data = await res.json();
+  google.script.run.withSuccessHandler(data => {
     if (data.status) {
       document.getElementById("c_name").value = data.customerName || "";
       document.getElementById("relation").value = data.relation || "";
@@ -710,17 +737,14 @@ async function searchAndFillCustomer(mobile) {
       document.getElementById("accountNo").value = data.accountNo || "";
       document.getElementById("ifsc").value = data.ifsc || "";
     }
-  } catch(e) { console.error("Customer search error:", e); }
+  }).searchCustomer(mobile);
 }
 
 async function fetchSalesRepName(salesId, targetDisplayId, targetInputId) {
   if (!salesId) return;
-  try {
-    let res = await fetch(`${WEBAPP}?api=1&salesId=1&id=${encodeURIComponent(salesId)}`);
-    let data = await res.json();
+  google.script.run.withSuccessHandler(data => {
     let displayEl = document.getElementById(targetDisplayId);
     let inputEl = document.getElementById(targetInputId);
-
     if (data.status) {
       if (inputEl) inputEl.value = data.name;
       if (displayEl) displayEl.innerText = " " + data.name;
@@ -728,13 +752,12 @@ async function fetchSalesRepName(salesId, targetDisplayId, targetInputId) {
       if (inputEl) inputEl.value = "ID Not Found";
       if (displayEl) displayEl.innerText = " (ID Not Found)";
     }
-  } catch(e) { console.error("Sales Rep fetch error:", e); }
+  }).getSalesRep(salesId);
 }
 
 async function fetchProducts() {
-  try {
-    let res = await fetch(`${WEBAPP}?api=1&products=1`);
-    productList = await res.json();
+  google.script.run.withSuccessHandler(data => {
+    productList = data || [];
     let masterList = document.getElementById("masterProductList");
     if (masterList) {
       masterList.innerHTML = "";
@@ -744,7 +767,7 @@ async function fetchProducts() {
         masterList.appendChild(option);
       });
     }
-  } catch(e) { console.error("Error fetching product master:", e); }
+  }).getProducts();
 }
 
 function handleProductSearch(input) { onProductSelect(input); }
@@ -784,6 +807,7 @@ function convertNumberToWords(amount) {
   let words = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", 
                "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
   let tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+  
   let num = Math.floor(amount);
   if (num === 0) return "Zero Rupees Only";
   
@@ -809,7 +833,11 @@ function calculateGSTRow(element) {
   let isTelangana = state.trim().toLowerCase() === "telangana" || state.trim() === "";
 
   let cgstP = 0, sgstP = 0, igstP = 0;
-  if (isTelangana) { cgstP = gstP / 2; sgstP = gstP / 2; } else { igstP = gstP; }
+  if (isTelangana) {
+    cgstP = gstP / 2; sgstP = gstP / 2;
+  } else {
+    igstP = gstP;
+  }
 
   if (row.querySelector(".cgstp")) row.querySelector(".cgstp").value = cgstP;
   if (row.querySelector(".sgstp")) row.querySelector(".sgstp").value = sgstP;
@@ -961,9 +989,7 @@ async function requestOTP() {
   if (!username) { alert("Please enter username."); return; }
 
   currentOTPUsername = username;
-  try {
-    const response = await fetch(`${WEBAPP}?api=1&sendOTP=1&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
-    const result = await response.json();
+  google.script.run.withSuccessHandler(result => {
     if (result.status) {
       alert(result.message || "OTP sent successfully!");
       document.getElementById("stepCredentials").style.display = "none";
@@ -971,22 +997,20 @@ async function requestOTP() {
     } else {
       alert(result.message || "Invalid credentials.");
     }
-  } catch (error) { alert("Server error requesting OTP."); }
+  }).sendLoginOTP(username, password);
 }
 
 async function verifyOTPAndLogin() {
   let otp = document.getElementById("otpInput").value.trim();
   if (!otp) { alert("Please enter the OTP."); return; }
 
-  try {
-    const res = await fetch(`${WEBAPP}?api=1&verifyOTP=1&username=${encodeURIComponent(currentOTPUsername)}&otp=${encodeURIComponent(otp)}`);
-    const data = await res.json();
+  google.script.run.withSuccessHandler(data => {
     if (data.status) {
       localStorage.setItem("user", JSON.stringify(data.user || { name: currentOTPUsername, username: currentOTPUsername }));
       sessionStorage.setItem("active_session", "true");
       showApp();
     } else { alert(data.message || "Invalid OTP!"); }
-  } catch (err) { alert("Error verifying OTP."); }
+  }).verifyLoginOTP(currentOTPUsername, otp);
 }
 
 function showApp() {
@@ -1031,11 +1055,8 @@ function showRenewal() { hideAll(); hideCards(); document.getElementById("renewa
 function showWithoutGST() { hideAll(); hideCards(); document.getElementById("withoutGSTPage").style.display="block"; document.getElementById("withoutGSTCards").style.display="flex"; setTitle("Without GST Invoice"); loadDashboardMetrics("withoutGST"); }
 
 async function loadDashboardMetrics(moduleType) {
-  try {
-    let res = await fetch(WEBAPP + "?api=1&action=dashboard");
-    let data = await res.json();
+  google.script.run.withSuccessHandler(data => {
     if (!data) return;
-
     if (moduleType === "gst") {
       document.getElementById("gstBills").innerText = data.gstBills || 0;
       document.getElementById("gstAmount").innerText = "₹" + (data.gstAmount || 0);
@@ -1052,7 +1073,7 @@ async function loadDashboardMetrics(moduleType) {
       document.getElementById("withoutGSTBillCount").innerText = data.withoutGSTBills || 0;
       document.getElementById("withoutGSTAmount").innerText = "₹" + (data.withoutGSTAmount || 0);
     }
-  } catch(e) { console.error("Error loading metrics:", e); }
+  }).getDashboard();
 }
 
 function syncGSTToVoucher() {
@@ -1071,8 +1092,6 @@ function syncGSTToVoucher() {
   document.getElementById("voucherBranch").value = document.getElementById("branch").value;
   document.getElementById("voucherAccountNo").value = document.getElementById("accountNo").value;
   document.getElementById("voucherIFSC").value = document.getElementById("ifsc").value;
-  document.getElementById("joiningDate").value = document.getElementById("gstDate").value;
-  setRedeemDate();
   alert("GST Data Synced to Voucher Form!");
 }
 
@@ -1080,7 +1099,6 @@ function syncGSTToRepurchase() {
   document.getElementById("name").value = document.getElementById("c_name").value;
   document.getElementById("address").value = document.getElementById("village").value + ", " + document.getElementById("district").value;
   document.getElementById("repurchasePhone").value = document.getElementById("phone").value;
-  document.getElementById("date").value = document.getElementById("gstDate").value;
   alert("GST Data Synced to Repurchase Form!");
 }
 
@@ -1099,8 +1117,6 @@ function syncGSTToRenewal() {
   document.getElementById("renewalBranch").value = document.getElementById("branch").value;
   document.getElementById("renewalAccountNo").value = document.getElementById("accountNo").value;
   document.getElementById("renewalIfsc").value = document.getElementById("ifsc").value;
-  document.getElementById("renewalJoiningDate").value = document.getElementById("gstDate").value;
-  setRenewalRedeemDate();
   alert("GST Data Synced to Renewal Form!");
 }
 
@@ -1147,11 +1163,16 @@ function addRow() {
   tbody.appendChild(tr);
 }
 
-async function saveData(payload) {
-  try {
-    let res = await fetch(WEBAPP, { method: "POST", body: JSON.stringify(payload) });
-    return await res.json();
-  } catch(e) { return { status: false, message: e.toString() }; }
+function clearPageFields(pageId) {
+  if (confirm("Do you want to clear the form fields?")) {
+    const pageContainer = document.getElementById(pageId);
+    if (pageContainer) {
+      pageContainer.querySelectorAll("input, textarea").forEach(el => {
+        if (el.type === "checkbox") el.checked = false;
+        else if (!el.readOnly || el.id.includes("Invoice") || el.id.includes("Voucher")) el.value = "";
+      });
+    }
+  }
 }
 
 async function generateGST() {
@@ -1167,7 +1188,14 @@ async function generateGST() {
         qty: tr.querySelector(".qty").value,
         rate: tr.querySelector(".rate").value,
         gross: tr.querySelector(".gross").value,
-        gst: tr.querySelector(".gst").value
+        gst: tr.querySelector(".gst").value,
+        cgstP: tr.querySelector(".cgstp").value,
+        cgst: tr.querySelector(".cgst").value,
+        sgstP: tr.querySelector(".sgstp").value,
+        sgst: tr.querySelector(".sgst").value,
+        igstP: tr.querySelector(".igstp").value,
+        igst: tr.querySelector(".igst").value,
+        taxable: tr.querySelector(".taxable").value
       });
     }
   });
@@ -1194,23 +1222,30 @@ async function generateGST() {
     gstin: document.getElementById("gstin").value,
     words: document.getElementById("gstWords").value,
     basicAmount: document.getElementById("basicAmt").value,
+    sgstAmt: document.getElementById("sgstAmt").value,
+    cgstAmt: document.getElementById("cgstAmt").value,
+    igstAmt: document.getElementById("igstAmt").value,
+    totalGST: document.getElementById("totalGST").value,
     finalTotal: document.getElementById("finalTotal").value,
     totalQty: document.getElementById("totalQty").value,
-    cash: document.getElementById("cash").checked,
-    cheque: document.getElementById("cheque").checked,
-    upi: document.getElementById("upi").checked,
-    netbanking: document.getElementById("netbanking").checked,
-    card: document.getElementById("card").checked,
-    hypothecation: document.getElementById("hypothecation").checked,
+    payCash: document.getElementById("cash").checked,
+    payCheque: document.getElementById("cheque").checked,
+    payUPI: document.getElementById("upi").checked,
+    payNet: document.getElementById("netbanking").checked,
+    payCard: document.getElementById("card").checked,
+    payHypo: document.getElementById("hypothecation").checked,
     createdBy: user.username || "System",
     items: items
   };
-  let result = await saveData(payload);
-  if(result.status) {
-    alert("GST Invoice Generated & Saved Successfully!");
-    if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
-    if(result.nextInvoiceNo) document.getElementById("gstInvoiceNo").value = result.nextInvoiceNo;
-  } else { alert("Error saving GST Invoice: " + result.message); }
+
+  google.script.run.withSuccessHandler(result => {
+    if(result.status) {
+      alert("GST Invoice Generated & Saved Successfully!");
+      if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
+      if(result.nextInvoiceNo) document.getElementById("gstInvoiceNo").value = result.nextInvoiceNo;
+      clearPageFields("gstPage");
+    } else { alert("Error saving GST Invoice: " + result.message); }
+  }).saveGSTInvoice(payload);
 }
 
 async function generate() {
@@ -1231,12 +1266,15 @@ async function generate() {
     items: items, total: document.getElementById("total").value, words: document.getElementById("words").value,
     createdBy: user.username || "System"
   };
-  let result = await saveData(payload);
-  if(result.status) {
-    alert("Repurchase Bill Generated & Saved Successfully!");
-    if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
-    if(result.nextInvoiceNo) document.getElementById("invoiceNo").value = result.nextInvoiceNo;
-  } else { alert("Error saving Repurchase Bill: " + result.message); }
+
+  google.script.run.withSuccessHandler(result => {
+    if(result.status) {
+      alert("Repurchase Bill Generated & Saved Successfully!");
+      if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
+      if(result.nextInvoiceNo) document.getElementById("invoiceNo").value = result.nextInvoiceNo;
+      clearPageFields("billingPage");
+    } else { alert("Error saving Repurchase Bill: " + result.message); }
+  }).saveRepurchase(payload);
 }
 
 async function generateVoucher() {
@@ -1247,6 +1285,7 @@ async function generateVoucher() {
       if (product) {
         gstItems.push({
           product: product,
+          productModel: tr.querySelector(".pmodel").value,
           qty: tr.querySelector(".qty").value,
           rate: tr.querySelector(".rate").value,
           gross: tr.querySelector(".gross").value
@@ -1277,54 +1316,65 @@ async function generateVoucher() {
     ifsc: document.getElementById("voucherIFSC").value,
     salesRepId: document.getElementById("salesRepId").value,
     salesRepName: document.getElementById("salesRepNameInput").value,
-    rewardPoints: document.getElementById("rewardPoints").value,
     monthlyRedeem: document.getElementById("monthlyRedeem").value,
     monthlyCoupon: document.getElementById("monthlywithCoupon").value,
     totalCoupon: document.getElementById("totalCoupon").value,
+    remarks: document.getElementById("voucherRemarks").value,
     isSyncedWithGST: isVoucherSyncedFromGST,
-    gstInvoiceNo: document.getElementById("gstInvoiceNo").value,
-    gstInvoiceDate: document.getElementById("gstDate").value,
-    gstInvoiceAmount: document.getElementById("finalTotal").value,
-    gstWords: document.getElementById("gstWords").value,
-    gstTotalQty: document.getElementById("totalQty").value,
     gstItems: gstItems
   };
 
-  let result = await saveData(payload);
-  if(result.status) {
-    alert("Voucher Generated & Saved Successfully!");
-    if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
-    if(result.nextInvoiceNo) document.getElementById("voucherNo").value = result.nextInvoiceNo;
-    isVoucherSyncedFromGST = false;
-  } else { alert("Error saving Voucher: " + result.message); }
+  google.script.run.withSuccessHandler(result => {
+    if(result.status) {
+      alert("Voucher Generated & Saved Successfully!");
+      if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
+      if(result.nextInvoiceNo) document.getElementById("voucherNo").value = result.nextInvoiceNo;
+      isVoucherSyncedFromGST = false;
+      clearPageFields("voucherPage");
+    } else { alert("Error saving Voucher: " + result.message); }
+  }).saveVoucher(payload);
 }
 
 async function generateRenewalVoucher() {
   let user = JSON.parse(localStorage.getItem("user")) || {};
   let payload = {
-    type: "renewal", renewalNo: document.getElementById("renewalVoucherNo").value,
-    joiningDate: document.getElementById("renewalJoiningDate").value, redeemDate: document.getElementById("renewalRedeemDate").value,
+    type: "renewal", 
+    renewalNo: document.getElementById("renewalVoucherNo").value,
+    joiningDate: document.getElementById("renewalJoiningDate").value, 
+    redeemDate: document.getElementById("renewalRedeemDate").value,
+    renewalType: document.getElementById("renewalTypeSelect").value,
     kits: document.getElementById("renewalKits").value,
-    customerName: document.getElementById("renewalCustomerName").value, relation: document.getElementById("renewalRelation").value,
-    mobile: document.getElementById("renewalMobile").value, village: document.getElementById("renewalVillage").value,
-    district: document.getElementById("renewalDistrict").value, state: document.getElementById("renewalState").value,
-    pincode: document.getElementById("renewalPincode").value, email: document.getElementById("renewalEmail").value,
-    aadhaar: document.getElementById("renewalAadhaar").value, pan: document.getElementById("renewalPan").value,
-    bankName: document.getElementById("renewalBankName").value, branch: document.getElementById("renewalBranch").value,
-    accountNo: document.getElementById("renewalAccountNo").value, ifsc: document.getElementById("renewalIfsc").value,
+    customerName: document.getElementById("renewalCustomerName").value, 
+    relation: document.getElementById("renewalRelation").value,
+    mobile: document.getElementById("renewalMobile").value, 
+    village: document.getElementById("renewalVillage").value,
+    district: document.getElementById("renewalDistrict").value, 
+    state: document.getElementById("renewalState").value,
+    pincode: document.getElementById("renewalPincode").value, 
+    email: document.getElementById("renewalEmail").value,
+    aadhaar: document.getElementById("renewalAadhaar").value, 
+    pan: document.getElementById("renewalPan").value,
+    bankName: document.getElementById("renewalBankName").value, 
+    branch: document.getElementById("renewalBranch").value,
+    accountNo: document.getElementById("renewalAccountNo").value, 
+    ifsc: document.getElementById("renewalIfsc").value,
     salesRepId: document.getElementById("renewalSalesRepId").value,
     salesRepName: document.getElementById("renewalSalesRepNameInput").value,
     rewardPoints: document.getElementById("renewalRewardPoints").value,
     monthlyCoupon: document.getElementById("renewalMonthlywithCoupon").value,
     totalCoupon: document.getElementById("renewalTotalCoupon").value,
+    remarks: document.getElementById("renewalRemarks").value,
     createdBy: user.username || "System"
   };
-  let result = await saveData(payload);
-  if(result.status) {
-    alert("Renewal Voucher Generated & Saved Successfully!");
-    if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
-    if(result.nextInvoiceNo) document.getElementById("renewalVoucherNo").value = result.nextInvoiceNo;
-  } else { alert("Error saving Renewal Voucher: " + result.message); }
+
+  google.script.run.withSuccessHandler(result => {
+    if(result.status) {
+      alert("Renewal Voucher Generated & Saved Successfully!");
+      if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
+      if(result.nextInvoiceNo) document.getElementById("renewalVoucherNo").value = result.nextInvoiceNo;
+      clearPageFields("renewalPage");
+    } else { alert("Error saving Renewal Voucher: " + result.message); }
+  }).saveRenewal(payload);
 }
 
 async function generateWithoutGSTInvoice() {
@@ -1354,28 +1404,23 @@ async function generateWithoutGSTInvoice() {
     basicAmount: document.getElementById("withoutBasicAmount").value,
     totalAmount: document.getElementById("withoutTotalAmount").value,
     words: document.getElementById("withoutAmountWords").value,
+    payCash: document.getElementById("w_cash").checked,
+    payCheque: document.getElementById("w_cheque").checked,
+    payUPI: document.getElementById("w_upi").checked,
+    payNet: document.getElementById("w_netbanking").checked,
+    payCard: document.getElementById("w_card").checked,
+    payNEFT: document.getElementById("w_neft").checked,
     items: items
   };
-  let result = await saveData(payload);
-  if(result.status) {
-    alert("Without GST Invoice Generated & Saved Successfully!");
-    if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
-    if(result.nextInvoiceNo) document.getElementById("withoutGSTInvoiceNo").value = result.nextInvoiceNo;
-  } else { alert("Error saving Without GST Invoice: " + result.message); }
-}
 
-function setRedeemDate() {
-  let jDate = document.getElementById("joiningDate").value;
-  if(jDate) {
-    document.getElementById("redeemDate").value = calculateRedeemReleaseDate(jDate);
-  }
-}
-
-function setRenewalRedeemDate() {
-  let jDate = document.getElementById("renewalJoiningDate").value;
-  if(jDate) {
-    document.getElementById("renewalRedeemDate").value = calculateRedeemReleaseDate(jDate);
-  }
+  google.script.run.withSuccessHandler(result => {
+    if(result.status) {
+      alert("Without GST Invoice Generated & Saved Successfully!");
+      if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
+      if(result.nextInvoiceNo) document.getElementById("withoutGSTInvoiceNo").value = result.nextInvoiceNo;
+      clearPageFields("withoutGSTPage");
+    } else { alert("Error saving Without GST Invoice: " + result.message); }
+  }).saveWithoutGST(payload);
 }
 
 function handleManualInvoice(type, manualVal) {
@@ -1434,12 +1479,14 @@ async function changePassword() {
     oldPassword: oldPassword, newPassword: newPassword
   };
 
-  let result = await saveData(payload);
-  if (result.status) {
-    alert("Password updated successfully!");
-    closePasswordPopup();
-  } else { alert("Failed to update password."); }
+  google.script.run.withSuccessHandler(result => {
+    if (result.status) {
+      alert("Password updated successfully!");
+      closePasswordPopup();
+    } else { alert("Failed to update password."); }
+  }).changePassword(payload);
 }
+ 
 </script>
 
 </body>
