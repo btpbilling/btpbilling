@@ -187,11 +187,9 @@ input, select, textarea {
   </style>
 </head>
 
- 
-<!-- =================================================================================
-     PART 3: COMPLETE FRONTEND STRUCTURE (Index.html)
-     Contains full interactive template fields with drop-downs and dynamic inputs.
-     ================================================================================= -->
+<!-- ================================================================================= -->
+<!-- PART 3: HTML LAYOUT STRUCTURE (Index.html) -->
+<!-- ================================================================================= -->
  
 <body>
 
@@ -320,7 +318,7 @@ input, select, textarea {
       <table style="width:100%; margin-bottom:15px;">
         <tr>
           <td>Consignee Name</td><td colspan="3"><input id="c_name" style="width:100%;"></td>
-          <td>Invoice No</td><td><input id="gstInvoiceNo" onblur="handleManualInvoice('gst', this.value)"></td>
+          <td>Invoice No</td><td><input id="gstInvoiceNo"></td>
         </tr>
         <tr>
           <td>Relation (W/O, S/O, D/O, C/O)</td><td colspan="3"><input id="relation" style="width:100%;"></td>
@@ -411,7 +409,7 @@ input, select, textarea {
       <h2>BEULAH TRADERS PRIVATE LIMITED<br><span style="font-size:16px; color:#666;">Repurchase Billing System</span></h2>
       <div style="display:flex;gap:15px;margin-bottom:15px;">
         <div><label>Date</label><br><input id="date" placeholder="DD-MMM-YYYY"></div>
-        <div><label>Invoice No</label><br><input id="invoiceNo" onblur="handleManualInvoice('repurchase', this.value)"></div>
+        <div><label>Invoice No</label><br><input id="invoiceNo"></div>
       </div>
       <div style="display:flex;gap:15px;margin-bottom:15px;">
         <input id="name" placeholder="Customer Name" style="flex:1;">
@@ -444,7 +442,7 @@ input, select, textarea {
     <div id="voucherPage" class="card" style="display:none;">
       <h2>BEULAH TRADERS PRIVATE LIMITED<br><span style="font-size:16px; color:#666;">Coupon Points Voucher</span></h2>
       <div class="grid2">
-        <div><label>VOUCHER.NO.</label><input id="voucherNo" style="width:100%;" onblur="handleManualInvoice('voucher', this.value)"></div>
+        <div><label>VOUCHER.NO.</label><input id="voucherNo" style="width:100%;"></div>
         <div><label>Joining Date</label><input id="joiningDate" style="width:100%;" placeholder="DD-MMM-YYYY" onchange="setRedeemDate()"></div>
         <div><label>Redeem Points Release Date</label><input id="redeemDate" style="width:100%;" placeholder="DD-MMM-YYYY" readonly></div>
         <div><label>Kit Coupon Reward Points (No. of kits)</label><input id="kits" type="number" style="width:100%;" oninput="calculateVoucher()"></div>
@@ -496,7 +494,7 @@ input, select, textarea {
     <div id="renewalPage" class="card" style="display:none;">
       <h2>Coupon Points Renewal</h2>
       <div class="grid2">
-        <div><label>VOUCHER.NO.</label><input id="renewalVoucherNo" style="width:100%;" onblur="handleManualInvoice('renewal', this.value)"></div>
+        <div><label>VOUCHER.NO.</label><input id="renewalVoucherNo" style="width:100%;"></div>
         <div><label>Joining Date</label><input id="renewalJoiningDate" style="width:100%;" placeholder="DD-MMM-YYYY" onchange="setRenewalRedeemDate()"></div>
         <div><label>Redeem Points Release Date</label><input id="renewalRedeemDate" style="width:100%;" placeholder="DD-MMM-YYYY" readonly></div>
         <div><label>Renewal Kits Count</label><input id="renewalKits" type="number" style="width:100%;" oninput="calculateRenewal()"></div>
@@ -547,7 +545,7 @@ input, select, textarea {
     <div id="withoutGSTPage" class="card" style="display:none;">
       <h2>BEULAH TRADERS PRIVATE LIMITED<br><span style="font-size:16px; color:#666;">WITHOUT GST INVOICE</span></h2>
       <div class="grid2">
-        <div><label>Invoice No.</label><input id="withoutGSTInvoiceNo" style="width:100%;" onblur="handleManualInvoice('withoutGST', this.value)"></div>
+        <div><label>Invoice No.</label><input id="withoutGSTInvoiceNo" style="width:100%;"></div>
         <div><label>Date</label><input id="withoutDate" style="width:100%;" placeholder="DD-MMM-YYYY"></div>
         <div><label>Consignee Name</label><input id="withoutCustomerName" style="width:100%;"></div>
         <div><label>Relation</label><input id="withoutRelation" style="width:100%;"></div>
@@ -625,22 +623,19 @@ input, select, textarea {
 
 <script src="script.js"></script>
  
+ 
 
 <script> 
-// BTP Billing System - Main Client-Side Logic (script.js)
+ 
 
 // =================================================================================
-// PART 4: COMPLETE CLIENT-SIDE SCRIPT LOGIC (script.js)
-// Solves 302/CORS issues via fetch text/plain mode, calculates totals/words, 
-// updates Chart.js graphs, renders exact templates & triggers post-generate clear form prompt.
+// PART 2: COMPLETE CLIENT-SIDE SCRIPT LOGIC (script.js)
 // =================================================================================
 
 const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
 let productList = [];
 let isVoucherSyncedFromGST = false;
-
-// Global Chart Instances
 let chartInstances = {};
 
 function getFormattedDate(d = new Date()) {
@@ -1227,7 +1222,6 @@ function addRow() {
   tbody.appendChild(tr);
 }
 
-// POST ROUTINE FIXING CORS/302 VIA text/plain POST MODE
 async function saveData(payload) {
   try {
     let res = await fetch(WEBAPP, {
