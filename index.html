@@ -13,7 +13,12 @@
   <meta charset="UTF-8">
 
   <style>
-/* GLOBAL STYLES */
+/* =================================================================================
+   PART 2: COMPLETE STYLING SCENARIO (style.css / <style>)
+   Contains pixel-perfect right alignment, floating profile picture, 
+   CSS glassmorphism, responsive grid layouts, and printable media styles.
+   ================================================================================= */
+
 body { 
   margin: 0; 
   padding: 0; 
@@ -21,7 +26,7 @@ body {
   background: #f4f7fb; 
 }
 
-/* PROFILE STYLING - UNCROPPED FIT */
+/* PROFILE STYLING - RIGHT ALIGNED & FLOATING */
 .profile {
   width: 145px; 
   height: 145px; 
@@ -35,29 +40,24 @@ body {
   animation: profileFloat 4s ease-in-out infinite;
   display: block;
 }
-
 @keyframes profileFloat {
   0% { transform: translateY(0px); } 
   50% { transform: translateY(-8px); } 
   100% { transform: translateY(0px); }
 }
-
 .profile:hover { transform: scale(1.05); }
 
 /* LOGIN PAGE STRUCTURE */
 .login { display: flex; width: 100%; height: 100vh; overflow: hidden; position: relative; background: #fff; }
-
 .left {
   width: 50%; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden;
   background: linear-gradient(135deg, #fff7f8 0%, #ffeef1 35%, #fff1eb 100%);
 }
-
 .left::before {
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(to bottom, rgba(15, 2, 102, 0.85), rgba(106,90,205,0.5), rgba(106,90,205,0.85));
   z-index: 1;
 }
-
 .left-content {
   position: relative; z-index: 5; width: 420px; padding: 35px 30px; border-radius: 32px;
   background: rgba(255,255,255,0.32); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -65,7 +65,6 @@ body {
   box-shadow: 0 15px 40px rgba(255,182,193,0.18);
   text-align: center; color: #fff;
 }
-
 .left-content h1 { font-size: 20px; letter-spacing: 1px; margin: 5px 0; }
 .left-content h2 { margin-bottom: 10px; font-weight: 500; font-size: 20px; }
 .left-content p { margin: 4px 0; letter-spacing: 0.5px; font-size: 13px; opacity: 0.95; }
@@ -74,26 +73,21 @@ body {
   width: 50%; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;
   background: url("https://images.unsplash.com/photo-1519681393784-d120267933ba") no-repeat center center; background-size: cover;
 }
-
 .login-box {
   width: 340px; padding: 35px; border-radius: 28px; background: rgba(255,255,255,0.2);
   backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(255,255,255,0.25);
   box-shadow: 0 15px 40px rgba(0,0,0,0.25); text-align: center; color: #2f2f2f;
 }
-
 .login-logo { width: 110px; display: block; margin: 0 auto 10px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.2)); }
-
 .login-box input {
   width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 10px;
   background: rgba(255,255,255,0.85); color: #000; outline: none; font-size: 14px; box-sizing: border-box;
 }
-
 .login-box button {
   width: 100%; padding: 13px; border: none; border-radius: 30px; background: white; color: #111;
   font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px;
 }
-
 .login-box button:hover { background: #ff758c; color: #fff; }
 
 /* NAVIGATION & SIDEBAR */
@@ -102,7 +96,6 @@ body {
   background: linear-gradient(180deg, #f86370 0%, #ffe9e4 45%, #f75700 100%);
   border-right: 1px solid rgba(255,255,255,0.6); box-shadow: 8px 0 30px rgba(255,182,193,0.15); box-sizing: border-box;
 }
-
 .company-logo-box { width: 100%; margin: 0 auto 20px; padding: 15px; border-radius: 20px; background: rgba(255,255,255,0.55); text-align: center; box-sizing: border-box; }
 .company-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: contain; background: #fff; }
 
@@ -110,7 +103,6 @@ body {
   display: block; width: 100%; padding: 12px 15px; border-radius: 12px; margin: 10px 0; cursor: pointer;
   transition: 0.35s; user-select: none; font-size: 14px; letter-spacing: 0.5px; font-weight: 700; color: #444; box-sizing: border-box;
 }
-
 .menu-item.active {
   background: linear-gradient(135deg, #ff9fb2, #ffb38a); color: white; font-weight: 800;
   box-shadow: 0 8px 18px rgba(255,182,193,0.28);
@@ -121,35 +113,30 @@ body {
   margin-left: 230px; min-height: 100vh; padding: 20px 25px; position: relative; z-index: 5;
   background: linear-gradient(135deg, rgba(255,245,247,0.95), rgba(244,247,251,0.95)); box-sizing: border-box;
 }
-
 .topbar {
   display: flex; justify-content: space-between; align-items: center; background: white;
   padding: 12px 20px; border-radius: 14px; margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.06);
 }
-
 .page-heading { font-size: 24px; font-weight: 800; color: #ff4f81; text-transform: uppercase; }
-
 .workflow-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-
 .action-btn {
   padding: 6px 12px; border: none; border-radius: 6px; background: #ff4d6d; color: #fff;
   font-weight: bold; cursor: pointer; font-size: 11px; transition: 0.2s;
 }
-
 .action-btn:hover { background: #d90429; }
 
-/* DASHBOARD CARDS LAYOUT */
+/* DASHBOARD CARD FIXED LAYOUT */
 .dashboardCards {
   width: 100%; display: flex; flex-direction: row; gap: 20px; margin-bottom: 25px; align-items: stretch;
 }
-
 .small-card {
-  flex: 1; background: #ffffff; border-radius: 16px; padding: 18px 20px; height: 120px;
+  flex: 1; background: #ffffff; border-radius: 16px; padding: 18px 20px; height: 180px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06); box-sizing: border-box; display: flex;
   flex-direction: column; justify-content: center; align-items: flex-start; position: relative; overflow: hidden;
 }
-
 .small-card h3 { margin: 0 0 8px 0; font-size: 15px; color: #555; font-weight: 600; }
+.chart-card { flex: 1.2; align-items: center; }
+.chart-container { position: relative; width: 100%; height: 120px; }
 
 /* FORMS & TABLES */
 .card {
@@ -157,26 +144,22 @@ body {
   border: 1px solid rgba(255,255,255,0.4); padding: 25px; border-radius: 20px;
   box-shadow: 0 10px 35px rgba(0,0,0,0.06); margin-top: 10px;
 }
-
 table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 10px; overflow: hidden; }
 th { background: #ff758c; color: #ffffff; padding: 10px; font-size: 13px; }
 td { padding: 8px; border-bottom: 1px solid #eee; text-align: center; }
-
 button {
   padding: 10px 15px; border: none; border-radius: 8px; background: #ff758c; color: #fff;
   cursor: pointer; transition: 0.3s; font-weight: 600;
 }
-
 button:hover { background: #ff4d6d; }
-
 input, select, textarea {
   padding: 9px; margin: 4px 0; border: 1px solid #ccc; border-radius: 8px; outline: none;
   background: #fff; color: #000; box-sizing: border-box; font-size: 13px;
 }
-
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-/* PROFILE DROPDOWN & POPUPS */
+/* PROFILE DROPDOWN & POPUP - STRICT RIGHT ALIGNMENT */
+.user { display: flex; align-items: center; justify-content: flex-end; }
 .profile-box { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid #ff758c; background:#fff; }
 .profile-box img { width: 100%; height: 100%; object-fit: contain; }
 
@@ -185,22 +168,34 @@ input, select, textarea {
   box-shadow: 0 15px 40px rgba(0,0,0,0.15); overflow: hidden; opacity: 0; visibility: hidden;
   transform: translateY(-10px); transition: 0.35s; z-index: 9999;
 }
-
 .dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
-
 .dropdown-top { display: flex; align-items: center; gap: 12px; padding: 15px; background: linear-gradient(45deg,#ff758c,#ff7eb3); color: #fff; }
-
-.drop-item { padding: 12px 18px; cursor: pointer; transition: 0.3s; font-size: 14px; color: #333; }
+.drop-item { padding: 12px 18px; cursor: pointer; transition: 0.3s; font-size: 14px; color: #333; text-align: left; }
 .drop-item:hover { background: #fff1f3; color: #ff4d6d; }
 
 .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; justify-content: center; align-items: center; z-index: 99999; }
 .popup-box { width: 380px; background: white; border-radius: 20px; padding: 25px; position: relative; }
 .close-btn { position: absolute; right: 18px; top: 15px; font-size: 24px; cursor: pointer; color: #666; }
+
+/* PRINT FORMAT MEDIA DIRECTIVE */
+@media print {
+  .sidebar, .topbar, .dashboardCards, button, .workflow-actions { display: none !important; }
+  .main { margin-left: 0 !important; padding: 0 !important; background: white !important; }
+  .card { border: none !important; box-shadow: none !important; backdrop-filter: none !important; }
+  input, select { border: none !important; background: transparent !important; }
+}
   </style>
 </head>
 
+ 
+<!-- =================================================================================
+     PART 3: COMPLETE FRONTEND STRUCTURE (Index.html)
+     Contains full interactive template fields with drop-downs and dynamic inputs.
+     ================================================================================= -->
+ 
 <body>
 
+<!-- GLOBAL DATALIST FOR PRODUCTS -->
 <datalist id="masterProductList"></datalist>
 
 <!-- LOGIN PAGE -->
@@ -231,7 +226,7 @@ input, select, textarea {
       </div>
 
       <div id="stepOTP" style="display:none;">
-        <p style="font-size:12px; margin-bottom:5px;">Enter OTP sent to email:</p>
+        <p style="font-size:12px; margin-bottom:5px;">Enter OTP sent to email (Valid for 10 mins):</p>
         <input id="otpInput" placeholder="Enter 6-digit OTP"><br>
         <button onclick="verifyOTPAndLogin()">Verify & Login</button>
         <button onclick="requestOTP()" style="background:#6c757d; margin-top:5px;">Resend OTP</button>
@@ -240,7 +235,7 @@ input, select, textarea {
   </div>
 </div>
 
-<!-- MAIN APP PAGE -->
+<!-- MAIN APP INTERFACE -->
 <div id="app" style="display:none;">
 
   <div class="sidebar">
@@ -288,42 +283,47 @@ input, select, textarea {
       </div>
     </div>
 
-    <!-- METRIC CARDS -->
+    <!-- CARDS -->
     <div id="invoiceCards" class="dashboardCards" style="display:none;">
       <div class="small-card"><h3>GST Bills Today</h3><p id="gstBills" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">0</p></div>
       <div class="small-card"><h3>GST Amount</h3><p id="gstAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
+      <div class="small-card chart-card"><h3>GST Graph</h3><div class="chart-container"><canvas id="gstChart"></canvas></div></div>
     </div>
 
     <div id="repurchaseCards" class="dashboardCards" style="display:none;">
       <div class="small-card"><h3>Repurchase Bills</h3><p id="todayBills" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">0</p></div>
       <div class="small-card"><h3>Amount</h3><p id="todayAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
+      <div class="small-card chart-card"><h3>Graph</h3><div class="chart-container"><canvas id="salesChart"></canvas></div></div>
     </div>
 
     <div id="voucherCards" class="dashboardCards" style="display:none;">
       <div class="small-card"><h3>Vouchers</h3><p id="voucherCount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">0</p></div>
       <div class="small-card"><h3>Amount</h3><p id="voucherAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
+      <div class="small-card chart-card"><h3>Graph</h3><div class="chart-container"><canvas id="voucherChart"></canvas></div></div>
     </div>
 
     <div id="renewalCards" class="dashboardCards" style="display:none;">
       <div class="small-card"><h3>Renewals Today</h3><p id="renewalCount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">0</p></div>
       <div class="small-card"><h3>Amount</h3><p id="renewalAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
+      <div class="small-card chart-card"><h3>Graph</h3><div class="chart-container"><canvas id="renewalChart"></canvas></div></div>
     </div>
 
     <div id="withoutGSTCards" class="dashboardCards" style="display:none;">
       <div class="small-card"><h3>Without GST Bills</h3><p id="withoutGSTBillCount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">0</p></div>
       <div class="small-card"><h3>Amount</h3><p id="withoutGSTAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
+      <div class="small-card chart-card"><h3>Graph</h3><div class="chart-container"><canvas id="withoutGSTChart"></canvas></div></div>
     </div>
 
-    <!-- GST INVOICE PAGE -->
+    <!-- GST PAGE -->
     <div id="gstPage" class="card" style="display:none;">
       <h2>BEULAH TRADERS PRIVATE LIMITED<br><span style="font-size:16px; color:#666;">Invoice with GST</span></h2>
       <table style="width:100%; margin-bottom:15px;">
         <tr>
           <td>Consignee Name</td><td colspan="3"><input id="c_name" style="width:100%;"></td>
-          <td>Invoice No</td><td><input id="gstInvoiceNo"></td>
+          <td>Invoice No</td><td><input id="gstInvoiceNo" onblur="handleManualInvoice('gst', this.value)"></td>
         </tr>
         <tr>
-          <td>Relation</td><td colspan="3"><input id="relation" style="width:100%;"></td>
+          <td>Relation (W/O, S/O, D/O, C/O)</td><td colspan="3"><input id="relation" style="width:100%;"></td>
           <td>Date</td><td><input id="gstDate" placeholder="DD-MMM-YYYY"></td>
         </tr>
         <tr>
@@ -337,7 +337,7 @@ input, select, textarea {
         <tr>
           <td>State</td><td><input id="state" value="Telangana"></td>
           <td>Pincode</td><td><input id="pincode"></td>
-          <td>GST IN (Optional)</td><td><input id="gstin" placeholder="Optional"></td>
+          <td>GST IN</td><td><input id="gstin" placeholder="GSTIN (i12)"></td>
         </tr>
         <tr>
           <td>Aadhaar No</td><td><input id="aadhaar"></td>
@@ -352,20 +352,23 @@ input, select, textarea {
       </table>
 
       <div style="margin:10px 0;">
-        <label><input type="checkbox" id="cash"> Cash</label> &nbsp;
-        <label><input type="checkbox" id="cheque"> Cheque</label> &nbsp;
-        <label><input type="checkbox" id="upi"> UPI</label> &nbsp;
-        <label><input type="checkbox" id="netbanking"> Net Banking</label> &nbsp;
-        <label><input type="checkbox" id="card"> Card</label> &nbsp;
-        <label><input type="checkbox" id="hypothecation"> Hypothecation</label>
+        <label>Payment Mode Selection: </label>
+        <select id="gstPaymentMode" style="width:200px;">
+          <option value="Cash">Cash</option>
+          <option value="UPI">UPI (Phone pe / GPay)</option>
+          <option value="Card">Credit / Debit Card</option>
+          <option value="Cheque">Cheque</option>
+          <option value="Net Banking">Net Banking</option>
+          <option value="Hypothecation">Hypothecation</option>
+        </select>
       </div>
 
       <table id="gstTable">
         <thead>
           <tr>
-            <th>SL</th><th>Product</th><th>Model No</th><th>Product Model</th><th>HSN</th>
+            <th>SL</th><th>Product Name</th><th>Model No</th><th>Product Model</th><th>HSN</th>
             <th>Qty</th><th>Rate</th><th>Gross</th><th>GST%</th><th>CGST%</th><th>CGST</th>
-            <th>SGST%</th><th>SGST</th><th>IGST%</th><th>IGST</th><th>Taxable</th>
+            <th>SGST%</th><th>SGST</th><th>IGST%</th><th>IGST</th><th>Taxable Amount (Ex.GST)</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -392,8 +395,8 @@ input, select, textarea {
         <tr><td colspan="4"></td><td>SGST</td><td><input id="sgstAmt" readonly></td></tr>
         <tr><td colspan="4"></td><td>CGST</td><td><input id="cgstAmt" readonly></td></tr>
         <tr><td colspan="4"></td><td>IGST</td><td><input id="igstAmt" readonly></td></tr>
-        <tr><td colspan="4"></td><td>Total GST</td><td><input id="totalGST" readonly></td></tr>
-        <tr><td colspan="4"></td><td><b>Final Total</b></td><td><input id="finalTotal" readonly></td></tr>
+        <tr><td colspan="4"></td><td>Total GST Amount</td><td><input id="totalGST" readonly></td></tr>
+        <tr><td colspan="4"></td><td><b>Actual Total Invoice</b></td><td><input id="finalTotal" readonly></td></tr>
       </table>
 
       <div style="text-align:center; margin-top:20px; display:flex; gap:10px; justify-content:center;">
@@ -408,7 +411,7 @@ input, select, textarea {
       <h2>BEULAH TRADERS PRIVATE LIMITED<br><span style="font-size:16px; color:#666;">Repurchase Billing System</span></h2>
       <div style="display:flex;gap:15px;margin-bottom:15px;">
         <div><label>Date</label><br><input id="date" placeholder="DD-MMM-YYYY"></div>
-        <div><label>Invoice No</label><br><input id="invoiceNo"></div>
+        <div><label>Invoice No</label><br><input id="invoiceNo" onblur="handleManualInvoice('repurchase', this.value)"></div>
       </div>
       <div style="display:flex;gap:15px;margin-bottom:15px;">
         <input id="name" placeholder="Customer Name" style="flex:1;">
@@ -441,34 +444,45 @@ input, select, textarea {
     <div id="voucherPage" class="card" style="display:none;">
       <h2>BEULAH TRADERS PRIVATE LIMITED<br><span style="font-size:16px; color:#666;">Coupon Points Voucher</span></h2>
       <div class="grid2">
-        <div><label>Voucher No</label><input id="voucherNo" style="width:100%;"></div>
+        <div><label>VOUCHER.NO.</label><input id="voucherNo" style="width:100%;" onblur="handleManualInvoice('voucher', this.value)"></div>
         <div><label>Joining Date</label><input id="joiningDate" style="width:100%;" placeholder="DD-MMM-YYYY" onchange="setRedeemDate()"></div>
-        <div><label>Redeem Release Date</label><input id="redeemDate" style="width:100%;" placeholder="DD-MMM-YYYY" readonly></div>
-        <div><label>Kits Count</label><input id="kits" type="number" style="width:100%;" oninput="calculateVoucher()"></div>
+        <div><label>Redeem Points Release Date</label><input id="redeemDate" style="width:100%;" placeholder="DD-MMM-YYYY" readonly></div>
+        <div><label>Kit Coupon Reward Points (No. of kits)</label><input id="kits" type="number" style="width:100%;" oninput="calculateVoucher()"></div>
+        <div>
+          <label>Kit Selection (Checkboxes sync)</label>
+          <select id="voucherKitType" style="width:100%;">
+            <option value="Gold Kit">Gold Kit</option>
+            <option value="Clothes Kit">Clothes Kit</option>
+            <option value="Silver Kit">Silver Kit</option>
+            <option value="Herbal Kit">Herbal Kit</option>
+            <option value="Home Needs Kit">Home Needs Kit</option>
+          </select>
+        </div>
         <div><label>Customer Name</label><input id="voucherCustomerName" style="width:100%;"></div>
         <div><label>Relation</label><input id="voucherRelation" style="width:100%;"></div>
-        <div><label>Mobile</label><input id="voucherMobile" style="width:100%;"></div>
-        <div><label>Village</label><input id="voucherVillage" style="width:100%;"></div>
+        <div><label>Mobile Number</label><input id="voucherMobile" style="width:100%;"></div>
+        <div><label>Village / Area</label><input id="voucherVillage" style="width:100%;"></div>
         <div><label>District</label><input id="voucherDistrict" style="width:100%;"></div>
         <div><label>State</label><input id="voucherState" style="width:100%;"></div>
         <div><label>Pincode</label><input id="voucherPincode" style="width:100%;"></div>
         <div><label>Email</label><input id="voucherEmail" style="width:100%;"></div>
-        <div><label>Aadhaar</label><input id="voucherAadhaar" style="width:100%;"></div>
-        <div><label>PAN</label><input id="voucherPAN" style="width:100%;"></div>
+        <div><label>Aadhaar Number</label><input id="voucherAadhaar" style="width:100%;"></div>
+        <div><label>PAN Number</label><input id="voucherPAN" style="width:100%;"></div>
         <div><label>Bank Name</label><input id="voucherBankName" style="width:100%;"></div>
-        <div><label>Branch</label><input id="voucherBranch" style="width:100%;"></div>
-        <div><label>Account No</label><input id="voucherAccountNo" style="width:100%;"></div>
-        <div><label>IFSC</label><input id="voucherIFSC" style="width:100%;"></div>
+        <div><label>Branch Name</label><input id="voucherBranch" style="width:100%;"></div>
+        <div><label>Account Number</label><input id="voucherAccountNo" style="width:100%;"></div>
+        <div><label>IFSC Code</label><input id="voucherIFSC" style="width:100%;"></div>
         <div>
-          <label>Sales Rep ID</label>
+          <label>SALES REPRESENTATIVE ID</label>
           <input id="salesRepId" style="width:100%;" onblur="fetchSalesRepName(this.value, 'salesRepNameDisplay', 'salesRepNameInput')">
-          <input id="salesRepNameInput" style="width:100%; margin-top:4px;" placeholder="Sales Rep Name" readonly>
+          <input id="salesRepNameInput" style="width:100%; margin-top:4px;" placeholder="SALES REPRESENTATIVE NAME" readonly>
           <span id="salesRepNameDisplay" style="font-size:12px; font-weight:bold; color:#ff4d6d;"></span>
         </div>
-        <div><label>Reward Points</label><input id="rewardPoints" style="width:100%;" readonly></div>
-        <div><label>Monthly Redeem</label><input id="monthlyRedeem" style="width:100%;" readonly></div>
-        <div><label>Monthly Coupon Net</label><input id="monthlywithCoupon" style="width:100%;" readonly></div>
-        <div><label>Total 12M Coupon</label><input id="totalCoupon" style="width:100%;" readonly></div>
+        <div><label>Kit Coupon Reward Points Value</label><input id="rewardPoints" style="width:100%;" readonly></div>
+        <div><label>Per Month Redeem Points</label><input id="monthlyRedeem" style="width:100%;" readonly></div>
+        <div><label>Coupon Points (Per Month With Deduction Of 2%)</label><input id="monthlywithCoupon" style="width:100%;" readonly></div>
+        <div><label>Total Coupon Points (12 Months With Deduction)</label><input id="totalCoupon" style="width:100%;" readonly></div>
+        <div style="grid-column: span 2;"><label>Remarks</label><input id="voucherRemarks" style="width:100%;" placeholder="Product ticked name"></div>
       </div>
       <br>
       <div style="display:flex; gap:10px;">
@@ -482,14 +496,24 @@ input, select, textarea {
     <div id="renewalPage" class="card" style="display:none;">
       <h2>Coupon Points Renewal</h2>
       <div class="grid2">
-        <div><label>Renewal Voucher No</label><input id="renewalVoucherNo" style="width:100%;"></div>
+        <div><label>VOUCHER.NO.</label><input id="renewalVoucherNo" style="width:100%;" onblur="handleManualInvoice('renewal', this.value)"></div>
         <div><label>Joining Date</label><input id="renewalJoiningDate" style="width:100%;" placeholder="DD-MMM-YYYY" onchange="setRenewalRedeemDate()"></div>
-        <div><label>Redeem Release Date</label><input id="renewalRedeemDate" style="width:100%;" placeholder="DD-MMM-YYYY" readonly></div>
-        <div><label>Renewal Kits</label><input id="renewalKits" type="number" style="width:100%;" oninput="calculateRenewal()"></div>
+        <div><label>Redeem Points Release Date</label><input id="renewalRedeemDate" style="width:100%;" placeholder="DD-MMM-YYYY" readonly></div>
+        <div><label>Renewal Kits Count</label><input id="renewalKits" type="number" style="width:100%;" oninput="calculateRenewal()"></div>
         <div>
-          <label>Sales Rep ID</label>
+          <label>Renewal Option Checkbox Selection</label>
+          <select id="renewalTypeSelection" style="width:100%;">
+            <option value="Renewal">Renewal</option>
+            <option value="Purchase">Purchase</option>
+            <option value="Upgrade">Upgrade</option>
+            <option value="New Joining">New Joining</option>
+            <option value="Reactivation">Reactivation</option>
+          </select>
+        </div>
+        <div>
+          <label>SALES REPRESENTATIVE ID</label>
           <input id="renewalSalesRepId" style="width:100%;" onblur="fetchSalesRepName(this.value, 'renewalSalesRepNameDisplay', 'renewalSalesRepNameInput')">
-          <input id="renewalSalesRepNameInput" style="width:100%; margin-top:4px;" placeholder="Sales Rep Name" readonly>
+          <input id="renewalSalesRepNameInput" style="width:100%; margin-top:4px;" placeholder="SALES REPRESENTATIVE NAME" readonly>
           <span id="renewalSalesRepNameDisplay" style="font-size:12px; font-weight:bold; color:#ff4d6d;"></span>
         </div>
         <div><label>Customer Name</label><input type="text" id="renewalCustomerName" style="width:100%;"></div>
@@ -506,9 +530,10 @@ input, select, textarea {
         <div><label>Branch Name</label><input id="renewalBranch" style="width:100%;"></div>
         <div><label>Account Number</label><input id="renewalAccountNo" style="width:100%;"></div>
         <div><label>IFSC Code</label><input id="renewalIfsc" style="text-transform:uppercase; width:100%;"></div>
-        <div><label>Reward Points</label><input id="renewalRewardPoints" style="width:100%;" readonly></div>
+        <div><label>Reward Points Value</label><input id="renewalRewardPoints" style="width:100%;" readonly></div>
         <div><label>Monthly Coupon Net</label><input id="renewalMonthlywithCoupon" style="width:100%;" readonly></div>
         <div><label>Total 12M Coupon</label><input id="renewalTotalCoupon" style="width:100%;" readonly></div>
+        <div style="grid-column: span 2;"><label>Remarks</label><input id="renewalRemarks" style="width:100%;" placeholder="Whatever we ticked that name"></div>
       </div>
       <br>
       <div style="display:flex; gap:10px;">
@@ -522,7 +547,7 @@ input, select, textarea {
     <div id="withoutGSTPage" class="card" style="display:none;">
       <h2>BEULAH TRADERS PRIVATE LIMITED<br><span style="font-size:16px; color:#666;">WITHOUT GST INVOICE</span></h2>
       <div class="grid2">
-        <div><label>Invoice No</label><input id="withoutGSTInvoiceNo" style="width:100%;"></div>
+        <div><label>Invoice No.</label><input id="withoutGSTInvoiceNo" style="width:100%;" onblur="handleManualInvoice('withoutGST', this.value)"></div>
         <div><label>Date</label><input id="withoutDate" style="width:100%;" placeholder="DD-MMM-YYYY"></div>
         <div><label>Consignee Name</label><input id="withoutCustomerName" style="width:100%;"></div>
         <div><label>Relation</label><input id="withoutRelation" style="width:100%;"></div>
@@ -532,12 +557,23 @@ input, select, textarea {
         <div><label>Pincode</label><input id="withoutPincode" style="width:100%;"></div>
         <div><label>Mobile Number</label><input id="withoutMobile" style="width:100%;"></div>
         <div><label>Email</label><input id="withoutEmail" style="width:100%;"></div>
+        <div>
+          <label>Payment Mode Selection</label>
+          <select id="withoutGSTPaymentMode" style="width:100%;">
+            <option value="Cash">Cash</option>
+            <option value="UPI">UPI / PhonePe / GPay</option>
+            <option value="Card">Credit / Debit Card</option>
+            <option value="Cheque">Cheque</option>
+            <option value="Net Banking">Net Banking</option>
+            <option value="NEFT/RTGS">NEFT / RTGS</option>
+          </select>
+        </div>
       </div>
 
       <table id="withoutGSTTable" style="margin-top:15px;">
         <thead>
           <tr>
-            <th>SL</th><th>Product</th><th>Model No</th><th>Product Model</th><th>HSN</th><th>Qty</th><th>Rate</th><th>Amount</th>
+            <th>SL. NO.</th><th>PRODUCT NAME</th><th>MODEL NUMBER</th><th>PRODUCT MODEL</th><th>HSN</th><th>QTY</th><th>RATE</th><th>AMOUNT</th>
           </tr>
         </thead>
         <tbody id="withoutGSTBody"></tbody>
@@ -547,7 +583,7 @@ input, select, textarea {
       <div class="grid2">
         <div><label>Basic Amount</label><input id="withoutBasicAmount" style="width:100%;" readonly></div>
         <div><label>Total Amount</label><input id="withoutTotalAmount" style="width:100%;" readonly></div>
-        <div style="grid-column: span 2;"><label>Amount in Words</label><input id="withoutAmountWords" style="width:100%;" readonly></div>
+        <div style="grid-column: span 2;"><label>AMOUNT IN WORDS</label><input id="withoutAmountWords" style="width:100%;" readonly></div>
       </div>
 
       <br>
@@ -588,14 +624,24 @@ input, select, textarea {
 </div>
 
 <script src="script.js"></script>
+ 
 
 <script> 
 // BTP Billing System - Main Client-Side Logic (script.js)
+
+// =================================================================================
+// PART 4: COMPLETE CLIENT-SIDE SCRIPT LOGIC (script.js)
+// Solves 302/CORS issues via fetch text/plain mode, calculates totals/words, 
+// updates Chart.js graphs, renders exact templates & triggers post-generate clear form prompt.
+// =================================================================================
 
 const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
 let productList = [];
 let isVoucherSyncedFromGST = false;
+
+// Global Chart Instances
+let chartInstances = {};
 
 function getFormattedDate(d = new Date()) {
   const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
@@ -634,18 +680,12 @@ function calculateRedeemDateLogic(joiningDateStr) {
 
 function setRedeemDate() {
   let jDate = document.getElementById("joiningDate")?.value;
-  let rDateEl = document.getElementById("redeemDate");
-  if (rDateEl && jDate) {
-    rDateEl.value = calculateRedeemDateLogic(jDate);
-  }
+  if (jDate) document.getElementById("redeemDate").value = calculateRedeemDateLogic(jDate);
 }
 
 function setRenewalRedeemDate() {
   let jDate = document.getElementById("renewalJoiningDate")?.value;
-  let rDateEl = document.getElementById("renewalRedeemDate");
-  if (rDateEl && jDate) {
-    rDateEl.value = calculateRedeemDateLogic(jDate);
-  }
+  if (jDate) document.getElementById("renewalRedeemDate").value = calculateRedeemDateLogic(jDate);
 }
 
 window.onload = function() {
@@ -703,9 +743,7 @@ async function loadNextInvoiceNumbers() {
     let resWithout = await fetch(`${WEBAPP}?api=1&nextWithoutGSTNo=1`);
     let dataWithout = await resWithout.json();
     if (dataWithout.invoiceNo) document.getElementById("withoutGSTInvoiceNo").value = dataWithout.invoiceNo;
-  } catch(e) {
-    console.error("Error loading initial invoice numbers:", e);
-  }
+  } catch(e) { console.error("Error loading initial invoice numbers:", e); }
 }
 
 async function searchAndFillCustomer(mobile) {
@@ -1047,6 +1085,31 @@ function showBilling() { hideAll(); hideCards(); document.getElementById("billin
 function showRenewal() { hideAll(); hideCards(); document.getElementById("renewalPage").style.display="block"; document.getElementById("renewalCards").style.display="flex"; setTitle("Renewal Voucher"); loadDashboardMetrics("renewal"); }
 function showWithoutGST() { hideAll(); hideCards(); document.getElementById("withoutGSTPage").style.display="block"; document.getElementById("withoutGSTCards").style.display="flex"; setTitle("Without GST Invoice"); loadDashboardMetrics("withoutGST"); }
 
+function renderChart(canvasId, label, value) {
+  let ctx = document.getElementById(canvasId)?.getContext("2d");
+  if (!ctx) return;
+  if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+
+  chartInstances[canvasId] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: [label],
+      datasets: [{
+        label: 'Today Value',
+        data: [value],
+        backgroundColor: '#ff758c',
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+}
+
 async function loadDashboardMetrics(moduleType) {
   try {
     let res = await fetch(WEBAPP + "?api=1&action=dashboard");
@@ -1056,18 +1119,23 @@ async function loadDashboardMetrics(moduleType) {
     if (moduleType === "gst") {
       document.getElementById("gstBills").innerText = data.gstBills || 0;
       document.getElementById("gstAmount").innerText = "₹" + (data.gstAmount || 0);
+      renderChart("gstChart", "GST Sales", data.gstAmount || 0);
     } else if (moduleType === "repurchase") {
       document.getElementById("todayBills").innerText = data.repurchaseBills || 0;
       document.getElementById("todayAmount").innerText = "₹" + (data.repurchaseAmount || 0);
+      renderChart("salesChart", "Repurchase", data.repurchaseAmount || 0);
     } else if (moduleType === "voucher") {
       document.getElementById("voucherCount").innerText = data.voucherCount || 0;
       document.getElementById("voucherAmount").innerText = "₹" + (data.voucherAmount || 0);
+      renderChart("voucherChart", "Voucher Points", data.voucherAmount || 0);
     } else if (moduleType === "renewal") {
       document.getElementById("renewalCount").innerText = data.renewalCount || 0;
       document.getElementById("renewalAmount").innerText = "₹" + (data.renewalAmount || 0);
+      renderChart("renewalChart", "Renewals", data.renewalAmount || 0);
     } else if (moduleType === "withoutGST") {
       document.getElementById("withoutGSTBillCount").innerText = data.withoutGSTBills || 0;
       document.getElementById("withoutGSTAmount").innerText = "₹" + (data.withoutGSTAmount || 0);
+      renderChart("withoutGSTChart", "Without GST", data.withoutGSTAmount || 0);
     }
   } catch(e) { console.error("Error loading dashboard metrics:", e); }
 }
@@ -1159,39 +1227,47 @@ function addRow() {
   tbody.appendChild(tr);
 }
 
+// POST ROUTINE FIXING CORS/302 VIA text/plain POST MODE
 async function saveData(payload) {
   try {
-    let res = await fetch(WEBAPP, { method: "POST", body: JSON.stringify(payload) });
+    let res = await fetch(WEBAPP, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
     return await res.json();
   } catch(e) { return { status: false, message: e.toString() }; }
 }
 
 function promptClearFields(formType) {
-  if (confirm("Saved successfully! Do you want to clear the fields now?")) {
-    if (formType === "gst") {
-      document.querySelectorAll("#gstPage input:not(#gstDate):not(#gstInvoiceNo)").forEach(i => i.value = "");
-      document.querySelectorAll("#gstTable tbody").forEach(tb => tb.innerHTML = "");
-      for (let i = 0; i < 3; i++) addGSTRow();
-    } else if (formType === "repurchase") {
-      document.querySelectorAll("#billingPage input:not(#date):not(#invoiceNo)").forEach(i => i.value = "");
-      document.querySelectorAll("#repurchaseBody").forEach(tb => tb.innerHTML = "");
-      for (let i = 0; i < 3; i++) addRow();
-    } else if (formType === "voucher") {
-      document.querySelectorAll("#voucherPage input:not(#joiningDate):not(#voucherNo)").forEach(i => i.value = "");
-    } else if (formType === "renewal") {
-      document.querySelectorAll("#renewalPage input:not(#renewalJoiningDate):not(#renewalVoucherNo)").forEach(i => i.value = "");
-    } else if (formType === "withoutGST") {
-      document.querySelectorAll("#withoutGSTPage input:not(#withoutDate):not(#withoutGSTInvoiceNo)").forEach(i => i.value = "");
-      document.querySelectorAll("#withoutGSTBody").forEach(tb => tb.innerHTML = "");
-      for (let i = 0; i < 3; i++) addWithoutGSTRow();
+  setTimeout(() => {
+    if (confirm("Invoice generated and saved successfully! Do you want to clear the form fields now?")) {
+      if (formType === "gst") {
+        document.querySelectorAll("#gstPage input:not(#gstDate):not(#gstInvoiceNo)").forEach(i => i.value = "");
+        document.querySelector("#gstTable tbody").innerHTML = "";
+        for (let i = 0; i < 3; i++) addGSTRow();
+      } else if (formType === "repurchase") {
+        document.querySelectorAll("#billingPage input:not(#date):not(#invoiceNo)").forEach(i => i.value = "");
+        document.querySelector("#repurchaseBody").innerHTML = "";
+        for (let i = 0; i < 3; i++) addRow();
+      } else if (formType === "voucher") {
+        document.querySelectorAll("#voucherPage input:not(#joiningDate):not(#voucherNo)").forEach(i => i.value = "");
+      } else if (formType === "renewal") {
+        document.querySelectorAll("#renewalPage input:not(#renewalJoiningDate):not(#renewalVoucherNo)").forEach(i => i.value = "");
+      } else if (formType === "withoutGST") {
+        document.querySelectorAll("#withoutGSTPage input:not(#withoutDate):not(#withoutGSTInvoiceNo)").forEach(i => i.value = "");
+        document.querySelector("#withoutGSTBody").innerHTML = "";
+        for (let i = 0; i < 3; i++) addWithoutGSTRow();
+      }
     }
-  }
+  }, 300);
 }
 
 async function generateGST() {
   let items = [];
   document.querySelectorAll("#gstTable tbody tr").forEach(tr => {
-    let product = tr.querySelector(".product-search").value;
+    let product = tr.querySelector(".product-search")?.value;
     if (product) {
       items.push({
         product: product,
@@ -1219,6 +1295,7 @@ async function generateGST() {
     pincode: document.getElementById("pincode").value,
     email: document.getElementById("email").value,
     mobile: document.getElementById("phone").value,
+    paymentMode: document.getElementById("gstPaymentMode").value,
     aadhaar: document.getElementById("aadhaar").value,
     pan: document.getElementById("pan").value,
     bankName: document.getElementById("bankName").value,
@@ -1233,9 +1310,9 @@ async function generateGST() {
     createdBy: user.username || "System",
     items: items
   };
+
   let result = await saveData(payload);
   if(result.status) {
-    alert("GST Invoice Generated & Saved Successfully!");
     if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if(result.nextInvoiceNo) document.getElementById("gstInvoiceNo").value = result.nextInvoiceNo;
     promptClearFields("gst");
@@ -1245,10 +1322,10 @@ async function generateGST() {
 async function generate() {
   let items = [];
   document.querySelectorAll("#repurchaseBody tr").forEach(tr => {
-    let metal = tr.querySelector(".metalType").value;
-    let weight = tr.querySelector(".weight").value;
-    let rate = tr.querySelector(".rate").value;
-    let amount = tr.querySelector(".amount").value;
+    let metal = tr.querySelector(".metalType")?.value;
+    let weight = tr.querySelector(".weight")?.value;
+    let rate = tr.querySelector(".rate")?.value;
+    let amount = tr.querySelector(".amount")?.value;
     if (weight) items.push({ metal, weight, rate, amount });
   });
 
@@ -1261,9 +1338,9 @@ async function generate() {
     total: document.getElementById("total").value, words: document.getElementById("words").value,
     createdBy: user.username || "System"
   };
+
   let result = await saveData(payload);
   if(result.status) {
-    alert("Repurchase Bill Generated & Saved Successfully!");
     if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if(result.nextInvoiceNo) document.getElementById("invoiceNo").value = result.nextInvoiceNo;
     promptClearFields("repurchase");
@@ -1271,12 +1348,17 @@ async function generate() {
 }
 
 async function generateVoucher() {
+  let kitType = document.getElementById("voucherKitType").value;
+  let monthlyRedeemVal = parseFloat(document.getElementById("monthlyRedeem").value) || 0;
+  let totalCouponVal = parseFloat(document.getElementById("totalCoupon").value) || 0;
+
   let payload = {
     type: "voucher",
     voucherNo: document.getElementById("voucherNo").value,
     joiningDate: document.getElementById("joiningDate").value,
     redeemDate: document.getElementById("redeemDate").value,
     kits: document.getElementById("kits").value,
+    kitType: kitType,
     customerName: document.getElementById("voucherCustomerName").value,
     relation: document.getElementById("voucherRelation").value,
     mobile: document.getElementById("voucherMobile").value,
@@ -1293,13 +1375,15 @@ async function generateVoucher() {
     ifsc: document.getElementById("voucherIFSC").value,
     salesRepId: document.getElementById("salesRepId").value,
     salesRepName: document.getElementById("salesRepNameInput").value,
-    monthlyRedeem: document.getElementById("monthlyRedeem").value,
-    totalCoupon: document.getElementById("totalCoupon").value
+    monthlyRedeem: monthlyRedeemVal,
+    monthlyWords: convertNumberToWords(monthlyRedeemVal),
+    totalCoupon: totalCouponVal,
+    totalWords: convertNumberToWords(totalCouponVal),
+    remarks: document.getElementById("voucherRemarks").value || kitType
   };
 
   let result = await saveData(payload);
   if(result.status) {
-    alert("Voucher Generated & Saved Successfully!");
     if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if(result.nextInvoiceNo) document.getElementById("voucherNo").value = result.nextInvoiceNo;
     promptClearFields("voucher");
@@ -1307,12 +1391,20 @@ async function generateVoucher() {
 }
 
 async function generateRenewalVoucher() {
+  let renewalType = document.getElementById("renewalTypeSelection").value;
+  let monthlyCouponVal = parseFloat(document.getElementById("renewalMonthlywithCoupon").value) || 0;
+  let totalCouponVal = parseFloat(document.getElementById("renewalTotalCoupon").value) || 0;
+
+  let user = JSON.parse(localStorage.getItem("user")) || {};
   let payload = {
     type: "renewal",
     renewalNo: document.getElementById("renewalVoucherNo").value,
     joiningDate: document.getElementById("renewalJoiningDate").value,
     redeemDate: document.getElementById("renewalRedeemDate").value,
     kits: document.getElementById("renewalKits").value,
+    renewalType: renewalType,
+    salesRepId: document.getElementById("renewalSalesRepId").value,
+    salesRepName: document.getElementById("renewalSalesRepNameInput").value,
     customerName: document.getElementById("renewalCustomerName").value,
     relation: document.getElementById("renewalRelation").value,
     mobile: document.getElementById("renewalMobile").value,
@@ -1327,15 +1419,16 @@ async function generateRenewalVoucher() {
     branch: document.getElementById("renewalBranch").value,
     accountNo: document.getElementById("renewalAccountNo").value,
     ifsc: document.getElementById("renewalIfsc").value,
-    salesRepId: document.getElementById("renewalSalesRepId").value,
-    salesRepName: document.getElementById("renewalSalesRepNameInput").value,
-    monthlyCoupon: document.getElementById("renewalMonthlywithCoupon").value,
-    totalCoupon: document.getElementById("renewalTotalCoupon").value
+    monthlyCoupon: monthlyCouponVal,
+    monthlyWords: convertNumberToWords(monthlyCouponVal),
+    totalCoupon: totalCouponVal,
+    totalWords: convertNumberToWords(totalCouponVal),
+    remarks: document.getElementById("renewalRemarks").value || renewalType,
+    createdBy: user.username || "System"
   };
 
   let result = await saveData(payload);
   if(result.status) {
-    alert("Renewal Voucher Generated & Saved Successfully!");
     if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if(result.nextInvoiceNo) document.getElementById("renewalVoucherNo").value = result.nextInvoiceNo;
     promptClearFields("renewal");
@@ -1349,12 +1442,12 @@ async function generateWithoutGSTInvoice() {
     if (product) {
       items.push({
         product: product,
-        modelNo: tr.querySelector(".withoutModelNo")?.value || "",
-        productModel: tr.querySelector(".withoutProductModel")?.value || "",
-        hsn: tr.querySelector(".withoutHSN")?.value || "",
-        qty: tr.querySelector(".withoutQty")?.value || 0,
-        rate: tr.querySelector(".withoutRate")?.value || 0,
-        amount: tr.querySelector(".withoutAmount")?.value || 0
+        modelNo: tr.querySelector(".withoutModelNo").value,
+        productModel: tr.querySelector(".withoutProductModel").value,
+        hsn: tr.querySelector(".withoutHSN").value,
+        qty: tr.querySelector(".withoutQty").value,
+        rate: tr.querySelector(".withoutRate").value,
+        amount: tr.querySelector(".withoutAmount").value
       });
     }
   });
@@ -1371,65 +1464,42 @@ async function generateWithoutGSTInvoice() {
     pincode: document.getElementById("withoutPincode").value,
     mobile: document.getElementById("withoutMobile").value,
     email: document.getElementById("withoutEmail").value,
+    paymentMode: document.getElementById("withoutGSTPaymentMode").value,
     totalAmount: document.getElementById("withoutTotalAmount").value,
+    words: document.getElementById("withoutAmountWords").value,
     items: items
   };
 
   let result = await saveData(payload);
   if(result.status) {
-    alert("Without GST Invoice Generated & Saved Successfully!");
     if(result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if(result.nextInvoiceNo) document.getElementById("withoutGSTInvoiceNo").value = result.nextInvoiceNo;
     promptClearFields("withoutGST");
   } else { alert("Error saving Without GST Invoice: " + result.message); }
 }
 
-function shareWhatsApp(type) {
-  let name = "", phone = "", total = "", invNo = "";
-  if (type === "GST Invoice") {
-    name = document.getElementById("c_name").value;
-    phone = document.getElementById("phone").value;
-    total = document.getElementById("finalTotal").value;
-    invNo = document.getElementById("gstInvoiceNo").value;
-  } else if (type === "Repurchase Bill") {
-    name = document.getElementById("name").value;
-    phone = document.getElementById("repurchasePhone").value;
-    total = document.getElementById("total").value;
-    invNo = document.getElementById("invoiceNo").value;
-  } else if (type === "Voucher") {
-    name = document.getElementById("voucherCustomerName").value;
-    phone = document.getElementById("voucherMobile").value;
-    total = document.getElementById("totalCoupon").value;
-    invNo = document.getElementById("voucherNo").value;
-  } else if (type === "Renewal Voucher") {
-    name = document.getElementById("renewalCustomerName").value;
-    phone = document.getElementById("renewalMobile").value;
-    total = document.getElementById("renewalTotalCoupon").value;
-    invNo = document.getElementById("renewalVoucherNo").value;
-  } else if (type === "Without GST Invoice") {
-    name = document.getElementById("withoutCustomerName").value;
-    phone = document.getElementById("withoutMobile").value;
-    total = document.getElementById("withoutTotalAmount").value;
-    invNo = document.getElementById("withoutGSTInvoiceNo").value;
-  }
+function shareWhatsApp(billType) {
+  let phone = document.getElementById("phone")?.value || document.getElementById("voucherMobile")?.value || document.getElementById("renewalMobile")?.value || document.getElementById("withoutMobile")?.value || "";
+  let name = document.getElementById("c_name")?.value || document.getElementById("voucherCustomerName")?.value || document.getElementById("renewalCustomerName")?.value || document.getElementById("withoutCustomerName")?.value || "";
+  let total = document.getElementById("finalTotal")?.value || document.getElementById("totalCoupon")?.value || document.getElementById("renewalTotalCoupon")?.value || document.getElementById("withoutTotalAmount")?.value || "";
 
-  if (!phone) { alert("Please enter mobile number."); return; }
-  let msg = `Hello ${name},\nYour ${type} (No: ${invNo}) of amount ₹${total} has been generated successfully by BEULAH TRADERS PRIVATE LIMITED. Thank you!`;
-  window.open(`https://api.whatsapp.com/send?phone=91${phone}&text=${encodeURIComponent(msg)}`, "_blank");
+  if (!phone) { alert("Please enter mobile number to send WhatsApp message."); return; }
+
+  let msg = `Dear ${name},\n\nThank you for choosing BEULAH TRADERS PRIVATE LIMITED.\nYour ${billType} of Amount/Points: ₹${total} has been generated successfully.\n\nThank you!`;
+  let url = `https://api.whatsapp.com/send?phone=91${phone}&text=${encodeURIComponent(msg)}`;
+  window.open(url, "_blank");
 }
 
-function printFormattedPage(pageId) {
-  let cardContent = document.getElementById(pageId).innerHTML;
-  let printWindow = window.open("", "", "width=900,height=650");
-  printWindow.document.write(`<html><head><title>Print Document</title><style>body{font-family:sans-serif;padding:20px;} table{width:100%;border-collapse:collapse;} th,td{border:1px solid #ccc;padding:8px;text-align:center;} button,.action-btn{display:none;}</style></head><body>${cardContent}</body></html>`);
-  printWindow.document.close();
-  printWindow.focus();
-  printWindow.print();
-  printWindow.close();
+function printFormattedPage(pageId) { window.print(); }
+
+function toggleMenu(e) {
+  e.stopPropagation();
+  document.getElementById("dropdownMenu").classList.toggle("show");
 }
 
-function toggleMenu(e) { e.stopPropagation(); document.getElementById("dropdownMenu").classList.toggle("show"); }
-document.addEventListener("click", () => document.getElementById("dropdownMenu")?.classList.remove("show"));
+document.addEventListener("click", function() {
+  document.getElementById("dropdownMenu")?.classList.remove("show");
+});
 
 function openProfile() { document.getElementById("profilePopup").style.display = "flex"; }
 function closeProfile() { document.getElementById("profilePopup").style.display = "none"; }
@@ -1437,19 +1507,21 @@ function openPasswordPopup() { document.getElementById("passwordPopup").style.di
 function closePasswordPopup() { document.getElementById("passwordPopup").style.display = "none"; }
 
 async function changePassword() {
-  let user = JSON.parse(localStorage.getItem("user"));
-  let oldPassword = document.getElementById("oldPass").value;
-  let newPassword = document.getElementById("newPass").value;
-  let confirmPass = document.getElementById("confirmPass").value;
+  let oldPassword = document.getElementById("oldPass").value.trim();
+  let newPassword = document.getElementById("newPass").value.trim();
+  let confirmPassword = document.getElementById("confirmPass").value.trim();
+  let user = JSON.parse(localStorage.getItem("user")) || {};
 
-  if (newPassword !== confirmPass) { alert("New passwords do not match."); return; }
+  if (!oldPassword || !newPassword) { alert("Please enter current and new passwords."); return; }
+  if (newPassword !== confirmPassword) { alert("New passwords do not match."); return; }
 
   let payload = { type: "password", username: user.username, oldPassword: oldPassword, newPassword: newPassword };
-  let result = await saveData(payload);
-  if (result.status) {
+  let res = await saveData(payload);
+
+  if (res.status) {
     alert("Password updated successfully!");
     closePasswordPopup();
-  } else { alert("Failed: " + result.message); }
+  } else { alert("Error: " + res.message); }
 }
 
 function logout() {
@@ -1457,6 +1529,7 @@ function logout() {
   localStorage.removeItem("user");
   window.location.reload();
 }
+ 
 </script>
 
 </body>
