@@ -632,10 +632,16 @@ input, select, textarea {
 // PART 2: COMPLETE CLIENT-SIDE SCRIPT LOGIC (script.js)
 // =================================================================================
 
+// BTP Billing System - Main Client-Side Logic (script.js)
+
+// Update this URL with your exact "Anyone" web app execution URL:
 const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
+
 let currentOTPUsername = "";
 let productList = [];
 let isVoucherSyncedFromGST = false;
+
+// Global Chart Instances
 let chartInstances = {};
 
 function getFormattedDate(d = new Date()) {
@@ -717,69 +723,67 @@ window.onload = function() {
   loadNextInvoiceNumbers();
 };
 
-async function loadNextInvoiceNumbers() {
+async function fetchAPI(url) {
   try {
-    let resGST = await fetch(`${WEBAPP}?api=1&nextGSTInvoice=1`);
-    let dataGST = await resGST.json();
-    if (dataGST.invoiceNo) document.getElementById("gstInvoiceNo").value = dataGST.invoiceNo;
+    let res = await fetch(url, { redirect: "follow" });
+    let text = await res.text();
+    return JSON.parse(text);
+  } catch(e) {
+    console.error("API Fetch Error:", e);
+    return null;
+  }
+}
 
-    let resRep = await fetch(`${WEBAPP}?api=1&nextInvoice=1`);
-    let dataRep = await resRep.json();
-    if (dataRep.invoiceNo) document.getElementById("invoiceNo").value = dataRep.invoiceNo;
+async function loadNextInvoiceNumbers() {
+  let dataGST = await fetchAPI(`${WEBAPP}?api=1&nextGSTInvoice=1`);
+  if (dataGST && dataGST.invoiceNo) document.getElementById("gstInvoiceNo").value = dataGST.invoiceNo;
 
-    let resVouch = await fetch(`${WEBAPP}?api=1&nextVoucherNo=1`);
-    let dataVouch = await resVouch.json();
-    if (dataVouch.voucherNo) document.getElementById("voucherNo").value = dataVouch.voucherNo;
+  let dataRep = await fetchAPI(`${WEBAPP}?api=1&nextInvoice=1`);
+  if (dataRep && dataRep.invoiceNo) document.getElementById("invoiceNo").value = dataRep.invoiceNo;
 
-    let resRen = await fetch(`${WEBAPP}?api=1&nextRenewalNo=1`);
-    let dataRen = await resRen.json();
-    if (dataRen.renewalNo) document.getElementById("renewalVoucherNo").value = dataRen.renewalNo;
+  let dataVouch = await fetchAPI(`${WEBAPP}?api=1&nextVoucherNo=1`);
+  if (dataVouch && dataVouch.voucherNo) document.getElementById("voucherNo").value = dataVouch.voucherNo;
 
-    let resWithout = await fetch(`${WEBAPP}?api=1&nextWithoutGSTNo=1`);
-    let dataWithout = await resWithout.json();
-    if (dataWithout.invoiceNo) document.getElementById("withoutGSTInvoiceNo").value = dataWithout.invoiceNo;
-  } catch(e) { console.error("Error loading initial invoice numbers:", e); }
+  let dataRen = await fetchAPI(`${WEBAPP}?api=1&nextRenewalNo=1`);
+  if (dataRen && dataRen.renewalNo) document.getElementById("renewalVoucherNo").value = dataRen.renewalNo;
+
+  let dataWithout = await fetchAPI(`${WEBAPP}?api=1&nextWithoutGSTNo=1`);
+  if (dataWithout && dataWithout.invoiceNo) document.getElementById("withoutGSTInvoiceNo").value = dataWithout.invoiceNo;
 }
 
 async function searchAndFillCustomer(mobile) {
   if (!mobile) return;
-  try {
-    let res = await fetch(`${WEBAPP}?api=1&customerSearch=1&mobile=${encodeURIComponent(mobile)}`);
-    let data = await res.json();
-    if (data.status) {
-      document.getElementById("c_name").value = data.customerName || "";
-      document.getElementById("relation").value = data.relation || "";
-      document.getElementById("email").value = data.email || "";
-      document.getElementById("bankName").value = data.bankName || "";
-      document.getElementById("branch").value = data.branch || "";
-      document.getElementById("accountNo").value = data.accountNo || "";
-      document.getElementById("ifsc").value = data.ifsc || "";
-    }
-  } catch(e) { console.error("Customer search error:", e); }
+  let data = await fetchAPI(`${WEBAPP}?api=1&customerSearch=1&mobile=${encodeURIComponent(mobile)}`);
+  if (data && data.status) {
+    document.getElementById("c_name").value = data.customerName || "";
+    document.getElementById("relation").value = data.relation || "";
+    document.getElementById("email").value = data.email || "";
+    document.getElementById("bankName").value = data.bankName || "";
+    document.getElementById("branch").value = data.branch || "";
+    document.getElementById("accountNo").value = data.accountNo || "";
+    document.getElementById("ifsc").value = data.ifsc || "";
+  }
 }
 
 async function fetchSalesRepName(salesId, targetDisplayId, targetInputId) {
   if (!salesId) return;
-  try {
-    let res = await fetch(`${WEBAPP}?api=1&salesId=1&id=${encodeURIComponent(salesId)}`);
-    let data = await res.json();
-    let displayEl = document.getElementById(targetDisplayId);
-    let inputEl = document.getElementById(targetInputId);
+  let data = await fetchAPI(`${WEBAPP}?api=1&salesId=1&id=${encodeURIComponent(salesId)}`);
+  let displayEl = document.getElementById(targetDisplayId);
+  let inputEl = document.getElementById(targetInputId);
 
-    if (data.status) {
-      if (inputEl) inputEl.value = data.name;
-      if (displayEl) displayEl.innerText = " " + data.name;
-    } else {
-      if (inputEl) inputEl.value = "ID Not Found";
-      if (displayEl) displayEl.innerText = " (ID Not Found)";
-    }
-  } catch(e) { console.error("Sales Rep fetch error:", e); }
+  if (data && data.status) {
+    if (inputEl) inputEl.value = data.name;
+    if (displayEl) displayEl.innerText = " " + data.name;
+  } else {
+    if (inputEl) inputEl.value = "ID Not Found";
+    if (displayEl) displayEl.innerText = " (ID Not Found)";
+  }
 }
 
 async function fetchProducts() {
-  try {
-    let res = await fetch(`${WEBAPP}?api=1&products=1`);
-    productList = await res.json();
+  let data = await fetchAPI(`${WEBAPP}?api=1&products=1`);
+  if (data && Array.isArray(data)) {
+    productList = data;
     let masterList = document.getElementById("masterProductList");
     if (masterList) {
       masterList.innerHTML = "";
@@ -789,7 +793,7 @@ async function fetchProducts() {
         masterList.appendChild(option);
       });
     }
-  } catch(e) { console.error("Error fetching product master:", e); }
+  }
 }
 
 function handleProductSearch(input) { onProductSelect(input); }
@@ -1011,32 +1015,28 @@ async function requestOTP() {
   if (!username) { alert("Please enter username."); return; }
 
   currentOTPUsername = username;
-  try {
-    const response = await fetch(`${WEBAPP}?api=1&sendOTP=1&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
-    const result = await response.json();
-    if (result.status) {
-      alert(result.message || "OTP sent successfully!");
-      document.getElementById("stepCredentials").style.display = "none";
-      document.getElementById("stepOTP").style.display = "block";
-    } else {
-      alert(result.message || "Invalid credentials.");
-    }
-  } catch (error) { alert("Server error requesting OTP."); }
+  let result = await fetchAPI(`${WEBAPP}?api=1&sendOTP=1&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+  if (result && result.status) {
+    alert(result.message || "OTP sent successfully!");
+    document.getElementById("stepCredentials").style.display = "none";
+    document.getElementById("stepOTP").style.display = "block";
+  } else {
+    alert(result ? result.message : "Invalid credentials or Server Error.");
+  }
 }
 
 async function verifyOTPAndLogin() {
   let otp = document.getElementById("otpInput").value.trim();
   if (!otp) { alert("Please enter the OTP."); return; }
 
-  try {
-    const res = await fetch(`${WEBAPP}?api=1&verifyOTP=1&username=${encodeURIComponent(currentOTPUsername)}&otp=${encodeURIComponent(otp)}`);
-    const data = await res.json();
-    if (data.status) {
-      localStorage.setItem("user", JSON.stringify(data.user || { name: currentOTPUsername, username: currentOTPUsername }));
-      sessionStorage.setItem("active_session", "true");
-      showApp();
-    } else { alert(data.message || "Invalid OTP!"); }
-  } catch (err) { alert("Error verifying OTP."); }
+  let data = await fetchAPI(`${WEBAPP}?api=1&verifyOTP=1&username=${encodeURIComponent(currentOTPUsername)}&otp=${encodeURIComponent(otp)}`);
+  if (data && data.status) {
+    localStorage.setItem("user", JSON.stringify(data.user || { name: currentOTPUsername, username: currentOTPUsername }));
+    sessionStorage.setItem("active_session", "true");
+    showApp();
+  } else { 
+    alert(data ? data.message : "Invalid OTP!"); 
+  }
 }
 
 function showApp() {
@@ -1106,33 +1106,30 @@ function renderChart(canvasId, label, value) {
 }
 
 async function loadDashboardMetrics(moduleType) {
-  try {
-    let res = await fetch(WEBAPP + "?api=1&action=dashboard");
-    let data = await res.json();
-    if (!data) return;
+  let data = await fetchAPI(WEBAPP + "?api=1&action=dashboard");
+  if (!data) return;
 
-    if (moduleType === "gst") {
-      document.getElementById("gstBills").innerText = data.gstBills || 0;
-      document.getElementById("gstAmount").innerText = "₹" + (data.gstAmount || 0);
-      renderChart("gstChart", "GST Sales", data.gstAmount || 0);
-    } else if (moduleType === "repurchase") {
-      document.getElementById("todayBills").innerText = data.repurchaseBills || 0;
-      document.getElementById("todayAmount").innerText = "₹" + (data.repurchaseAmount || 0);
-      renderChart("salesChart", "Repurchase", data.repurchaseAmount || 0);
-    } else if (moduleType === "voucher") {
-      document.getElementById("voucherCount").innerText = data.voucherCount || 0;
-      document.getElementById("voucherAmount").innerText = "₹" + (data.voucherAmount || 0);
-      renderChart("voucherChart", "Voucher Points", data.voucherAmount || 0);
-    } else if (moduleType === "renewal") {
-      document.getElementById("renewalCount").innerText = data.renewalCount || 0;
-      document.getElementById("renewalAmount").innerText = "₹" + (data.renewalAmount || 0);
-      renderChart("renewalChart", "Renewals", data.renewalAmount || 0);
-    } else if (moduleType === "withoutGST") {
-      document.getElementById("withoutGSTBillCount").innerText = data.withoutGSTBills || 0;
-      document.getElementById("withoutGSTAmount").innerText = "₹" + (data.withoutGSTAmount || 0);
-      renderChart("withoutGSTChart", "Without GST", data.withoutGSTAmount || 0);
-    }
-  } catch(e) { console.error("Error loading dashboard metrics:", e); }
+  if (moduleType === "gst") {
+    document.getElementById("gstBills").innerText = data.gstBills || 0;
+    document.getElementById("gstAmount").innerText = "₹" + (data.gstAmount || 0);
+    renderChart("gstChart", "GST Sales", data.gstAmount || 0);
+  } else if (moduleType === "repurchase") {
+    document.getElementById("todayBills").innerText = data.repurchaseBills || 0;
+    document.getElementById("todayAmount").innerText = "₹" + (data.repurchaseAmount || 0);
+    renderChart("salesChart", "Repurchase", data.repurchaseAmount || 0);
+  } else if (moduleType === "voucher") {
+    document.getElementById("voucherCount").innerText = data.voucherCount || 0;
+    document.getElementById("voucherAmount").innerText = "₹" + (data.voucherAmount || 0);
+    renderChart("voucherChart", "Voucher Points", data.voucherAmount || 0);
+  } else if (moduleType === "renewal") {
+    document.getElementById("renewalCount").innerText = data.renewalCount || 0;
+    document.getElementById("renewalAmount").innerText = "₹" + (data.renewalAmount || 0);
+    renderChart("renewalChart", "Renewals", data.renewalAmount || 0);
+  } else if (moduleType === "withoutGST") {
+    document.getElementById("withoutGSTBillCount").innerText = data.withoutGSTBills || 0;
+    document.getElementById("withoutGSTAmount").innerText = "₹" + (data.withoutGSTAmount || 0);
+    renderChart("withoutGSTChart", "Without GST", data.withoutGSTAmount || 0);
+  }
 }
 
 function syncGSTToVoucher() {
@@ -1222,6 +1219,7 @@ function addRow() {
   tbody.appendChild(tr);
 }
 
+// POST ROUTINE FIXING CORS/302 VIA text/plain POST MODE
 async function saveData(payload) {
   try {
     let res = await fetch(WEBAPP, {
@@ -1230,7 +1228,8 @@ async function saveData(payload) {
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload)
     });
-    return await res.json();
+    let text = await res.text();
+    return JSON.parse(text);
   } catch(e) { return { status: false, message: e.toString() }; }
 }
 
@@ -1512,10 +1511,10 @@ async function changePassword() {
   let payload = { type: "password", username: user.username, oldPassword: oldPassword, newPassword: newPassword };
   let res = await saveData(payload);
 
-  if (res.status) {
+  if (res && res.status) {
     alert("Password updated successfully!");
     closePasswordPopup();
-  } else { alert("Error: " + res.message); }
+  } else { alert("Error: " + (res ? res.message : "Failed to update password")); }
 }
 
 function logout() {
@@ -1523,7 +1522,6 @@ function logout() {
   localStorage.removeItem("user");
   window.location.reload();
 }
- 
 </script>
 
 </body>
