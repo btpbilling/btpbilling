@@ -569,9 +569,8 @@
 
 <script src="script.js"></script>
  
-
-  <script>
-    // BTP Billing System - Main Client-Side Logic (script.js)
+<script>
+  // BTP Billing System - Main Client-Side Logic (script.js)
 
 const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
@@ -588,7 +587,7 @@ function getFormattedDate(d = new Date()) {
   return `${day}-${month}-${year}`;
 }
 
-// Calculate Redeem Date strictly according to logic:
+// Calculate Redeem Date strictly:
 // Day 1-15 -> 15th of month +2; Day 16-30/31 -> last day of month +2
 function calculateRedeemDateLogic(joiningDateStr) {
   if (!joiningDateStr) return "";
@@ -1502,6 +1501,6 @@ async function changePassword() {
     closePasswordPopup();
   } else { alert("Failed to update password."); }
 }
-  </script>
+</script>
 </body>
 </html>
