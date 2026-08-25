@@ -12,6 +12,7 @@
   <meta property="og:url" content="https://btpbilling.github.io/btpbilling/">
   <meta charset="UTF-8">
 
+ 
   <style>
     /* GLOBAL STYLES */
     body { 
@@ -23,8 +24,8 @@
 
     /* PROFILE STYLING - UNCROPPED FIT */
     .profile {
-      width: 115px; 
-      height: 115px; 
+      width: 145px; 
+      height: 145px; 
       border-radius: 50%; 
       object-fit: contain; 
       background-color: #ffffff;
@@ -130,8 +131,6 @@
       flex-direction: column; justify-content: center; align-items: flex-start; position: relative; overflow: hidden;
     }
     .small-card h3 { margin: 0 0 8px 0; font-size: 15px; color: #555; font-weight: 600; }
-    .chart-card { flex: 1.2; align-items: center; }
-    .chart-container { position: relative; width: 100%; height: 120px; }
 
     /* FORMS & TABLES */
     .card {
@@ -267,31 +266,26 @@
     <div id="invoiceCards" class="dashboardCards" style="display:none;">
       <div class="small-card"><h3>GST Bills Today</h3><p id="gstBills" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">0</p></div>
       <div class="small-card"><h3>GST Amount</h3><p id="gstAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
-      <div class="small-card chart-card"><h3>GST Graph</h3><div class="chart-container"><canvas id="gstChart"></canvas></div></div>
     </div>
 
     <div id="repurchaseCards" class="dashboardCards" style="display:none;">
       <div class="small-card"><h3>Repurchase Bills</h3><p id="todayBills" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">0</p></div>
       <div class="small-card"><h3>Amount</h3><p id="todayAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
-      <div class="small-card chart-card"><h3>Graph</h3><div class="chart-container"><canvas id="salesChart"></canvas></div></div>
     </div>
 
     <div id="voucherCards" class="dashboardCards" style="display:none;">
       <div class="small-card"><h3>Vouchers</h3><p id="voucherCount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">0</p></div>
       <div class="small-card"><h3>Amount</h3><p id="voucherAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
-      <div class="small-card chart-card"><h3>Graph</h3><div class="chart-container"><canvas id="voucherChart"></canvas></div></div>
     </div>
 
     <div id="renewalCards" class="dashboardCards" style="display:none;">
       <div class="small-card"><h3>Renewals Today</h3><p id="renewalCount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">0</p></div>
       <div class="small-card"><h3>Amount</h3><p id="renewalAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
-      <div class="small-card chart-card"><h3>Graph</h3><div class="chart-container"><canvas id="renewalChart"></canvas></div></div>
     </div>
 
     <div id="withoutGSTCards" class="dashboardCards" style="display:none;">
       <div class="small-card"><h3>Without GST Bills</h3><p id="withoutGSTBillCount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">0</p></div>
       <div class="small-card"><h3>Amount</h3><p id="withoutGSTAmount" style="font-size:28px; font-weight:bold; color:#ff5c8a; margin:0;">₹0</p></div>
-      <div class="small-card chart-card"><h3>Graph</h3><div class="chart-container"><canvas id="withoutGSTChart"></canvas></div></div>
     </div>
 
     <!-- GST PAGE -->
@@ -391,13 +385,13 @@
         <div><label>Invoice No</label><br><input id="invoiceNo" onblur="handleManualInvoice('repurchase', this.value)"></div>
       </div>
       <div style="display:flex;gap:15px;margin-bottom:15px;">
-        <input id="name" placeholder="Customer Name" style="flex:1;">
+        <input id="name" placeholder="Vendor / Customer Name" style="flex:1;">
         <input id="address" placeholder="Address" style="flex:1;">
         <input id="repurchasePhone" placeholder="Phone" style="flex:1;">
       </div>
       <table id="table">
         <thead>
-          <tr><th>Sl</th><th>Metal Type</th><th>Weight (Grams)</th><th>Rate (Per Gram)</th><th>Amount</th></tr>
+          <tr><th>Sl</th><th>Metal Type / Description</th><th>Weight (Grams)</th><th>Rate (Per Gram)</th><th>Amount</th></tr>
         </thead>
         <tbody id="repurchaseBody"></tbody>
         <tfoot>
@@ -445,6 +439,16 @@
           <input id="salesRepNameInput" style="width:100%; margin-top:4px;" placeholder="Sales Rep Name" readonly>
           <span id="salesRepNameDisplay" style="font-size:12px; font-weight:bold; color:#ff4d6d;"></span>
         </div>
+        <div>
+          <label>Kit Type Selection (Checkbox Sync)</label>
+          <select id="voucherKitType" style="width:100%;">
+            <option value="Gold">Gold</option>
+            <option value="Clothes Kit">Clothes Kit</option>
+            <option value="Silver">Silver</option>
+            <option value="Herbal Kit">Herbal Kit</option>
+            <option value="Home Needs Kit">Home Needs Kit</option>
+          </select>
+        </div>
         <div><label>Reward Points</label><input id="rewardPoints" style="width:100%;" readonly></div>
         <div><label>Monthly Redeem</label><input id="monthlyRedeem" style="width:100%;" readonly></div>
         <div><label>Monthly Coupon Net</label><input id="monthlywithCoupon" style="width:100%;" readonly></div>
@@ -471,6 +475,16 @@
           <input id="renewalSalesRepId" style="width:100%;" onblur="fetchSalesRepName(this.value, 'renewalSalesRepNameDisplay', 'renewalSalesRepNameInput')">
           <input id="renewalSalesRepNameInput" style="width:100%; margin-top:4px;" placeholder="Sales Rep Name" readonly>
           <span id="renewalSalesRepNameDisplay" style="font-size:12px; font-weight:bold; color:#ff4d6d;"></span>
+        </div>
+        <div>
+          <label>Renewal Category (Checkbox Sync)</label>
+          <select id="renewalCategory" style="width:100%;">
+            <option value="Renewal">Renewal</option>
+            <option value="Purchase">Purchase</option>
+            <option value="Upgrade">Upgrade</option>
+            <option value="New Joining">New Joining</option>
+            <option value="Reactivation">Reactivation</option>
+          </select>
         </div>
         <div><label>Customer Name</label><input type="text" id="renewalCustomerName" style="width:100%;"></div>
         <div><label>Relation</label><input type="text" id="renewalRelation" style="width:100%;"></div>
@@ -512,6 +526,15 @@
         <div><label>Pincode</label><input id="withoutPincode" style="width:100%;"></div>
         <div><label>Mobile Number</label><input id="withoutMobile" style="width:100%;"></div>
         <div><label>Email</label><input id="withoutEmail" style="width:100%;"></div>
+      </div>
+
+      <div style="margin:10px 0;">
+        <label><input type="checkbox" id="w_cash"> Cash</label> &nbsp;
+        <label><input type="checkbox" id="w_cheque"> Cheque</label> &nbsp;
+        <label><input type="checkbox" id="w_upi"> UPI / PhonePe / GPay</label> &nbsp;
+        <label><input type="checkbox" id="w_netbanking"> Net Banking</label> &nbsp;
+        <label><input type="checkbox" id="w_card"> Credit / Debit Card</label> &nbsp;
+        <label><input type="checkbox" id="w_neft"> NEFT / RTGS</label>
       </div>
 
       <table id="withoutGSTTable" style="margin-top:15px;">
@@ -567,10 +590,13 @@
   </div>
 </div>
 
+ 
 <script src="script.js"></script>
 <script>
 
   // BTP Billing System - Complete Client-Side Logic (script.js)
+
+// BTP Billing System - Main Client-Side Logic (script.js)
 
 const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
@@ -587,6 +613,7 @@ function getFormattedDate(d = new Date()) {
   return `${day}-${month}-${year}`;
 }
 
+// Redeem Date Logic: Day 1-15 -> 15th + 2 Months; Day 16-31 -> End of month + 2 Months
 function calculateRedeemDateLogic(joiningDateStr) {
   if (!joiningDateStr) return "";
   let d = new Date(joiningDateStr);
@@ -1170,6 +1197,15 @@ async function generateGST() {
     }
   });
 
+  let payMode = {
+    cash: document.getElementById("cash").checked,
+    upi: document.getElementById("upi").checked,
+    card: document.getElementById("card").checked,
+    cheque: document.getElementById("cheque").checked,
+    netbanking: document.getElementById("netbanking").checked,
+    hypothecation: document.getElementById("hypothecation").checked
+  };
+
   let user = JSON.parse(localStorage.getItem("user")) || {};
   let payload = {
     type: "gstInvoice",
@@ -1190,6 +1226,7 @@ async function generateGST() {
     accountNo: document.getElementById("accountNo").value,
     ifsc: document.getElementById("ifsc").value,
     gstin: document.getElementById("gstin").value,
+    payMode: payMode,
     words: document.getElementById("gstWords").value,
     basicAmount: document.getElementById("basicAmt").value,
     finalTotal: document.getElementById("finalTotal").value,
@@ -1250,6 +1287,7 @@ async function generateVoucher() {
     });
   }
 
+  let user = JSON.parse(localStorage.getItem("user")) || {};
   let payload = {
     type: "voucher",
     voucherNo: document.getElementById("voucherNo").value,
@@ -1272,7 +1310,9 @@ async function generateVoucher() {
     ifsc: document.getElementById("voucherIFSC").value,
     salesRepId: document.getElementById("salesRepId").value,
     salesRepName: document.getElementById("salesRepNameInput").value,
+    kitType: document.getElementById("voucherKitType").value,
     monthlyRedeem: document.getElementById("monthlyRedeem").value,
+    monthlyCoupon: document.getElementById("monthlywithCoupon").value,
     totalCoupon: document.getElementById("totalCoupon").value,
     isSyncedWithGST: isVoucherSyncedFromGST,
     gstInvoiceNo: document.getElementById("gstInvoiceNo").value,
@@ -1280,7 +1320,8 @@ async function generateVoucher() {
     gstInvoiceAmount: document.getElementById("finalTotal").value,
     gstWords: document.getElementById("gstWords").value,
     gstTotalQty: document.getElementById("totalQty").value,
-    gstItems: gstItems
+    gstItems: gstItems,
+    createdBy: user.username || "System"
   };
 
   let result = await saveData(payload);
@@ -1308,6 +1349,7 @@ async function generateRenewalVoucher() {
     accountNo: document.getElementById("renewalAccountNo").value, ifsc: document.getElementById("renewalIfsc").value,
     salesRepId: document.getElementById("renewalSalesRepId").value,
     salesRepName: document.getElementById("renewalSalesRepNameInput").value,
+    renewalCategory: document.getElementById("renewalCategory").value,
     monthlyCoupon: document.getElementById("renewalMonthlywithCoupon").value,
     totalCoupon: document.getElementById("renewalTotalCoupon").value,
     createdBy: user.username || "System"
@@ -1338,6 +1380,16 @@ async function generateWithoutGSTInvoice() {
     }
   });
 
+  let payMode = {
+    cash: document.getElementById("w_cash").checked,
+    cheque: document.getElementById("w_cheque").checked,
+    upi: document.getElementById("w_upi").checked,
+    netbanking: document.getElementById("w_netbanking").checked,
+    card: document.getElementById("w_card").checked,
+    neft: document.getElementById("w_neft").checked
+  };
+
+  let user = JSON.parse(localStorage.getItem("user")) || {};
   let payload = {
     type: "withoutGST", invoiceNo: document.getElementById("withoutGSTInvoiceNo").value,
     date: document.getElementById("withoutDate").value, customerName: document.getElementById("withoutCustomerName").value,
@@ -1345,7 +1397,8 @@ async function generateWithoutGSTInvoice() {
     district: document.getElementById("withoutDistrict").value, state: document.getElementById("withoutState").value,
     pincode: document.getElementById("withoutPincode").value, mobile: document.getElementById("withoutMobile").value,
     email: document.getElementById("withoutEmail").value, totalAmount: document.getElementById("withoutTotalAmount").value,
-    items: items
+    words: document.getElementById("withoutAmountWords").value, payMode: payMode,
+    createdBy: user.username || "System", items: items
   };
   let result = await saveData(payload);
   if(result.status) {
@@ -1406,99 +1459,121 @@ function shareWhatsApp(type) {
     let monthlyCoupon = document.getElementById("monthlywithCoupon").value || "0.00";
     let totalCoupon = document.getElementById("totalCoupon").value || "0.00";
 
+    if (isVoucherSyncedFromGST) {
+      let gstInvoiceNo = document.getElementById("gstInvoiceNo").value || "";
+      let gstDate = document.getElementById("gstDate").value || "";
+      let gstTotal = document.getElementById("finalTotal").value || "0.00";
+      let gstWords = document.getElementById("gstWords").value || "";
+      let totalQty = document.getElementById("totalQty").value || "0";
+
+      let prodDetails = "";
+      document.querySelectorAll("#gstTable tbody tr").forEach(tr => {
+        let pName = tr.querySelector(".product-search")?.value;
+        let pQty = tr.querySelector(".qty")?.value;
+        let pRate = tr.querySelector(".rate")?.value;
+        let pGross = tr.querySelector(".gross")?.value;
+        if (pName) {
+          prodDetails += `• ${pName} | Qty: ${pQty} | Rate: ₹${pRate} | Amount: ₹${pGross}\n`;
+        }
+      });
+
+      textMsg = `Greetings from Beulah Traders Private Limited 🎉\n\n` +
+        `Dear ${customerName},\n\n` +
+        `Customer Details:\n` +
+        `Name     : ${customerName}\n` +
+        `Relation : ${relation}\n` +
+        `Mobile   : ${mobile}\n` +
+        `Email    : ${email}\n\n` +
+        `Sales Representative:\n` +
+        `ID       : ${salesRepId}\n` +
+        `Name     : ${salesRepName}\n\n` +
+        `Invoice Details:\n` +
+        `Invoice No   : ${gstInvoiceNo}\n` +
+        `Invoice Date : ${gstDate}\n` +
+        `Invoice Amount: ₹${gstTotal}\n` +
+        `In Words     : ${gstWords}\n` +
+        `PRODUCT DETAILS:\n${prodDetails}` +
+        `Total Quantity: ${totalQty}\n\n` +
+        `Voucher Details:\n` +
+        `Voucher No               : ${voucherNo}\n` +
+        `No.Of Kits               : ${kits}\n` +
+        `Redeem Points Release Date: ${redeemDate}\n` +
+        `Coupon Per Month          : ${monthlyCoupon} Points\n` +
+        `Coupon Total (12 Months)  : ${totalCoupon} Points\n\n` +
+        `Documents:\n` +
+        `Invoice PDF : Available in Drive\n` +
+        `Voucher PDF : Available in Drive\n\n` +
+        `Best Regards,\n` +
+        `Beulah Traders Private Limited\n` +
+        `TEPPALI SAIDULU\n` +
+        `📞 8978816673`;
+    } else {
+      textMsg = `Greetings from Beulah Traders Private Limited 🎉\n\n` +
+        `Dear ${customerName},\n\n` +
+        `Customer Details:\n` +
+        `Name     : ${customerName}\n` +
+        `Relation : ${relation}\n` +
+        `Mobile   : ${mobile}\n` +
+        `Email    : ${email}\n\n` +
+        `Sales Representative:\n` +
+        `ID       : ${salesRepId}\n` +
+        `Name     : ${salesRepName}\n\n` +
+        `Voucher Details:\n` +
+        `Voucher No               : ${voucherNo}\n` +
+        `No.Of Kits               : ${kits}\n` +
+        `Redeem Points Release Date: ${redeemDate}\n` +
+        `Coupon Per Month          : ${monthlyCoupon} Points\n` +
+        `Coupon Total (12 Months)  : ${totalCoupon} Points\n\n` +
+        `Best Regards,\n` +
+        `Beulah Traders Private Limited\n` +
+        `TEPPALI SAIDULU\n` +
+        `📞 8978816673`;
+    }
+  } else if (type === "GST Invoice") {
+    let customerName = document.getElementById("c_name").value || "Valued Customer";
+    let gstInvoiceNo = document.getElementById("gstInvoiceNo").value || "";
+    let gstDate = document.getElementById("gstDate").value || "";
+    let gstTotal = document.getElementById("finalTotal").value || "0.00";
+    let gstWords = document.getElementById("gstWords").value || "";
+
     textMsg = `Greetings from Beulah Traders Private Limited 🎉\n\n` +
       `Dear ${customerName},\n\n` +
-      `Customer Details:\n` +
-      `Name     : ${customerName}\n` +
-      `Relation : ${relation}\n` +
-      `Mobile   : ${mobile}\n` +
-      `Email    : ${email}\n\n` +
-      `Sales Representative:\n` +
-      `ID       : ${salesRepId}\n` +
-      `Name     : ${salesRepName}\n\n`;
-
-    if (isVoucherSyncedFromGST) {
-      let invNo = document.getElementById("gstInvoiceNo").value;
-      let invDate = document.getElementById("gstDate").value;
-      let invAmt = document.getElementById("finalTotal").value;
-      let invWords = document.getElementById("gstWords").value;
-      let totalQty = document.getElementById("totalQty").value;
-
-      textMsg += `Invoice Details:\n` +
-        `Invoice No    : ${invNo}\n` +
-        `Invoice Date  : ${invDate}\n` +
-        `Invoice Amount: ₹${invAmt}\n` +
-        `In Words      : ${invWords}\n` +
-        `PRODUCT DETAILS:\n`;
-
-      document.querySelectorAll("#gstTable tbody tr").forEach(tr => {
-        let p = tr.querySelector(".product-search")?.value;
-        let q = tr.querySelector(".qty")?.value;
-        let r = tr.querySelector(".rate")?.value;
-        let a = tr.querySelector(".gross")?.value;
-        if (p) textMsg += `• ${p} | Qty: ${q} | Rate: ₹${r} | Amount: ₹${a}\n`;
-      });
-      textMsg += `Total Quantity: ${totalQty}\n\n`;
-    }
-
-    textMsg += `Voucher Details:\n` +
-      `Voucher No               : ${voucherNo}\n` +
-      `No.Of Kits               : ${kits}\n` +
-      `Redeem Points Release Date: ${redeemDate}\n` +
-      `Coupon Per Month          : ${monthlyCoupon} Points\n` +
-      `Coupon Total (12 Months)  : ${totalCoupon} Points\n\n` +
-      `Documents:\n` +
-      `Voucher PDF : Generated\n\n` +
+      `Invoice Details:\n` +
+      `Invoice No   : ${gstInvoiceNo}\n` +
+      `Invoice Date : ${gstDate}\n` +
+      `Invoice Amount: ₹${gstTotal}\n` +
+      `In Words     : ${gstWords}\n\n` +
       `Best Regards,\n` +
       `Beulah Traders Private Limited\n` +
       `TEPPALI SAIDULU\n` +
       `📞 8978816673`;
-
   } else {
-    let name = document.getElementById("c_name") ? document.getElementById("c_name").value : "Customer";
-    textMsg = `Greetings from Beulah Traders Private Limited 🎉\n\nHello ${name}, your ${type} details from Beulah Traders Private Limited have been processed successfully. Thank you!\n\nBest Regards,\nBeulah Traders Private Limited\n📞 8978816673`;
+    textMsg = `Greetings from Beulah Traders Private Limited 🎉\n\nThank you for doing business with us!`;
   }
 
-  let phone = document.getElementById("voucherMobile")?.value || document.getElementById("phone")?.value || "";
-  let url = `https://api.whatsapp.com/send?phone=${encodeURIComponent(phone)}&text=${encodeURIComponent(textMsg)}`;
-  window.open(url, "_blank");
+  let encoded = encodeURIComponent(textMsg);
+  window.open(`https://api.whatsapp.com/send?text=${encoded}`, "_blank");
 }
 
-function toggleMenu(e) { e.stopPropagation(); document.getElementById("dropdownMenu").classList.toggle("show"); }
+function toggleMenu(e) {
+  e.stopPropagation();
+  document.getElementById("dropdownMenu").classList.toggle("show");
+}
+
+document.addEventListener("click", function() {
+  document.getElementById("dropdownMenu").classList.remove("show");
+});
+
 function openProfile() { document.getElementById("profilePopup").style.display = "flex"; }
 function closeProfile() { document.getElementById("profilePopup").style.display = "none"; }
 function openPasswordPopup() { document.getElementById("passwordPopup").style.display = "flex"; }
 function closePasswordPopup() { document.getElementById("passwordPopup").style.display = "none"; }
 
 function logout() {
-  if (confirm("Are you sure you want to logout?")) {
-    localStorage.removeItem("user");
-    sessionStorage.removeItem("active_session");
-    document.getElementById("app").style.display = "none";
-    document.getElementById("loginPage").style.display = "flex";
-  }
+  sessionStorage.removeItem("active_session");
+  localStorage.removeItem("user");
+  location.reload();
 }
-
-async function changePassword() {
-  let oldPassword = document.getElementById("oldPass").value;
-  let newPassword = document.getElementById("newPass").value;
-  let confirmPass = document.getElementById("confirmPass").value;
-
-  if (newPassword !== confirmPass) { alert("New Passwords do not match!"); return; }
-
-  let user = JSON.parse(localStorage.getItem("user"));
-  let payload = {
-    type: "password", username: user ? user.username : "",
-    oldPassword: oldPassword, newPassword: newPassword
-  };
-
-  let result = await saveData(payload);
-  if (result.status) {
-    alert("Password updated successfully!");
-    closePasswordPopup();
-  } else { alert("Failed to update password."); }
-}
-
 
 </script>
 </body>
