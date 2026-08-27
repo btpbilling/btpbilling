@@ -921,14 +921,15 @@ function calculateVoucher() {
 
 function addGSTRow() {
   let tbody = document.querySelector("#gstTable tbody");
+  if (!tbody) return;
   let rowCount = tbody.querySelectorAll("tr").length + 1;
   let tr = document.createElement("tr");
   tr.innerHTML = `
     <td>${rowCount}</td>
-    <td><input class="product-search" list="masterProductList" placeholder="Search product..." oninput="handleProductSearch(this)"></td>
-    <td><input class="modelNo" style="width:60px;"></td>
-    <td><input class="pmodel" style="width:60px;"></td>
-    <td><input class="hsn" style="width:50px;"></td>
+    <td><input class="product-search" list="masterProductList" placeholder="Search product..." oninput="handleProductSearch(this)" style="width:130px;"></td>
+    <td><input class="modelNo" readonly style="width:60px;"></td>
+    <td><input class="pmodel" readonly style="width:60px;"></td>
+    <td><input class="hsn" readonly style="width:50px;"></td>
     <td><input class="qty" type="number" style="width:40px;" oninput="calculateGSTRow(this)"></td>
     <td><input class="rate" type="number" style="width:50px;" oninput="calculateGSTRow(this)"></td>
     <td><input class="gross" readonly style="width:60px;"></td>
@@ -946,6 +947,7 @@ function addGSTRow() {
 
 function addRow() {
   const tbody = document.getElementById("repurchaseBody");
+  if (!tbody) return;
   const tr = document.createElement("tr");
   tr.innerHTML = `
     <td>${tbody.rows.length + 1}</td>
@@ -1051,47 +1053,8 @@ async function loadDashboardMetrics(moduleType) {
     if (moduleType === "gst") {
       document.getElementById("gstBills").innerText = data.gstBills || 0;
       document.getElementById("gstAmount").innerText = "₹" + (data.gstAmount || 0);
-      renderChart("gstChart", gstChartInstance, data.gstChartLabels, data.gstChartData, "GST Sales (₹)");
-    } else if (moduleType === "repurchase") {
-      document.getElementById("todayBills").innerText = data.repurchaseBills || 0;
-      document.getElementById("todayAmount").innerText = "₹" + (data.repurchaseAmount || 0);
-      renderChart("salesChart", salesChartInstance, data.repChartLabels, data.repChartData, "Repurchase (₹)");
-    } else if (moduleType === "voucher") {
-      document.getElementById("voucherCount").innerText = data.voucherCount || 0;
-      document.getElementById("voucherAmount").innerText = "₹" + (data.voucherAmount || 0);
-      renderChart("voucherChart", voucherChartInstance, data.vouchChartLabels, data.vouchChartData, "Vouchers (₹)");
-    } else if (moduleType === "renewal") {
-      document.getElementById("renewalCount").innerText = data.renewalCount || 0;
-      document.getElementById("renewalAmount").innerText = "₹" + (data.renewalAmount || 0);
-      renderChart("renewalChart", renewalChartInstance, data.renChartLabels, data.renChartData, "Renewals (₹)");
-    } else if (moduleType === "withoutGST") {
-      document.getElementById("withoutGSTBillCount").innerText = data.withoutGSTBills || 0;
-      document.getElementById("withoutGSTAmount").innerText = "₹" + (data.withoutGSTAmount || 0);
-      renderChart("withoutGSTChart", withoutGSTChartInstance, data.wgChartLabels, data.wgChartData, "Without GST (₹)");
     }
   } catch (e) { console.error("Error loading dashboard metrics:", e); }
-}
-
-function renderChart(canvasId, chartObj, labels, data, labelName) {
-  let ctx = document.getElementById(canvasId)?.getContext("2d");
-  if (!ctx) return;
-  if (chartObj) chartObj.destroy();
-  
-  chartObj = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels || ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-      datasets: [{
-        label: labelName,
-        data: data || [0, 0, 0, 0, 0, 0, 0],
-        borderColor: '#ff4d6d',
-        backgroundColor: 'rgba(255, 77, 109, 0.15)',
-        fill: true,
-        tension: 0.3
-      }]
-    },
-    options: { responsive: true, maintainAspectRatio: false }
-  });
 }
 
 async function saveData(payload) {
@@ -1178,9 +1141,7 @@ async function generateGST() {
   let result = await saveData(payload);
   if (result.status) {
     alert("GST Template Populated & PDF Generated Successfully!");
-    if (result.pdfUrl) {
-      window.open(result.pdfUrl, "_blank"); // Automatically opens your Google Sheet Template PDF
-    }
+    if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if (result.nextInvoiceNo) document.getElementById("gstInvoiceNo").value = result.nextInvoiceNo;
     promptClearFields("gst");
   } else { 
