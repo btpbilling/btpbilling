@@ -639,6 +639,10 @@ input, select, textarea {
 // BTP BILLING & REPURCHASE SYSTEM - FRONTEND LOGIC (script.js)
 // ============================================================================
 
+// ============================================================================
+// BTP BILLING & REPURCHASE SYSTEM - FRONTEND LOGIC (script.js)
+// ============================================================================
+
 const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
 let productList = [];
@@ -797,21 +801,6 @@ function onProductSelect(input) {
   }
 }
 
-function loadWithoutGSTProduct(input) {
-  let selectedName = input.value.trim().toLowerCase();
-  if (!selectedName) return;
-
-  let item = productList.find(p => String(p.name).trim().toLowerCase() === selectedName);
-  if (item) {
-    let row = input.closest("tr");
-    if (row.querySelector(".withoutModelNo")) row.querySelector(".withoutModelNo").value = item.modelNo || "";
-    if (row.querySelector(".withoutProductModel")) row.querySelector(".withoutProductModel").value = item.productModel || "";
-    if (row.querySelector(".withoutHSN")) row.querySelector(".withoutHSN").value = item.hsn || "";
-    if (row.querySelector(".withoutRate")) row.querySelector(".withoutRate").value = item.rate || 0;
-    calculateWithoutGSTRow(input);
-  }
-}
-
 function convertNumberToWords(amount) {
   let words = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
     "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
@@ -932,58 +921,6 @@ function calculateVoucher() {
   if (document.getElementById("monthlyRedeem")) document.getElementById("monthlyRedeem").value = monthlyRedeem.toFixed(2);
   if (document.getElementById("monthlywithCoupon")) document.getElementById("monthlywithCoupon").value = monthlyWithDeduction.toFixed(2);
   if (document.getElementById("totalCoupon")) document.getElementById("totalCoupon").value = totalWithDeduction.toFixed(2);
-}
-
-function calculateRenewal() {
-  let kits = parseFloat(document.getElementById("renewalKits")?.value) || 0;
-  let totalPoints = kits * 6000;
-  let monthlyRedeem = totalPoints / 12;
-  let monthlyWithDeduction = monthlyRedeem * 0.98;
-  let totalWithDeduction = monthlyWithDeduction * 12;
-
-  if (document.getElementById("renewalRewardPoints")) document.getElementById("renewalRewardPoints").value = totalPoints;
-  if (document.getElementById("renewalMonthlywithCoupon")) document.getElementById("renewalMonthlywithCoupon").value = monthlyWithDeduction.toFixed(2);
-  if (document.getElementById("renewalTotalCoupon")) document.getElementById("renewalTotalCoupon").value = totalWithDeduction.toFixed(2);
-}
-
-function calculateWithoutGSTRow(element) {
-  let row = element.closest("tr");
-  let qty = parseFloat(row.querySelector(".withoutQty")?.value) || 0;
-  let rate = parseFloat(row.querySelector(".withoutRate")?.value) || 0;
-  let amount = qty * rate;
-
-  row.querySelector(".withoutAmount").value = amount.toFixed(2);
-  calculateWithoutGSTTotals();
-}
-
-function calculateWithoutGSTTotals() {
-  let grandTotal = 0;
-  document.querySelectorAll("#withoutGSTBody tr").forEach(row => {
-    grandTotal += parseFloat(row.querySelector(".withoutAmount")?.value) || 0;
-  });
-
-  let roundedTotal = Math.round(grandTotal);
-  if (document.getElementById("withoutBasicAmount")) document.getElementById("withoutBasicAmount").value = grandTotal.toFixed(2);
-  if (document.getElementById("withoutTotalAmount")) document.getElementById("withoutTotalAmount").value = roundedTotal.toFixed(2);
-  if (document.getElementById("withoutAmountWords")) document.getElementById("withoutAmountWords").value = convertNumberToWords(roundedTotal);
-}
-
-function addWithoutGSTRow() {
-  let tbody = document.getElementById("withoutGSTBody");
-  if (!tbody) return;
-  let rowCount = tbody.querySelectorAll("tr").length + 1;
-  let tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td class="withoutSL">${rowCount}</td>
-    <td><input class="withoutProduct" list="masterProductList" onchange="loadWithoutGSTProduct(this)"></td>
-    <td><input class="withoutModelNo" readonly style="width:60px;"></td>
-    <td><input class="withoutProductModel" readonly style="width:60px;"></td>
-    <td><input class="withoutHSN" readonly style="width:50px;"></td>
-    <td><input class="withoutQty" type="number" min="1" placeholder="Qty" style="width:40px;" oninput="calculateWithoutGSTRow(this)"></td>
-    <td><input class="withoutRate" type="number" value="0" style="width:50px;" oninput="calculateWithoutGSTRow(this)"></td>
-    <td><input class="withoutAmount" value="0.00" readonly style="width:60px;"></td>
-  `;
-  tbody.appendChild(tr);
 }
 
 function addGSTRow() {
@@ -1161,52 +1098,6 @@ function renderChart(canvasId, chartObj, labels, data, labelName) {
   });
 }
 
-function syncGSTToVoucher() {
-  isVoucherSyncedFromGST = true;
-  document.getElementById("voucherCustomerName").value = document.getElementById("c_name").value;
-  document.getElementById("voucherRelation").value = document.getElementById("relation").value;
-  document.getElementById("voucherMobile").value = document.getElementById("phone").value;
-  document.getElementById("voucherVillage").value = document.getElementById("village").value;
-  document.getElementById("voucherDistrict").value = document.getElementById("district").value;
-  document.getElementById("voucherState").value = document.getElementById("state").value;
-  document.getElementById("voucherPincode").value = document.getElementById("pincode").value;
-  document.getElementById("voucherEmail").value = document.getElementById("email").value;
-  document.getElementById("voucherPaymentMode").value = getSelectedPaymentMode();
-  document.getElementById("voucherAadhaar").value = document.getElementById("aadhaar").value;
-  document.getElementById("voucherPAN").value = document.getElementById("pan").value;
-  document.getElementById("voucherBankName").value = document.getElementById("bankName").value;
-  document.getElementById("voucherBranch").value = document.getElementById("branch").value;
-  document.getElementById("voucherAccountNo").value = document.getElementById("accountNo").value;
-  document.getElementById("voucherIFSC").value = document.getElementById("ifsc").value;
-  alert("GST Data Synced to Voucher Form!");
-}
-
-function syncGSTToRepurchase() {
-  document.getElementById("name").value = document.getElementById("c_name").value;
-  document.getElementById("address").value = document.getElementById("village").value + ", " + document.getElementById("district").value;
-  document.getElementById("repurchasePhone").value = document.getElementById("phone").value;
-  alert("GST Data Synced to Repurchase Form!");
-}
-
-function syncGSTToRenewal() {
-  document.getElementById("renewalCustomerName").value = document.getElementById("c_name").value;
-  document.getElementById("renewalRelation").value = document.getElementById("relation").value;
-  document.getElementById("renewalMobile").value = document.getElementById("phone").value;
-  document.getElementById("renewalVillage").value = document.getElementById("village").value;
-  document.getElementById("renewalDistrict").value = document.getElementById("district").value;
-  document.getElementById("renewalState").value = document.getElementById("state").value;
-  document.getElementById("renewalPincode").value = document.getElementById("pincode").value;
-  document.getElementById("renewalEmail").value = document.getElementById("email").value;
-  document.getElementById("renewalPaymentMode").value = getSelectedPaymentMode();
-  document.getElementById("renewalAadhaar").value = document.getElementById("aadhaar").value;
-  document.getElementById("renewalPan").value = document.getElementById("pan").value;
-  document.getElementById("renewalBankName").value = document.getElementById("bankName").value;
-  document.getElementById("renewalBranch").value = document.getElementById("branch").value;
-  document.getElementById("renewalAccountNo").value = document.getElementById("accountNo").value;
-  document.getElementById("renewalIfsc").value = document.getElementById("ifsc").value;
-  alert("GST Data Synced to Renewal Form!");
-}
-
 async function saveData(payload) {
   try {
     let res = await fetch(WEBAPP, { method: "POST", body: JSON.stringify(payload) });
@@ -1226,18 +1117,6 @@ function promptClearFields(formType) {
       });
       document.querySelectorAll("#gstTable tbody").forEach(tb => tb.innerHTML = "");
       for (let i = 0; i < 3; i++) addGSTRow();
-    } else if (formType === "repurchase") {
-      document.querySelectorAll("#billingPage input:not(#date):not(#invoiceNo)").forEach(i => i.value = "");
-      document.querySelectorAll("#repurchaseBody").forEach(tb => tb.innerHTML = "");
-      for (let i = 0; i < 3; i++) addRow();
-    } else if (formType === "voucher") {
-      document.querySelectorAll("#voucherPage input:not(#joiningDate):not(#voucherNo)").forEach(i => i.value = "");
-    } else if (formType === "renewal") {
-      document.querySelectorAll("#renewalPage input:not(#renewalJoiningDate):not(#renewalVoucherNo)").forEach(i => i.value = "");
-    } else if (formType === "withoutGST") {
-      document.querySelectorAll("#withoutGSTPage input:not(#withoutDate):not(#withoutGSTInvoiceNo)").forEach(i => i.value = "");
-      document.querySelectorAll("#withoutGSTBody").forEach(tb => tb.innerHTML = "");
-      for (let i = 0; i < 3; i++) addWithoutGSTRow();
     }
   }
 }
@@ -1302,200 +1181,22 @@ async function generateGST() {
 
   let result = await saveData(payload);
   if (result.status) {
-    alert("GST Invoice Generated & Saved to Template & DB!");
-    if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
+    alert("GST Template Populated & PDF Generated Successfully!");
+    if (result.pdfUrl) {
+      window.open(result.pdfUrl, "_blank"); // Automatically opens your Google Sheet Template PDF
+    }
     if (result.nextInvoiceNo) document.getElementById("gstInvoiceNo").value = result.nextInvoiceNo;
     promptClearFields("gst");
-  } else { alert("Error saving GST Invoice: " + result.message); }
-}
-
-async function generate() {
-  let items = [];
-  document.querySelectorAll("#repurchaseBody tr").forEach(tr => {
-    let metal = tr.querySelector(".metalType").value;
-    let weight = tr.querySelector(".weight").value;
-    let rate = tr.querySelector(".rate").value;
-    let amount = tr.querySelector(".amount").value;
-    if (weight) items.push({ metal, weight, rate, amount });
-  });
-
-  let user = JSON.parse(localStorage.getItem("user")) || {};
-  let payload = {
-    type: "repurchase", date: document.getElementById("date").value,
-    invoiceNo: document.getElementById("invoiceNo").value, customerName: document.getElementById("name").value,
-    address: document.getElementById("address").value, phone: document.getElementById("repurchasePhone").value,
-    items: items, total: document.getElementById("total").value, words: document.getElementById("words").value,
-    createdBy: user.username || "System"
-  };
-
-  let result = await saveData(payload);
-  if (result.status) {
-    alert("Repurchase Bill Generated & Saved!");
-    if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
-    if (result.nextInvoiceNo) document.getElementById("invoiceNo").value = result.nextInvoiceNo;
-    promptClearFields("repurchase");
-  } else { alert("Error saving Repurchase Bill: " + result.message); }
-}
-
-async function generateVoucher() {
-  let gstItems = [];
-  if (isVoucherSyncedFromGST) {
-    document.querySelectorAll("#gstTable tbody tr").forEach(tr => {
-      let product = tr.querySelector(".product-search").value;
-      if (product) {
-        gstItems.push({
-          product: product,
-          qty: tr.querySelector(".qty").value,
-          rate: tr.querySelector(".rate").value,
-          gross: tr.querySelector(".gross").value
-        });
-      }
-    });
+  } else { 
+    alert("Error saving/generating template: " + result.message); 
   }
-
-  let payload = {
-    type: "voucher",
-    voucherNo: document.getElementById("voucherNo").value,
-    joiningDate: document.getElementById("joiningDate").value,
-    redeemDate: document.getElementById("redeemDate").value,
-    kits: document.getElementById("kits").value,
-    customerName: document.getElementById("voucherCustomerName").value,
-    relation: document.getElementById("voucherRelation").value,
-    mobile: document.getElementById("voucherMobile").value,
-    village: document.getElementById("voucherVillage").value,
-    district: document.getElementById("voucherDistrict").value,
-    state: document.getElementById("voucherState").value,
-    pincode: document.getElementById("voucherPincode").value,
-    email: document.getElementById("voucherEmail").value,
-    paymentMode: document.getElementById("voucherPaymentMode").value,
-    aadhaar: document.getElementById("voucherAadhaar").value,
-    pan: document.getElementById("voucherPAN").value,
-    bankName: document.getElementById("voucherBankName").value,
-    branch: document.getElementById("voucherBranch").value,
-    accountNo: document.getElementById("voucherAccountNo").value,
-    ifsc: document.getElementById("voucherIFSC").value,
-    salesRepId: document.getElementById("salesRepId").value,
-    salesRepName: document.getElementById("salesRepNameInput").value,
-    monthlyRedeem: document.getElementById("monthlyRedeem").value,
-    totalCoupon: document.getElementById("totalCoupon").value,
-    isSyncedWithGST: isVoucherSyncedFromGST,
-    gstInvoiceNo: document.getElementById("gstInvoiceNo").value,
-    gstInvoiceDate: document.getElementById("gstDate").value,
-    gstInvoiceAmount: document.getElementById("finalTotal").value,
-    gstWords: document.getElementById("gstWords").value,
-    gstTotalQty: document.getElementById("totalQty").value,
-    gstItems: gstItems
-  };
-
-  let result = await saveData(payload);
-  if (result.status) {
-    alert("Voucher Generated & Saved!");
-    if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
-    if (result.nextInvoiceNo) document.getElementById("voucherNo").value = result.nextInvoiceNo;
-    isVoucherSyncedFromGST = false;
-    promptClearFields("voucher");
-  } else { alert("Error saving Voucher: " + result.message); }
-}
-
-async function generateRenewalVoucher() {
-  let user = JSON.parse(localStorage.getItem("user")) || {};
-  let payload = {
-    type: "renewal", renewalNo: document.getElementById("renewalVoucherNo").value,
-    joiningDate: document.getElementById("renewalJoiningDate").value, redeemDate: document.getElementById("renewalRedeemDate").value,
-    kits: document.getElementById("renewalKits").value,
-    customerName: document.getElementById("renewalCustomerName").value, relation: document.getElementById("renewalRelation").value,
-    mobile: document.getElementById("renewalMobile").value, village: document.getElementById("renewalVillage").value,
-    district: document.getElementById("renewalDistrict").value, state: document.getElementById("renewalState").value,
-    pincode: document.getElementById("renewalPincode").value, email: document.getElementById("renewalEmail").value,
-    paymentMode: document.getElementById("renewalPaymentMode").value,
-    aadhaar: document.getElementById("renewalAadhaar").value, pan: document.getElementById("renewalPan").value,
-    bankName: document.getElementById("renewalBankName").value, branch: document.getElementById("renewalBranch").value,
-    accountNo: document.getElementById("renewalAccountNo").value, ifsc: document.getElementById("renewalIfsc").value,
-    salesRepId: document.getElementById("renewalSalesRepId").value,
-    salesRepName: document.getElementById("renewalSalesRepNameInput").value,
-    monthlyCoupon: document.getElementById("renewalMonthlywithCoupon").value,
-    totalCoupon: document.getElementById("renewalTotalCoupon").value,
-    createdBy: user.username || "System"
-  };
-
-  let result = await saveData(payload);
-  if (result.status) {
-    alert("Renewal Voucher Generated & Saved!");
-    if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
-    if (result.nextInvoiceNo) document.getElementById("renewalVoucherNo").value = result.nextInvoiceNo;
-    promptClearFields("renewal");
-  } else { alert("Error saving Renewal Voucher: " + result.message); }
-}
-
-async function generateWithoutGSTInvoice() {
-  let items = [];
-  document.querySelectorAll("#withoutGSTBody tr").forEach(tr => {
-    let product = tr.querySelector(".withoutProduct").value;
-    if (product) {
-      items.push({
-        product: product,
-        modelNo: tr.querySelector(".withoutModelNo").value,
-        productModel: tr.querySelector(".withoutProductModel").value,
-        hsn: tr.querySelector(".withoutHSN").value,
-        qty: tr.querySelector(".withoutQty").value,
-        rate: tr.querySelector(".withoutRate").value,
-        amount: tr.querySelector(".withoutAmount").value
-      });
-    }
-  });
-
-  let payload = {
-    type: "withoutGST", invoiceNo: document.getElementById("withoutGSTInvoiceNo").value,
-    date: document.getElementById("withoutDate").value, customerName: document.getElementById("withoutCustomerName").value,
-    relation: document.getElementById("withoutRelation").value, village: document.getElementById("withoutVillage").value,
-    district: document.getElementById("withoutDistrict").value, state: document.getElementById("withoutState").value,
-    pincode: document.getElementById("withoutPincode").value, mobile: document.getElementById("withoutMobile").value,
-    email: document.getElementById("withoutEmail").value, paymentMode: document.getElementById("withoutPaymentMode").value,
-    totalAmount: document.getElementById("withoutTotalAmount").value,
-    items: items
-  };
-
-  let result = await saveData(payload);
-  if (result.status) {
-    alert("Without GST Invoice Generated & Saved!");
-    if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
-    if (result.nextInvoiceNo) document.getElementById("withoutGSTInvoiceNo").value = result.nextInvoiceNo;
-    promptClearFields("withoutGST");
-  } else { alert("Error saving Without GST Invoice: " + result.message); }
-}
-
-function setRedeemDate() {
-  let jDate = document.getElementById("joiningDate").value;
-  if (jDate) document.getElementById("redeemDate").value = calculateRedeemDateLogic(jDate);
-}
-
-function setRenewalRedeemDate() {
-  let jDate = document.getElementById("renewalJoiningDate").value;
-  if (jDate) document.getElementById("renewalRedeemDate").value = calculateRedeemDateLogic(jDate);
-}
-
-function handleManualInvoice(type, manualVal) {
-  if (!manualVal) return;
-  const match = manualVal.match(/^(.*\/)(\d+)(\/\d{2}-\d{2})$/);
-  if (match) {
-    let nextVal = match[1] + String(parseInt(match[2], 10) + 1).padStart(match[2].length, "0") + match[3];
-    console.log("Manual invoice sequence updated:", nextVal);
-  }
-}
-
-function printFormattedPage(pageId) {
-  let card = document.getElementById(pageId);
-  if (!card) return;
-  card.classList.add("printable-area");
-  window.print();
-  card.classList.remove("printable-area");
 }
 
 function shareWhatsApp(docType) {
-  let phone = document.getElementById("phone")?.value || document.getElementById("voucherMobile")?.value || document.getElementById("renewalMobile")?.value || document.getElementById("repurchasePhone")?.value || document.getElementById("withoutMobile")?.value || "";
-  let name = document.getElementById("c_name")?.value || document.getElementById("voucherCustomerName")?.value || document.getElementById("renewalCustomerName")?.value || document.getElementById("name")?.value || document.getElementById("withoutCustomerName")?.value || "Customer";
-  let invoiceNo = document.getElementById("gstInvoiceNo")?.value || document.getElementById("voucherNo")?.value || document.getElementById("renewalVoucherNo")?.value || document.getElementById("invoiceNo")?.value || document.getElementById("withoutGSTInvoiceNo")?.value || "";
-  let amount = document.getElementById("finalTotal")?.value || document.getElementById("totalCoupon")?.value || document.getElementById("renewalTotalCoupon")?.value || document.getElementById("total")?.value || document.getElementById("withoutTotalAmount")?.value || "0.00";
+  let phone = document.getElementById("phone")?.value || "";
+  let name = document.getElementById("c_name")?.value || "Customer";
+  let invoiceNo = document.getElementById("gstInvoiceNo")?.value || "";
+  let amount = document.getElementById("finalTotal")?.value || "0.00";
   let mode = getSelectedPaymentMode();
 
   let text = `Dear ${name},\nThank you for choosing Beulah Traders Private Limited!\n\n` +
@@ -1503,7 +1204,7 @@ function shareWhatsApp(docType) {
              `*Invoice/Ref No:* ${invoiceNo}\n` +
              `*Amount:* ₹${amount}\n` +
              `*Payment Mode:* ${mode}\n\n` +
-             `For queries, please reach out to us at support. Have a great day!`;
+             `Have a great day!`;
 
   let cleanPhone = phone.replace(/\D/g, "");
   let url = cleanPhone ? `https://wa.me/91${cleanPhone}?text=${encodeURIComponent(text)}` : `https://wa.me/?text=${encodeURIComponent(text)}`;
