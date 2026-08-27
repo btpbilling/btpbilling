@@ -210,7 +210,6 @@ input, select, textarea {
 .popup-box { width: 380px; background: white; border-radius: 20px; padding: 25px; position: relative; }
 .close-btn { position: absolute; right: 18px; top: 15px; font-size: 24px; cursor: pointer; color: #666; }
 
-/* Dynamic Print Rule - Shows Form Template without UI Controls */
 @media print {
   body * { visibility: hidden !important; }
   .printable-area, .printable-area * { visibility: visible !important; }
@@ -229,11 +228,8 @@ input, select, textarea {
 }
   </style>
 </head>
-
- 
  
 <body>
- 
 
 <datalist id="masterProductList"></datalist>
 
@@ -635,10 +631,8 @@ input, select, textarea {
 
 <script src="script.js"></script>
  
- 
- 
 <script>
-
+ 
 // ============================================================================
 // BTP BILLING & REPURCHASE SYSTEM - FRONTEND LOGIC (script.js)
 // ============================================================================
@@ -1487,7 +1481,6 @@ function handleManualInvoice(type, manualVal) {
   }
 }
 
-// Print Handler
 function printFormattedPage(pageId) {
   let card = document.getElementById(pageId);
   if (!card) return;
