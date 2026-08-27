@@ -16,6 +16,7 @@
   <style>
     /* GLOBAL STYLES */
    /* GLOBAL STYLES */
+/* GLOBAL STYLES */
 body { 
   margin: 0; 
   padding: 0; 
@@ -177,6 +178,28 @@ input, select, textarea {
   background: #fff; color: #000; box-sizing: border-box; font-size: 13px;
 }
 
+/* PAYMENT MODE CHECKBOXES / RADIOS WRAPPER */
+.payment-modes-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  background: #fff0f3;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px dashed #ff758c;
+}
+
+.payment-modes-wrapper label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
 /* DROPDOWN & POPUPS */
@@ -197,9 +220,18 @@ input, select, textarea {
 .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; justify-content: center; align-items: center; z-index: 99999; }
 .popup-box { width: 380px; background: white; border-radius: 20px; padding: 25px; position: relative; }
 .close-btn { position: absolute; right: 18px; top: 15px; font-size: 24px; cursor: pointer; color: #666; }
+
+/* PRINT STYLES */
+@media print {
+  body * { visibility: hidden; }
+  .printable-area, .printable-area * { visibility: visible; }
+  .printable-area { position: absolute; left: 0; top: 0; width: 100%; }
+  .workflow-actions, button, .action-btn { display: none !important; }
+}
   </style>
 </head>
 
+ 
  
 <body>
 
@@ -327,25 +359,38 @@ input, select, textarea {
       <h2>BEULAH TRADERS PRIVATE LIMITED<br><span style="font-size:16px; color:#666;">Invoice with GST</span></h2>
       <table style="width:100%; margin-bottom:15px;">
         <tr>
-          <td>Consignee Name</td><td colspan="3"><input id="c_name" style="width:100%;"></td>
-          <td>Invoice No</td><td><input id="gstInvoiceNo" onblur="handleManualInvoice('gst', this.value)"></td>
+          <td>Consignee Name (c6)</td><td colspan="3"><input id="c_name" style="width:100%;"></td>
+          <td>Invoice No (i6)</td><td><input id="gstInvoiceNo" onblur="handleManualInvoice('gst', this.value)"></td>
         </tr>
         <tr>
-          <td>Relation</td><td colspan="3"><input id="relation" style="width:100%;"></td>
-          <td>Date</td><td><input id="gstDate" placeholder="DD-MMM-YYYY"></td>
+          <td>Relation (c7)</td><td colspan="3"><input id="relation" placeholder="W/O, S/O, D/O, C/O" style="width:100%;"></td>
+          <td>Date (i7)</td><td><input id="gstDate" placeholder="DD-MMM-YYYY"></td>
         </tr>
         <tr>
-          <td>Village / Area</td><td colspan="3"><input id="village" style="width:100%;"></td>
-          <td>Email</td><td><input id="email"></td>
+          <td>Village / Area (c8)</td><td colspan="3"><input id="village" style="width:100%;"></td>
+          <td>Email (i8)</td><td><input id="email"></td>
         </tr>
         <tr>
-          <td>District</td><td colspan="3"><input id="district" style="width:100%;"></td>
-          <td>Mobile</td><td><input id="phone" onblur="searchAndFillCustomer(this.value)"></td>
+          <td>District (c9)</td><td colspan="3"><input id="district" style="width:100%;"></td>
+          <td>Mobile Number (c12)</td><td><input id="phone" onblur="searchAndFillCustomer(this.value)"></td>
         </tr>
         <tr>
-          <td>State</td><td><input id="state" value="Telangana"></td>
-          <td>Pincode</td><td><input id="pincode"></td>
-          <td>GST IN (Optional)</td><td><input id="gstin" placeholder="Optional"></td>
+          <td>State (c10)</td><td><input id="state" value="Telangana"></td>
+          <td>Pincode (c11)</td><td><input id="pincode"></td>
+          <td>GST IN (i12)</td><td><input id="gstin" placeholder="Optional"></td>
+        </tr>
+        <tr>
+          <td>Payment Mode</td>
+          <td colspan="5">
+            <div class="payment-modes-wrapper">
+              <label><input type="radio" name="paymentMode" value="Cash" checked> Cash (i9)</label>
+              <label><input type="radio" name="paymentMode" value="UPI (Phone pe/ GPay)"> UPI (Phone pe/ GPay) (i10)</label>
+              <label><input type="radio" name="paymentMode" value="Credit/ Debit Card"> Credit/ Debit Card (i11)</label>
+              <label><input type="radio" name="paymentMode" value="Cheque"> Cheque (k9)</label>
+              <label><input type="radio" name="paymentMode" value="Net Banking"> Net Banking (k10)</label>
+              <label><input type="radio" name="paymentMode" value="Hypothecation"> Hypothecation (k11)</label>
+            </div>
+          </td>
         </tr>
         <tr>
           <td>Aadhaar No</td><td><input id="aadhaar"></td>
@@ -362,15 +407,15 @@ input, select, textarea {
       <table id="gstTable">
         <thead>
           <tr>
-            <th>SL</th><th>Product</th><th>Model No</th><th>Product Model</th><th>HSN</th>
+            <th>SL</th><th>Product Name</th><th>Model Number</th><th>Product Model</th><th>HSN</th>
             <th>Qty</th><th>Rate</th><th>Gross</th><th>GST%</th><th>CGST%</th><th>CGST</th>
-            <th>SGST%</th><th>SGST</th><th>IGST%</th><th>IGST</th><th>Taxable</th>
+            <th>SGST%</th><th>SGST</th><th>IGST%</th><th>IGST</th><th>Taxable Amount (Ex.GST)</th>
           </tr>
         </thead>
         <tbody></tbody>
         <tfoot>
           <tr style="background:#ffe3ec;font-weight:bold;">
-            <td colspan="5" style="text-align:right;">TOTAL</td>
+            <td colspan="5" style="text-align:right;">TOTAL (h25, j25 to p25)</td>
             <td><input id="totalQty" readonly style="width:50px;"></td><td></td>
             <td><input id="totalGross" readonly style="width:70px;"></td><td></td><td></td>
             <td><input id="totalCGST" readonly style="width:60px;"></td><td></td>
@@ -385,14 +430,14 @@ input, select, textarea {
 
       <table style="margin-top:20px; width:100%;">
         <tr>
-          <td>Amount in Words</td><td colspan="3"><input id="gstWords" style="width:100%;"></td>
-          <td>Basic Amount</td><td><input id="basicAmt" readonly></td>
+          <td>Amount in Words (e26)</td><td colspan="3"><input id="gstWords" style="width:100%;"></td>
+          <td>Basic Amount (n26)</td><td><input id="basicAmt" readonly></td>
         </tr>
-        <tr><td colspan="4"></td><td>SGST</td><td><input id="sgstAmt" readonly></td></tr>
-        <tr><td colspan="4"></td><td>CGST</td><td><input id="cgstAmt" readonly></td></tr>
-        <tr><td colspan="4"></td><td>IGST</td><td><input id="igstAmt" readonly></td></tr>
-        <tr><td colspan="4"></td><td>Total GST</td><td><input id="totalGST" readonly></td></tr>
-        <tr><td colspan="4"></td><td><b>Final Total</b></td><td><input id="finalTotal" readonly></td></tr>
+        <tr><td colspan="4"></td><td>SGST Amount (n27)</td><td><input id="sgstAmt" readonly></td></tr>
+        <tr><td colspan="4"></td><td>CGST Amount (n28)</td><td><input id="cgstAmt" readonly></td></tr>
+        <tr><td colspan="4"></td><td>IGST Amount (n29)</td><td><input id="igstAmt" readonly></td></tr>
+        <tr><td colspan="4"></td><td>Total GST Amount (n30)</td><td><input id="totalGST" readonly></td></tr>
+        <tr><td colspan="4"></td><td><b>Actual Total Invoice (n31)</b></td><td><input id="finalTotal" readonly></td></tr>
       </table>
 
       <div style="text-align:center; margin-top:20px; display:flex; gap:10px; justify-content:center;">
@@ -452,6 +497,7 @@ input, select, textarea {
         <div><label>State</label><input id="voucherState" style="width:100%;"></div>
         <div><label>Pincode</label><input id="voucherPincode" style="width:100%;"></div>
         <div><label>Email</label><input id="voucherEmail" style="width:100%;"></div>
+        <div><label>Payment Mode</label><input id="voucherPaymentMode" style="width:100%;" placeholder="Cash, UPI, Card, etc."></div>
         <div><label>Aadhaar</label><input id="voucherAadhaar" style="width:100%;"></div>
         <div><label>PAN</label><input id="voucherPAN" style="width:100%;"></div>
         <div><label>Bank Name</label><input id="voucherBankName" style="width:100%;"></div>
@@ -499,6 +545,7 @@ input, select, textarea {
         <div><label>State</label><input type="text" id="renewalState" style="width:100%;"></div>
         <div><label>Pincode</label><input type="text" id="renewalPincode" style="width:100%;"></div>
         <div><label>Email</label><input type="text" id="renewalEmail" style="width:100%;"></div>
+        <div><label>Payment Mode</label><input id="renewalPaymentMode" style="width:100%;" placeholder="Cash, UPI, Card, etc."></div>
         <div><label>Aadhaar Number</label><input id="renewalAadhaar" maxlength="12" style="width:100%;"></div>
         <div><label>PAN Number</label><input id="renewalPan" style="text-transform:uppercase; width:100%;"></div>
         <div><label>Bank Name</label><input id="renewalBankName" style="width:100%;"></div>
@@ -531,6 +578,7 @@ input, select, textarea {
         <div><label>Pincode</label><input id="withoutPincode" style="width:100%;"></div>
         <div><label>Mobile Number</label><input id="withoutMobile" style="width:100%;"></div>
         <div><label>Email</label><input id="withoutEmail" style="width:100%;"></div>
+        <div><label>Payment Mode</label><input id="withoutPaymentMode" style="width:100%;" placeholder="Cash, UPI, Card, etc."></div>
       </div>
 
       <table id="withoutGSTTable" style="margin-top:15px;">
@@ -587,8 +635,8 @@ input, select, textarea {
 </div>
 
 <script src="script.js"></script>
-</body>
-</html>
+ 
+ 
 <script>
 
  // ============================================================================
@@ -988,6 +1036,12 @@ function addRow() {
   tbody.appendChild(tr);
 }
 
+// Helper to get Selected Payment Mode in GST
+function getSelectedPaymentMode() {
+  let selected = document.querySelector('input[name="paymentMode"]:checked');
+  return selected ? selected.value : "Cash";
+}
+
 // Authentication Functions
 async function requestOTP() {
   const username = document.getElementById("username").value.trim();
@@ -1129,6 +1183,7 @@ function syncGSTToVoucher() {
   document.getElementById("voucherState").value = document.getElementById("state").value;
   document.getElementById("voucherPincode").value = document.getElementById("pincode").value;
   document.getElementById("voucherEmail").value = document.getElementById("email").value;
+  document.getElementById("voucherPaymentMode").value = getSelectedPaymentMode();
   document.getElementById("voucherAadhaar").value = document.getElementById("aadhaar").value;
   document.getElementById("voucherPAN").value = document.getElementById("pan").value;
   document.getElementById("voucherBankName").value = document.getElementById("bankName").value;
@@ -1154,6 +1209,7 @@ function syncGSTToRenewal() {
   document.getElementById("renewalState").value = document.getElementById("state").value;
   document.getElementById("renewalPincode").value = document.getElementById("pincode").value;
   document.getElementById("renewalEmail").value = document.getElementById("email").value;
+  document.getElementById("renewalPaymentMode").value = getSelectedPaymentMode();
   document.getElementById("renewalAadhaar").value = document.getElementById("aadhaar").value;
   document.getElementById("renewalPan").value = document.getElementById("pan").value;
   document.getElementById("renewalBankName").value = document.getElementById("bankName").value;
@@ -1173,7 +1229,13 @@ async function saveData(payload) {
 function promptClearFields(formType) {
   if (confirm("Saved successfully! Clear form fields now?")) {
     if (formType === "gst") {
-      document.querySelectorAll("#gstPage input:not(#gstDate):not(#gstInvoiceNo)").forEach(i => i.value = "");
+      document.querySelectorAll("#gstPage input:not(#gstDate):not(#gstInvoiceNo)").forEach(i => {
+        if (i.type === "radio") {
+          if (i.value === "Cash") i.checked = true;
+        } else {
+          i.value = "";
+        }
+      });
       document.querySelectorAll("#gstTable tbody").forEach(tb => tb.innerHTML = "");
       for (let i = 0; i < 3; i++) addGSTRow();
     } else if (formType === "repurchase") {
@@ -1195,17 +1257,24 @@ function promptClearFields(formType) {
 async function generateGST() {
   let items = [];
   document.querySelectorAll("#gstTable tbody tr").forEach(tr => {
-    let product = tr.querySelector(".product-search").value;
+    let product = tr.querySelector(".product-search")?.value;
     if (product) {
       items.push({
         product: product,
-        modelNo: tr.querySelector(".modelNo").value,
-        productModel: tr.querySelector(".pmodel").value,
-        hsn: tr.querySelector(".hsn").value,
-        qty: tr.querySelector(".qty").value,
-        rate: tr.querySelector(".rate").value,
-        gross: tr.querySelector(".gross").value,
-        gst: tr.querySelector(".gst").value
+        modelNo: tr.querySelector(".modelNo")?.value || "",
+        productModel: tr.querySelector(".pmodel")?.value || "",
+        hsn: tr.querySelector(".hsn")?.value || "",
+        qty: tr.querySelector(".qty")?.value || 0,
+        rate: tr.querySelector(".rate")?.value || 0,
+        gross: tr.querySelector(".gross")?.value || 0,
+        gst: tr.querySelector(".gst")?.value || 0,
+        cgstP: tr.querySelector(".cgstp")?.value || 0,
+        cgst: tr.querySelector(".cgst")?.value || 0,
+        sgstP: tr.querySelector(".sgstp")?.value || 0,
+        sgst: tr.querySelector(".sgst")?.value || 0,
+        igstP: tr.querySelector(".igstp")?.value || 0,
+        igst: tr.querySelector(".igst")?.value || 0,
+        taxable: tr.querySelector(".taxable")?.value || 0
       });
     }
   });
@@ -1223,6 +1292,7 @@ async function generateGST() {
     pincode: document.getElementById("pincode").value,
     email: document.getElementById("email").value,
     mobile: document.getElementById("phone").value,
+    paymentMode: getSelectedPaymentMode(),
     aadhaar: document.getElementById("aadhaar").value,
     pan: document.getElementById("pan").value,
     bankName: document.getElementById("bankName").value,
@@ -1232,11 +1302,16 @@ async function generateGST() {
     gstin: document.getElementById("gstin").value,
     words: document.getElementById("gstWords").value,
     basicAmount: document.getElementById("basicAmt").value,
+    cgstAmount: document.getElementById("cgstAmt").value,
+    sgstAmount: document.getElementById("sgstAmt").value,
+    igstAmount: document.getElementById("igstAmt").value,
+    totalGSTAmount: document.getElementById("totalGST").value,
     finalTotal: document.getElementById("finalTotal").value,
     totalQty: document.getElementById("totalQty").value,
     createdBy: user.username || "System",
     items: items
   };
+
   let result = await saveData(payload);
   if (result.status) {
     alert("GST Invoice Generated & Saved!");
@@ -1304,6 +1379,7 @@ async function generateVoucher() {
     state: document.getElementById("voucherState").value,
     pincode: document.getElementById("voucherPincode").value,
     email: document.getElementById("voucherEmail").value,
+    paymentMode: document.getElementById("voucherPaymentMode").value,
     aadhaar: document.getElementById("voucherAadhaar").value,
     pan: document.getElementById("voucherPAN").value,
     bankName: document.getElementById("voucherBankName").value,
@@ -1343,6 +1419,7 @@ async function generateRenewalVoucher() {
     mobile: document.getElementById("renewalMobile").value, village: document.getElementById("renewalVillage").value,
     district: document.getElementById("renewalDistrict").value, state: document.getElementById("renewalState").value,
     pincode: document.getElementById("renewalPincode").value, email: document.getElementById("renewalEmail").value,
+    paymentMode: document.getElementById("renewalPaymentMode").value,
     aadhaar: document.getElementById("renewalAadhaar").value, pan: document.getElementById("renewalPan").value,
     bankName: document.getElementById("renewalBankName").value, branch: document.getElementById("renewalBranch").value,
     accountNo: document.getElementById("renewalAccountNo").value, ifsc: document.getElementById("renewalIfsc").value,
@@ -1385,7 +1462,8 @@ async function generateWithoutGSTInvoice() {
     relation: document.getElementById("withoutRelation").value, village: document.getElementById("withoutVillage").value,
     district: document.getElementById("withoutDistrict").value, state: document.getElementById("withoutState").value,
     pincode: document.getElementById("withoutPincode").value, mobile: document.getElementById("withoutMobile").value,
-    email: document.getElementById("withoutEmail").value, totalAmount: document.getElementById("withoutTotalAmount").value,
+    email: document.getElementById("withoutEmail").value, paymentMode: document.getElementById("withoutPaymentMode").value,
+    totalAmount: document.getElementById("withoutTotalAmount").value,
     items: items
   };
 
@@ -1413,70 +1491,76 @@ function handleManualInvoice(type, manualVal) {
   const match = manualVal.match(/^(.*\/)(\d+)(\/\d{2}-\d{2})$/);
   if (match) {
     let nextVal = match[1] + String(parseInt(match[2], 10) + 1).padStart(match[2].length, "0") + match[3];
-    console.log(`Manual override calculated for ${type}: ${nextVal}`);
+    console.log("Manual invoice sequence updated:", nextVal);
   }
 }
 
+// Print & WhatsApp Functions
 function printFormattedPage(pageId) {
-  if (pageId === "gstPage") generateGST();
-  else if (pageId === "voucherPage") generateVoucher();
-  else if (pageId === "billingPage") generate();
-  else if (pageId === "renewalPage") generateRenewalVoucher();
-  else if (pageId === "withoutGSTPage") generateWithoutGSTInvoice();
+  let card = document.getElementById(pageId);
+  if (!card) return;
+  
+  card.classList.add("printable-area");
+  window.print();
+  card.classList.remove("printable-area");
 }
 
-function shareWhatsApp(type) {
-  let textMsg = "";
-  let phone = document.getElementById("voucherMobile")?.value || document.getElementById("phone")?.value || "";
+function shareWhatsApp(docType) {
+  let phone = document.getElementById("phone")?.value || document.getElementById("voucherMobile")?.value || document.getElementById("renewalMobile")?.value || document.getElementById("repurchasePhone")?.value || document.getElementById("withoutMobile")?.value || "";
+  let name = document.getElementById("c_name")?.value || document.getElementById("voucherCustomerName")?.value || document.getElementById("renewalCustomerName")?.value || document.getElementById("name")?.value || document.getElementById("withoutCustomerName")?.value || "Customer";
+  let invoiceNo = document.getElementById("gstInvoiceNo")?.value || document.getElementById("voucherNo")?.value || document.getElementById("renewalVoucherNo")?.value || document.getElementById("invoiceNo")?.value || document.getElementById("withoutGSTInvoiceNo")?.value || "";
+  let amount = document.getElementById("finalTotal")?.value || document.getElementById("totalCoupon")?.value || document.getElementById("renewalTotalCoupon")?.value || document.getElementById("total")?.value || document.getElementById("withoutTotalAmount")?.value || "0.00";
+  let mode = getSelectedPaymentMode();
 
-  if (type === "Voucher") {
-    let customerName = document.getElementById("voucherCustomerName").value || "Valued Customer";
-    textMsg = `Greetings from Beulah Traders Private Limited 🎉\n\n` +
-      `Dear ${customerName},\nYour Voucher #${document.getElementById("voucherNo").value} processed successfully.\n\n` +
-      `Best Regards,\nBeulah Traders Private Limited\n📞 8978816673`;
-  } else {
-    let name = document.getElementById("c_name") ? document.getElementById("c_name").value : "Customer";
-    textMsg = `Greetings from Beulah Traders Private Limited 🎉\n\nHello ${name}, your ${type} has been processed successfully.\n\n` +
-      `Best Regards,\nBeulah Traders Private Limited\n📞 8978816673`;
-  }
-  window.open(`https://api.whatsapp.com/send?phone=${encodeURIComponent(phone)}&text=${encodeURIComponent(textMsg)}`, "_blank");
+  let text = `Dear ${name},\nThank you for choosing Beulah Traders Private Limited!\n\n` +
+             `*Document:* ${docType}\n` +
+             `*Invoice/Ref No:* ${invoiceNo}\n` +
+             `*Amount:* ₹${amount}\n` +
+             `*Payment Mode:* ${mode}\n\n` +
+             `For queries, please reach out to us at support. Have a great day!`;
+
+  let cleanPhone = phone.replace(/\D/g, "");
+  let url = cleanPhone ? `https://wa.me/91${cleanPhone}?text=${encodeURIComponent(text)}` : `https://wa.me/?text=${encodeURIComponent(text)}`;
+  window.open(url, "_blank");
 }
 
-function toggleMenu(e) { e.stopPropagation(); document.getElementById("dropdownMenu").classList.toggle("show"); }
+// Popup toggling
+function toggleMenu(e) {
+  e.stopPropagation();
+  document.getElementById("dropdownMenu").classList.toggle("show");
+}
+document.addEventListener("click", () => document.getElementById("dropdownMenu")?.classList.remove("show"));
+
 function openProfile() { document.getElementById("profilePopup").style.display = "flex"; }
 function closeProfile() { document.getElementById("profilePopup").style.display = "none"; }
 function openPasswordPopup() { document.getElementById("passwordPopup").style.display = "flex"; }
 function closePasswordPopup() { document.getElementById("passwordPopup").style.display = "none"; }
 
-function logout() {
-  if (confirm("Are you sure you want to logout?")) {
-    localStorage.removeItem("user");
-    sessionStorage.removeItem("active_session");
-    document.getElementById("app").style.display = "none";
-    document.getElementById("loginPage").style.display = "flex";
+async function changePassword() {
+  let oldPass = document.getElementById("oldPass").value.trim();
+  let newPass = document.getElementById("newPass").value.trim();
+  let confirmPass = document.getElementById("confirmPass").value.trim();
+  let user = JSON.parse(localStorage.getItem("user")) || {};
+
+  if (!newPass || newPass !== confirmPass) {
+    alert("New Passwords do not match!");
+    return;
+  }
+
+  let res = await saveData({ type: "password", username: user.username, oldPassword: oldPass, newPassword: newPass });
+  if (res.status) {
+    alert("Password updated successfully!");
+    closePasswordPopup();
+  } else {
+    alert("Error resetting password.");
   }
 }
 
-async function changePassword() {
-  let oldPassword = document.getElementById("oldPass").value;
-  let newPassword = document.getElementById("newPass").value;
-  let confirmPass = document.getElementById("confirmPass").value;
-
-  if (newPassword !== confirmPass) { alert("New Passwords do not match!"); return; }
-
-  let user = JSON.parse(localStorage.getItem("user"));
-  let payload = {
-    type: "password", username: user ? user.username : "",
-    oldPassword: oldPassword, newPassword: newPassword
-  };
-
-  let result = await saveData(payload);
-  if (result.status) {
-    alert("Password updated successfully!");
-    closePasswordPopup();
-  } else { alert("Failed to update password."); }
+function logout() {
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.reload();
 }
-
 </script>
 </body>
 </html>
