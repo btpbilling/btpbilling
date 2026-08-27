@@ -229,6 +229,7 @@ input, select, textarea {
   </style>
 </head>
  
+
 <body>
 
 <datalist id="masterProductList"></datalist>
@@ -630,6 +631,7 @@ input, select, textarea {
 </div>
 
 <script src="script.js"></script>
+ 
  
 <script>
  
@@ -1300,7 +1302,7 @@ async function generateGST() {
 
   let result = await saveData(payload);
   if (result.status) {
-    alert("GST Invoice Generated & Saved!");
+    alert("GST Invoice Generated & Saved to Template & DB!");
     if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if (result.nextInvoiceNo) document.getElementById("gstInvoiceNo").value = result.nextInvoiceNo;
     promptClearFields("gst");
