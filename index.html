@@ -1168,12 +1168,13 @@ async function generateGST() {
   }
 }
 
-function printFormattedPage(pageId) {
-  let card = document.getElementById(pageId);
-  if (!card) return;
-  card.classList.add("printable-area");
-  window.print();
-  card.classList.remove("printable-area");
+// Redirect Print / PDF button to directly generate and open the Google Sheet template PDF
+async function printFormattedPage(pageId) {
+  if (pageId === 'gstPage') {
+    await generateGST();
+  } else {
+    window.print();
+  }
 }
 
 function shareWhatsApp(docType) {
