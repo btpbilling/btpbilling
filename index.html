@@ -758,6 +758,7 @@ async function searchAndFillCustomer(mobile) {
       document.getElementById("branch").value = data.branch || "";
       document.getElementById("accountNo").value = data.accountNo || "";
       document.getElementById("ifsc").value = data.ifsc || "";
+      if (document.getElementById("village")) document.getElementById("village").value = data.village || "";
     }
   } catch (e) { console.error("Customer search error:", e); }
 }
@@ -949,23 +950,19 @@ function addGSTRow() {
   tbody.appendChild(tr);
 }
 
-function addRow() {
+function addRow(desc = "", weight = "", rate = "") {
   const tbody = document.getElementById("repurchaseBody");
   if (!tbody) return;
   const tr = document.createElement("tr");
   tr.innerHTML = `
     <td>${tbody.rows.length + 1}</td>
-    <td>
-      <select class="metalType">
-        <option value="Gold">Gold</option>
-        <option value="Silver">Silver</option>
-      </select>
-    </td>
-    <td><input class="weight" type="number" step="0.01" placeholder="Grams" oninput="calculateRepurchaseRow(this)"></td>
-    <td><input class="rate" type="number" step="0.01" placeholder="Rate/g" oninput="calculateRepurchaseRow(this)"></td>
+    <td><input class="desc" value="${desc}" placeholder="Description" style="width:100%;"></td>
+    <td><input class="weight" type="number" step="0.01" value="${weight}" placeholder="Weight" oninput="calculateRepurchaseRow(this)"></td>
+    <td><input class="rate" type="number" step="0.01" value="${rate}" placeholder="Rate/g" oninput="calculateRepurchaseRow(this)"></td>
     <td><input class="amount" readonly></td>
   `;
   tbody.appendChild(tr);
+  if (weight || rate) calculateRepurchaseRow(tr);
 }
 
 function getSelectedPaymentMode() {
@@ -1079,6 +1076,74 @@ async function saveData(payload) {
   } catch (e) { return { status: false, message: e.toString() }; }
 }
 
+function syncGSTToVoucher() {
+  isVoucherSyncedFromGST = true;
+  let setVal = (id, val) => { let el = document.getElementById(id); if (el) el.value = val || ""; };
+  setVal("voucherCustomerName", document.getElementById("c_name")?.value);
+  setVal("voucherRelation", document.getElementById("relation")?.value);
+  setVal("voucherMobile", document.getElementById("phone")?.value);
+  setVal("voucherVillage", document.getElementById("village")?.value);
+  setVal("voucherDistrict", document.getElementById("district")?.value);
+  setVal("voucherState", document.getElementById("state")?.value);
+  setVal("voucherPincode", document.getElementById("pincode")?.value);
+  setVal("voucherEmail", document.getElementById("email")?.value);
+  setVal("voucherPaymentMode", getSelectedPaymentMode());
+  setVal("voucherAadhaar", document.getElementById("aadhaar")?.value);
+  setVal("voucherPAN", document.getElementById("pan")?.value);
+  setVal("voucherBankName", document.getElementById("bankName")?.value);
+  setVal("voucherBranch", document.getElementById("branch")?.value);
+  setVal("voucherAccountNo", document.getElementById("accountNo")?.value);
+  setVal("voucherIFSC", document.getElementById("ifsc")?.value);
+  alert("GST Data Synced to Voucher Form!");
+}
+
+function syncGSTToRepurchase() {
+  let setVal = (id, val) => { let el = document.getElementById(id); if (el) el.value = val || ""; };
+  setVal("name", document.getElementById("c_name")?.value);
+  setVal("repurchasePhone", document.getElementById("phone")?.value);
+  let village = document.getElementById("village")?.value || "";
+  let district = document.getElementById("district")?.value || "";
+  setVal("address", [village, district].filter(Boolean).join(", "));
+
+  let repurchaseBody = document.getElementById("repurchaseBody");
+  if (repurchaseBody) repurchaseBody.innerHTML = "";
+
+  document.querySelectorAll("#gstTable tbody tr").forEach(tr => {
+    let productName = tr.querySelector(".product-search")?.value;
+    let qty = tr.querySelector(".qty")?.value || "";
+    let rate = tr.querySelector(".rate")?.value || "";
+    if (productName) {
+      addRow(productName, qty, rate);
+    }
+  });
+
+  if (!repurchaseBody || repurchaseBody.rows.length === 0) {
+    addRow("", "", "");
+  }
+
+  alert("GST Data & Products Synced to Repurchase Form!");
+}
+
+function syncGSTToRenewal() {
+  let setVal = (id, val) => { let el = document.getElementById(id); if (el) el.value = val || ""; };
+  setVal("renewalCustomerName", document.getElementById("c_name")?.value);
+  setVal("renewalRelation", document.getElementById("relation")?.value);
+  setVal("renewalMobile", document.getElementById("phone")?.value);
+  setVal("renewalVillage", document.getElementById("village")?.value);
+  setVal("renewalDistrict", document.getElementById("district")?.value);
+  setVal("renewalState", document.getElementById("state")?.value);
+  setVal("renewalPincode", document.getElementById("pincode")?.value);
+  setVal("renewalEmail", document.getElementById("email")?.value);
+  setVal("renewalPaymentMode", getSelectedPaymentMode());
+  setVal("renewalAadhaar", document.getElementById("aadhaar")?.value);
+  setVal("renewalPan", document.getElementById("pan")?.value);
+  setVal("renewalBankName", document.getElementById("bankName")?.value);
+  setVal("renewalBranch", document.getElementById("branch")?.value);
+  setVal("renewalAccountNo", document.getElementById("accountNo")?.value);
+  setVal("renewalIfsc", document.getElementById("ifsc")?.value);
+  alert("GST Data Synced to Renewal Form!");
+}
+
 function promptClearFields(formType) {
   if (confirm("Saved successfully! Clear form fields now?")) {
     if (formType === "gst") {
@@ -1168,20 +1233,55 @@ async function generateGST() {
   }
 }
 
-// Redirect Print / PDF button to directly generate and open the Google Sheet template PDF
+async function generate() {
+  let items = [];
+  document.querySelectorAll("#repurchaseBody tr").forEach(tr => {
+    let desc = tr.querySelector(".desc")?.value || "";
+    let weight = tr.querySelector(".weight")?.value || "";
+    let rate = tr.querySelector(".rate")?.value || "";
+    let amount = tr.querySelector(".amount")?.value || "";
+    if (weight || desc) items.push({ desc, weight, rate, amount });
+  });
+
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
+  let payload = {
+    type: "repurchase",
+    date: document.getElementById("date")?.value || "",
+    invoiceNo: document.getElementById("invoiceNo")?.value || "",
+    customerName: document.getElementById("name")?.value || "",
+    address: document.getElementById("address")?.value || "",
+    phone: document.getElementById("repurchasePhone")?.value || "",
+    items: items,
+    total: document.getElementById("total")?.value || "0.00",
+    words: document.getElementById("words")?.value || "",
+    createdBy: user.username || "System"
+  };
+
+  let result = await saveData(payload);
+  if (result.status) {
+    alert("Repurchase Bill Generated & Saved!");
+    if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
+    if (result.nextInvoiceNo) document.getElementById("invoiceNo").value = result.nextInvoiceNo;
+  } else { 
+    alert("Error saving Repurchase Bill: " + result.message); 
+  }
+}
+
 async function printFormattedPage(pageId) {
   if (pageId === 'gstPage') {
     await generateGST();
+  } else if (pageId === 'billingPage') {
+    await generate();
   } else {
     window.print();
   }
 }
 
 function shareWhatsApp(docType) {
-  let phone = document.getElementById("phone")?.value || document.getElementById("voucherMobile")?.value || "";
-  let name = document.getElementById("c_name")?.value || document.getElementById("voucherCustomerName")?.value || "Customer";
-  let invoiceNo = document.getElementById("gstInvoiceNo")?.value || "";
-  let amount = document.getElementById("finalTotal")?.value || "0.00";
+  let phone = document.getElementById("phone")?.value || document.getElementById("voucherMobile")?.value || document.getElementById("repurchasePhone")?.value || "";
+  let name = document.getElementById("c_name")?.value || document.getElementById("voucherCustomerName")?.value || document.getElementById("name")?.value || "Customer";
+  let invoiceNo = document.getElementById("gstInvoiceNo")?.value || document.getElementById("invoiceNo")?.value || "";
+  let amount = document.getElementById("finalTotal")?.value || document.getElementById("total")?.value || "0.00";
   let mode = getSelectedPaymentMode();
 
   let text = `Dear ${name},\nThank you for choosing Beulah Traders Private Limited!\n\n` +
