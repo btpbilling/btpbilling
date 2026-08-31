@@ -639,9 +639,11 @@ input, select, textarea {
 // BTP BILLING & REPURCHASE SYSTEM - FRONTEND LOGIC (script.js)
 // ============================================================================
 
-const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 // ============================================================================
- 
+// BTP BILLING & REPURCHASE SYSTEM - FRONTEND LOGIC (script.js)
+// ============================================================================
+
+const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
 let productList = [];
 let isVoucherSyncedFromGST = false;
@@ -906,19 +908,6 @@ function calculateRepurchaseTotals() {
   let roundedTotal = Math.round(grandTotal);
   document.getElementById("total").value = roundedTotal.toFixed(2);
   document.getElementById("words").value = convertNumberToWords(roundedTotal);
-}
-
-function calculateVoucher() {
-  let kits = parseFloat(document.getElementById("kits")?.value) || 0;
-  let totalPoints = kits * 6000;
-  let monthlyRedeem = totalPoints / 12;
-  let monthlyWithDeduction = monthlyRedeem * 0.98;
-  let totalWithDeduction = monthlyWithDeduction * 12;
-
-  if (document.getElementById("rewardPoints")) document.getElementById("rewardPoints").value = totalPoints;
-  if (document.getElementById("monthlyRedeem")) document.getElementById("monthlyRedeem").value = monthlyRedeem.toFixed(2);
-  if (document.getElementById("monthlywithCoupon")) document.getElementById("monthlywithCoupon").value = monthlyWithDeduction.toFixed(2);
-  if (document.getElementById("totalCoupon")) document.getElementById("totalCoupon").value = totalWithDeduction.toFixed(2);
 }
 
 function addGSTRow() {
