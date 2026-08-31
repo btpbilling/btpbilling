@@ -639,10 +639,6 @@ input, select, textarea {
 // BTP BILLING & REPURCHASE SYSTEM - FRONTEND LOGIC (script.js)
 // ============================================================================
 
-// ============================================================================
-// BTP BILLING & REPURCHASE SYSTEM - FRONTEND LOGIC (script.js)
-// ============================================================================
-
 const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
 let productList = [];
@@ -683,13 +679,31 @@ function calculateRedeemDateLogic(joiningDateStr) {
   return getFormattedDate(new Date(targetYear, targetMonth, targetDay));
 }
 
+function setRedeemDate() {
+  let jDate = document.getElementById("joiningDate")?.value;
+  if (jDate) {
+    let rDateEl = document.getElementById("redeemDate");
+    if (rDateEl) rDateEl.value = calculateRedeemDateLogic(jDate);
+  }
+}
+
+function setRenewalRedeemDate() {
+  let jDate = document.getElementById("renewalJoiningDate")?.value;
+  if (jDate) {
+    let rDateEl = document.getElementById("renewalRedeemDate");
+    if (rDateEl) rDateEl.value = calculateRedeemDateLogic(jDate);
+  }
+}
+
 window.onload = function () {
   const sessionToken = sessionStorage.getItem("active_session");
   const user = localStorage.getItem("user");
 
   if (!sessionToken || !user) {
-    document.getElementById("loginPage").style.display = "flex";
-    document.getElementById("app").style.display = "none";
+    let loginPage = document.getElementById("loginPage");
+    let app = document.getElementById("app");
+    if (loginPage) loginPage.style.display = "flex";
+    if (app) app.style.display = "none";
   } else {
     showApp();
   }
@@ -706,7 +720,6 @@ window.onload = function () {
   fetchProducts().then(() => {
     for (let i = 0; i < 3; i++) { addRow(); }
     for (let i = 0; i < 3; i++) { addGSTRow(); }
-    for (let i = 0; i < 3; i++) { addWithoutGSTRow(); }
   });
 
   loadNextInvoiceNumbers();
@@ -715,11 +728,11 @@ window.onload = function () {
 async function loadNextInvoiceNumbers() {
   try {
     let [resGST, resRep, resVouch, resRen, resWithout] = await Promise.all([
-      fetch(`${WEBAPP}?api=1&nextGSTInvoice=1`).then(r => r.json()),
-      fetch(`${WEBAPP}?api=1&nextInvoice=1`).then(r => r.json()),
-      fetch(`${WEBAPP}?api=1&nextVoucherNo=1`).then(r => r.json()),
-      fetch(`${WEBAPP}?api=1&nextRenewalNo=1`).then(r => r.json()),
-      fetch(`${WEBAPP}?api=1&nextWithoutGSTNo=1`).then(r => r.json())
+      fetch(`${WEBAPP}?api=1&nextGSTInvoice=1`).then(r => r.json()).catch(() => ({})),
+      fetch(`${WEBAPP}?api=1&nextInvoice=1`).then(r => r.json()).catch(() => ({})),
+      fetch(`${WEBAPP}?api=1&nextVoucherNo=1`).then(r => r.json()).catch(() => ({})),
+      fetch(`${WEBAPP}?api=1&nextRenewalNo=1`).then(r => r.json()).catch(() => ({})),
+      fetch(`${WEBAPP}?api=1&nextWithoutGSTNo=1`).then(r => r.json()).catch(() => ({}))
     ]);
 
     if (resGST.invoiceNo) document.getElementById("gstInvoiceNo").value = resGST.invoiceNo;
@@ -864,24 +877,24 @@ function calculateGSTTotals() {
     totalTaxable += parseFloat(row.querySelector(".taxable")?.value) || 0;
   });
 
-  document.getElementById("totalQty").value = totalQty;
-  document.getElementById("totalGross").value = totalGross.toFixed(2);
-  document.getElementById("totalCGST").value = totalCGST.toFixed(2);
-  document.getElementById("totalSGST").value = totalSGST.toFixed(2);
-  document.getElementById("totalIGST").value = totalIGST.toFixed(2);
-  document.getElementById("totalTaxable").value = totalTaxable.toFixed(2);
+  let tq = document.getElementById("totalQty"); if (tq) tq.value = totalQty;
+  let tg = document.getElementById("totalGross"); if (tg) tg.value = totalGross.toFixed(2);
+  let tc = document.getElementById("totalCGST"); if (tc) tc.value = totalCGST.toFixed(2);
+  let ts = document.getElementById("totalSGST"); if (ts) ts.value = totalSGST.toFixed(2);
+  let ti = document.getElementById("totalIGST"); if (ti) ti.value = totalIGST.toFixed(2);
+  let tt = document.getElementById("totalTaxable"); if (tt) tt.value = totalTaxable.toFixed(2);
 
-  document.getElementById("basicAmt").value = totalGross.toFixed(2);
-  document.getElementById("sgstAmt").value = totalSGST.toFixed(2);
-  document.getElementById("cgstAmt").value = totalCGST.toFixed(2);
-  document.getElementById("igstAmt").value = totalIGST.toFixed(2);
+  let ba = document.getElementById("basicAmt"); if (ba) ba.value = totalGross.toFixed(2);
+  let sa = document.getElementById("sgstAmt"); if (sa) sa.value = totalSGST.toFixed(2);
+  let ca = document.getElementById("cgstAmt"); if (ca) ca.value = totalCGST.toFixed(2);
+  let ia = document.getElementById("igstAmt"); if (ia) ia.value = totalIGST.toFixed(2);
 
   let totalGST = totalCGST + totalSGST + totalIGST;
-  document.getElementById("totalGST").value = totalGST.toFixed(2);
+  let tgst = document.getElementById("totalGST"); if (tgst) tgst.value = totalGST.toFixed(2);
 
   let finalTotal = Math.round(totalTaxable);
-  document.getElementById("finalTotal").value = finalTotal.toFixed(2);
-  document.getElementById("gstWords").value = convertNumberToWords(finalTotal);
+  let ft = document.getElementById("finalTotal"); if (ft) ft.value = finalTotal.toFixed(2);
+  let gw = document.getElementById("gstWords"); if (gw) gw.value = convertNumberToWords(finalTotal);
 }
 
 document.addEventListener("input", function (e) {
@@ -906,8 +919,8 @@ function calculateRepurchaseTotals() {
   });
 
   let roundedTotal = Math.round(grandTotal);
-  document.getElementById("total").value = roundedTotal.toFixed(2);
-  document.getElementById("words").value = convertNumberToWords(roundedTotal);
+  let tot = document.getElementById("total"); if (tot) tot.value = roundedTotal.toFixed(2);
+  let wrd = document.getElementById("words"); if (wrd) wrd.value = convertNumberToWords(roundedTotal);
 }
 
 function addGSTRow() {
@@ -995,45 +1008,56 @@ async function verifyOTPAndLogin() {
 }
 
 function showApp() {
-  document.getElementById("loginPage").style.display = "none";
-  document.getElementById("app").style.display = "block";
+  let loginPage = document.getElementById("loginPage");
+  let app = document.getElementById("app");
+  if (loginPage) loginPage.style.display = "none";
+  if (app) app.style.display = "block";
 
-  let user = JSON.parse(localStorage.getItem("user"));
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
   if (user) {
-    const defaultPhoto = "https://i.imgur.com/t9HFQvX.png";
-    const profilePic = user.photo || user.profilePic || defaultPhoto;
+    let usernameDisp = document.getElementById("usernameDisplay");
+    let dropName = document.getElementById("dropName");
+    let profileUsr = document.getElementById("profileUsername");
+    let profileEmail = document.getElementById("profileEmail");
+    let profilePhone = document.getElementById("profilePhone");
+    let profilePopupName = document.getElementById("profilePopupName");
 
-    document.getElementById("usernameDisplay").innerText = user.name || "User";
-    document.getElementById("dropName").innerText = user.name || "User";
-    document.getElementById("profileUsername").value = user.username || "";
-    document.getElementById("profileEmail").value = user.email || "";
-    document.getElementById("profilePhone").value = user.phone || "";
-    document.getElementById("profilePopupName").innerText = user.name || "User";
-
-    document.getElementById("topProfile").src = profilePic;
-    document.getElementById("dropProfile").src = profilePic;
-    document.getElementById("profilePopupImg").src = profilePic;
+    if (usernameDisp) usernameDisp.innerText = user.name || "User";
+    if (dropName) dropName.innerText = user.name || "User";
+    if (profileUsr) profileUsr.value = user.username || "";
+    if (profileEmail) profileEmail.value = user.email || "";
+    if (profilePhone) profilePhone.value = user.phone || "";
+    if (profilePopupName) profilePopupName.innerText = user.name || "User";
   }
   showGST();
 }
 
 function hideAll() {
-  ["billingPage", "gstPage", "voucherPage", "renewalPage", "withoutGSTPage"].forEach(id => document.getElementById(id).style.display = "none");
+  ["billingPage", "gstPage", "voucherPage", "renewalPage", "withoutGSTPage"].forEach(id => {
+    let el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
 }
 function hideCards() {
-  ["repurchaseCards", "invoiceCards", "voucherCards", "renewalCards", "withoutGSTCards"].forEach(id => document.getElementById(id).style.display = "none");
+  ["repurchaseCards", "invoiceCards", "voucherCards", "renewalCards", "withoutGSTCards"].forEach(id => {
+    let el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
 }
-function setTitle(name) { document.getElementById("pageTitle").innerText = name; }
+function setTitle(name) {
+  let titleEl = document.getElementById("pageTitle");
+  if (titleEl) titleEl.innerText = name;
+}
 function setActive(el) {
   document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active"));
   el.classList.add("active");
 }
 
-function showGST() { hideAll(); hideCards(); document.getElementById("gstPage").style.display = "block"; document.getElementById("invoiceCards").style.display = "flex"; setTitle("GST Invoice"); loadDashboardMetrics("gst"); }
-function showVoucher() { hideAll(); hideCards(); document.getElementById("voucherPage").style.display = "block"; document.getElementById("voucherCards").style.display = "flex"; setTitle("Voucher"); loadDashboardMetrics("voucher"); }
-function showBilling() { hideAll(); hideCards(); document.getElementById("billingPage").style.display = "block"; document.getElementById("repurchaseCards").style.display = "flex"; setTitle("Repurchase"); loadDashboardMetrics("repurchase"); }
-function showRenewal() { hideAll(); hideCards(); document.getElementById("renewalPage").style.display = "block"; document.getElementById("renewalCards").style.display = "flex"; setTitle("Renewal Voucher"); loadDashboardMetrics("renewal"); }
-function showWithoutGST() { hideAll(); hideCards(); document.getElementById("withoutGSTPage").style.display = "block"; document.getElementById("withoutGSTCards").style.display = "flex"; setTitle("Without GST Invoice"); loadDashboardMetrics("withoutGST"); }
+function showGST() { hideAll(); hideCards(); let p = document.getElementById("gstPage"); if(p) p.style.display = "block"; let c = document.getElementById("invoiceCards"); if(c) c.style.display = "flex"; setTitle("GST Invoice"); loadDashboardMetrics("gst"); }
+function showVoucher() { hideAll(); hideCards(); let p = document.getElementById("voucherPage"); if(p) p.style.display = "block"; let c = document.getElementById("voucherCards"); if(c) c.style.display = "flex"; setTitle("Voucher"); loadDashboardMetrics("voucher"); }
+function showBilling() { hideAll(); hideCards(); let p = document.getElementById("billingPage"); if(p) p.style.display = "block"; let c = document.getElementById("repurchaseCards"); if(c) c.style.display = "flex"; setTitle("Repurchase"); loadDashboardMetrics("repurchase"); }
+function showRenewal() { hideAll(); hideCards(); let p = document.getElementById("renewalPage"); if(p) p.style.display = "block"; let c = document.getElementById("renewalCards"); if(c) c.style.display = "flex"; setTitle("Renewal Voucher"); loadDashboardMetrics("renewal"); }
+function showWithoutGST() { hideAll(); hideCards(); let p = document.getElementById("withoutGSTPage"); if(p) p.style.display = "block"; let c = document.getElementById("withoutGSTCards"); if(c) c.style.display = "flex"; setTitle("Without GST Invoice"); loadDashboardMetrics("withoutGST"); }
 
 async function loadDashboardMetrics(moduleType) {
   try {
@@ -1042,8 +1066,8 @@ async function loadDashboardMetrics(moduleType) {
     if (!data) return;
 
     if (moduleType === "gst") {
-      document.getElementById("gstBills").innerText = data.gstBills || 0;
-      document.getElementById("gstAmount").innerText = "₹" + (data.gstAmount || 0);
+      let gBills = document.getElementById("gstBills"); if (gBills) gBills.innerText = data.gstBills || 0;
+      let gAmt = document.getElementById("gstAmount"); if (gAmt) gAmt.innerText = "₹" + (data.gstAmount || 0);
     }
   } catch (e) { console.error("Error loading dashboard metrics:", e); }
 }
@@ -1065,7 +1089,8 @@ function promptClearFields(formType) {
           i.value = "";
         }
       });
-      document.querySelectorAll("#gstTable tbody").forEach(tb => tb.innerHTML = "");
+      let tbody = document.querySelector("#gstTable tbody");
+      if (tbody) tbody.innerHTML = "";
       for (let i = 0; i < 3; i++) addGSTRow();
     }
   }
@@ -1096,35 +1121,35 @@ async function generateGST() {
     }
   });
 
-  let user = JSON.parse(localStorage.getItem("user")) || {};
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
   let payload = {
     type: "gstInvoice",
-    customerName: document.getElementById("c_name").value,
-    invoiceNo: document.getElementById("gstInvoiceNo").value,
-    relation: document.getElementById("relation").value,
-    date: document.getElementById("gstDate").value,
-    village: document.getElementById("village").value,
-    district: document.getElementById("district").value,
-    state: document.getElementById("state").value,
-    pincode: document.getElementById("pincode").value,
-    email: document.getElementById("email").value,
-    mobile: document.getElementById("phone").value,
+    customerName: document.getElementById("c_name")?.value || "",
+    invoiceNo: document.getElementById("gstInvoiceNo")?.value || "",
+    relation: document.getElementById("relation")?.value || "",
+    date: document.getElementById("gstDate")?.value || "",
+    village: document.getElementById("village")?.value || "",
+    district: document.getElementById("district")?.value || "",
+    state: document.getElementById("state")?.value || "",
+    pincode: document.getElementById("pincode")?.value || "",
+    email: document.getElementById("email")?.value || "",
+    mobile: document.getElementById("phone")?.value || "",
     paymentMode: getSelectedPaymentMode(),
-    aadhaar: document.getElementById("aadhaar").value,
-    pan: document.getElementById("pan").value,
-    bankName: document.getElementById("bankName").value,
-    branch: document.getElementById("branch").value,
-    accountNo: document.getElementById("accountNo").value,
-    ifsc: document.getElementById("ifsc").value,
-    gstin: document.getElementById("gstin").value,
-    words: document.getElementById("gstWords").value,
-    basicAmount: document.getElementById("basicAmt").value,
-    cgstAmount: document.getElementById("cgstAmt").value,
-    sgstAmount: document.getElementById("sgstAmt").value,
-    igstAmount: document.getElementById("igstAmt").value,
-    totalGSTAmount: document.getElementById("totalGST").value,
-    finalTotal: document.getElementById("finalTotal").value,
-    totalQty: document.getElementById("totalQty").value,
+    aadhaar: document.getElementById("aadhaar")?.value || "",
+    pan: document.getElementById("pan")?.value || "",
+    bankName: document.getElementById("bankName")?.value || "",
+    branch: document.getElementById("branch")?.value || "",
+    accountNo: document.getElementById("accountNo")?.value || "",
+    ifsc: document.getElementById("ifsc")?.value || "",
+    gstin: document.getElementById("gstin")?.value || "",
+    words: document.getElementById("gstWords")?.value || "",
+    basicAmount: document.getElementById("basicAmt")?.value || "",
+    cgstAmount: document.getElementById("cgstAmt")?.value || "",
+    sgstAmount: document.getElementById("sgstAmt")?.value || "",
+    igstAmount: document.getElementById("igstAmt")?.value || "",
+    totalGSTAmount: document.getElementById("totalGST")?.value || "",
+    finalTotal: document.getElementById("finalTotal")?.value || "",
+    totalQty: document.getElementById("totalQty")?.value || "",
     createdBy: user.username || "System",
     items: items
   };
@@ -1133,16 +1158,27 @@ async function generateGST() {
   if (result.status) {
     alert("GST Template Populated & PDF Generated Successfully!");
     if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
-    if (result.nextInvoiceNo) document.getElementById("gstInvoiceNo").value = result.nextInvoiceNo;
+    if (result.nextInvoiceNo) {
+      let invEl = document.getElementById("gstInvoiceNo");
+      if (invEl) invEl.value = result.nextInvoiceNo;
+    }
     promptClearFields("gst");
   } else { 
-    alert("Error saving/generating template: " + result.message); 
+    alert("Error saving/generating template: " + (result.message || "Unknown error")); 
   }
 }
 
+function printFormattedPage(pageId) {
+  let card = document.getElementById(pageId);
+  if (!card) return;
+  card.classList.add("printable-area");
+  window.print();
+  card.classList.remove("printable-area");
+}
+
 function shareWhatsApp(docType) {
-  let phone = document.getElementById("phone")?.value || "";
-  let name = document.getElementById("c_name")?.value || "Customer";
+  let phone = document.getElementById("phone")?.value || document.getElementById("voucherMobile")?.value || "";
+  let name = document.getElementById("c_name")?.value || document.getElementById("voucherCustomerName")?.value || "Customer";
   let invoiceNo = document.getElementById("gstInvoiceNo")?.value || "";
   let amount = document.getElementById("finalTotal")?.value || "0.00";
   let mode = getSelectedPaymentMode();
@@ -1161,20 +1197,24 @@ function shareWhatsApp(docType) {
 
 function toggleMenu(e) {
   e.stopPropagation();
-  document.getElementById("dropdownMenu").classList.toggle("show");
+  let menu = document.getElementById("dropdownMenu");
+  if (menu) menu.classList.toggle("show");
 }
-document.addEventListener("click", () => document.getElementById("dropdownMenu")?.classList.remove("show"));
+document.addEventListener("click", () => {
+  let menu = document.getElementById("dropdownMenu");
+  if (menu) menu.classList.remove("show");
+});
 
-function openProfile() { document.getElementById("profilePopup").style.display = "flex"; }
-function closeProfile() { document.getElementById("profilePopup").style.display = "none"; }
-function openPasswordPopup() { document.getElementById("passwordPopup").style.display = "flex"; }
-function closePasswordPopup() { document.getElementById("passwordPopup").style.display = "none"; }
+function openProfile() { let p = document.getElementById("profilePopup"); if (p) p.style.display = "flex"; }
+function closeProfile() { let p = document.getElementById("profilePopup"); if (p) p.style.display = "none"; }
+function openPasswordPopup() { let p = document.getElementById("passwordPopup"); if (p) p.style.display = "flex"; }
+function closePasswordPopup() { let p = document.getElementById("passwordPopup"); if (p) p.style.display = "none"; }
 
 async function changePassword() {
-  let oldPass = document.getElementById("oldPass").value.trim();
-  let newPass = document.getElementById("newPass").value.trim();
-  let confirmPass = document.getElementById("confirmPass").value.trim();
-  let user = JSON.parse(localStorage.getItem("user")) || {};
+  let oldPass = document.getElementById("oldPass")?.value.trim() || "";
+  let newPass = document.getElementById("newPass")?.value.trim() || "";
+  let confirmPass = document.getElementById("confirmPass")?.value.trim() || "";
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
 
   if (!newPass || newPass !== confirmPass) {
     alert("New Passwords do not match!");
