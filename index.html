@@ -635,7 +635,7 @@ input, select, textarea {
  
 <script>
  
- // ============================================================================
+// ============================================================================
 // BTP BILLING & REPURCHASE SYSTEM - FRONTEND LOGIC (script.js)
 // ============================================================================
 
@@ -911,6 +911,18 @@ function calculateVoucher() {
   let tc = document.getElementById("totalCoupon"); if (tc) tc.value = totalWithDeduction.toFixed(2);
 }
 
+function calculateRenewal() {
+  let kits = parseFloat(document.getElementById("renewalKits")?.value) || 0;
+  let totalPoints = kits * 6000;
+  let monthlyRedeem = totalPoints / 12;
+  let monthlyWithDeduction = monthlyRedeem * 0.98;
+  let totalWithDeduction = monthlyWithDeduction * 12;
+
+  let rp = document.getElementById("renewalRewardPoints"); if (rp) rp.value = totalPoints;
+  let mc = document.getElementById("renewalMonthlyCoupon"); if (mc) mc.value = monthlyWithDeduction.toFixed(2);
+  let tc = document.getElementById("renewalTotalCoupon"); if (tc) tc.value = totalWithDeduction.toFixed(2);
+}
+
 document.addEventListener("input", function (e) {
   if (e.target.closest("#gstTable tbody")) calculateGSTRow(e.target);
   if (e.target.closest("#repurchaseBody")) calculateRepurchaseRow(e.target);
@@ -1096,12 +1108,10 @@ function syncGSTToVoucher() {
   isVoucherSyncedFromGST = true;
   let setVal = (id, val) => { let el = document.getElementById(id); if (el) el.value = val || ""; };
   
-  // 1. Sync GST Invoice Number to Voucher Number Format: BTP-00153/26-27 -> BT-00153/26-27
   let gstInv = document.getElementById("gstInvoiceNo")?.value || "";
   let convertedVoucherNo = gstInv.replace("BTP-", "BT-");
   setVal("voucherNo", convertedVoucherNo);
 
-  // 2. Sync Consignee & Details
   setVal("voucherCustomerName", document.getElementById("c_name")?.value);
   setVal("voucherRelation", document.getElementById("relation")?.value);
   setVal("voucherMobile", document.getElementById("phone")?.value);
@@ -1150,6 +1160,11 @@ function syncGSTToRepurchase() {
 
 function syncGSTToRenewal() {
   let setVal = (id, val) => { let el = document.getElementById(id); if (el) el.value = val || ""; };
+
+  let gstInv = document.getElementById("gstInvoiceNo")?.value || "";
+  let convertedRenewalNo = gstInv.replace("BTP-", "REN-");
+  setVal("renewalVoucherNo", convertedRenewalNo);
+
   setVal("renewalCustomerName", document.getElementById("c_name")?.value);
   setVal("renewalRelation", document.getElementById("relation")?.value);
   setVal("renewalMobile", document.getElementById("phone")?.value);
@@ -1165,7 +1180,8 @@ function syncGSTToRenewal() {
   setVal("renewalBranch", document.getElementById("branch")?.value);
   setVal("renewalAccountNo", document.getElementById("accountNo")?.value);
   setVal("renewalIfsc", document.getElementById("ifsc")?.value);
-  alert("GST Data Synced to Renewal Form!");
+
+  alert("GST Data & Renewal Voucher Number (" + convertedRenewalNo + ") Synced to Renewal Form!");
 }
 
 async function generateVoucher() {
@@ -1175,13 +1191,15 @@ async function generateVoucher() {
   let perMonthDeducted = perMonthRedeem * 0.98;
   let total12MonthDeducted = perMonthDeducted * 12;
 
+  let selectedKitType = document.getElementById("kitTypeSelect")?.value || "Gold";
+
   let payload = {
     type: "voucher",
     voucherNo: document.getElementById("voucherNo")?.value || "",
     joiningDate: document.getElementById("joiningDate")?.value || "",
     redeemDate: document.getElementById("redeemDate")?.value || "",
     kits: kits,
-    kitType: document.getElementById("kitTypeSelect")?.value || "Gold",
+    kitType: selectedKitType,
     customerName: document.getElementById("voucherCustomerName")?.value || "",
     relation: document.getElementById("voucherRelation")?.value || "",
     mobile: document.getElementById("voucherMobile")?.value || "",
@@ -1197,7 +1215,7 @@ async function generateVoucher() {
     totalCoupon: total12MonthDeducted.toFixed(2),
     wordsPerMonth: convertNumberToWords(perMonthDeducted),
     wordsTotal: convertNumberToWords(total12MonthDeducted),
-    remarks: document.getElementById("voucherRemarks")?.value || ""
+    remarks: selectedKitType
   };
 
   let result = await saveData(payload);
@@ -1210,6 +1228,54 @@ async function generateVoucher() {
     }
   } else {
     alert("Error saving Voucher: " + result.message);
+  }
+}
+
+async function generateRenewal() {
+  let kits = parseFloat(document.getElementById("renewalKits")?.value) || 0;
+  let rewardPoints = kits * 6000;
+  let perMonthRedeem = rewardPoints / 12;
+  let perMonthDeducted = perMonthRedeem * 0.98;
+  let total12MonthDeducted = perMonthDeducted * 12;
+
+  let renewalOption = document.getElementById("renewalOptionSelect")?.value || "G10";
+  let renewalType = document.getElementById("renewalTypeSelect")?.value || "Renewal";
+
+  let payload = {
+    type: "renewal",
+    renewalNo: document.getElementById("renewalVoucherNo")?.value || "",
+    joiningDate: document.getElementById("renewalJoiningDate")?.value || "",
+    redeemDate: document.getElementById("renewalRedeemDate")?.value || "",
+    kits: kits,
+    renewalOption: renewalOption,
+    renewalType: renewalType,
+    customerName: document.getElementById("renewalCustomerName")?.value || "",
+    relation: document.getElementById("renewalRelation")?.value || "",
+    mobile: document.getElementById("renewalMobile")?.value || "",
+    village: document.getElementById("renewalVillage")?.value || "",
+    district: document.getElementById("renewalDistrict")?.value || "",
+    state: document.getElementById("renewalState")?.value || "",
+    pincode: document.getElementById("renewalPincode")?.value || "",
+    email: document.getElementById("renewalEmail")?.value || "",
+    paymentMode: document.getElementById("renewalPaymentMode")?.value || "",
+    salesRepId: document.getElementById("renewalSalesRepId")?.value || "",
+    salesRepName: document.getElementById("renewalSalesRepNameInput")?.value || "",
+    monthlyCoupon: perMonthDeducted.toFixed(2),
+    totalCoupon: total12MonthDeducted.toFixed(2),
+    wordsPerMonth: convertNumberToWords(perMonthDeducted),
+    wordsTotal: convertNumberToWords(total12MonthDeducted)
+  };
+
+  let result = await saveData(payload);
+  if (result.status) {
+    alert("Renewal Voucher Populated in Sheet & PDF Generated Successfully!");
+    if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
+    if (result.nextInvoiceNo) {
+      let rEl = document.getElementById("renewalVoucherNo");
+      if (rEl) rEl.value = result.nextInvoiceNo;
+    }
+  } else {
+    alert("Error saving Renewal Voucher: " + result.message);
   }
 }
 
@@ -1325,16 +1391,18 @@ async function printFormattedPage(pageId) {
     await generate();
   } else if (pageId === 'voucherPage') {
     await generateVoucher();
+  } else if (pageId === 'renewalPage') {
+    await generateRenewal();
   } else {
     window.print();
   }
 }
 
 function shareWhatsApp(docType) {
-  let phone = document.getElementById("phone")?.value || document.getElementById("voucherMobile")?.value || document.getElementById("repurchasePhone")?.value || "";
-  let name = document.getElementById("c_name")?.value || document.getElementById("voucherCustomerName")?.value || document.getElementById("name")?.value || "Customer";
-  let invoiceNo = document.getElementById("gstInvoiceNo")?.value || document.getElementById("voucherNo")?.value || document.getElementById("invoiceNo")?.value || "";
-  let amount = document.getElementById("finalTotal")?.value || document.getElementById("totalCoupon")?.value || document.getElementById("total")?.value || "0.00";
+  let phone = document.getElementById("phone")?.value || document.getElementById("voucherMobile")?.value || document.getElementById("renewalMobile")?.value || document.getElementById("repurchasePhone")?.value || "";
+  let name = document.getElementById("c_name")?.value || document.getElementById("voucherCustomerName")?.value || document.getElementById("renewalCustomerName")?.value || document.getElementById("name")?.value || "Customer";
+  let invoiceNo = document.getElementById("gstInvoiceNo")?.value || document.getElementById("voucherNo")?.value || document.getElementById("renewalVoucherNo")?.value || document.getElementById("invoiceNo")?.value || "";
+  let amount = document.getElementById("finalTotal")?.value || document.getElementById("totalCoupon")?.value || document.getElementById("renewalTotalCoupon")?.value || document.getElementById("total")?.value || "0.00";
   let mode = getSelectedPaymentMode();
 
   let text = `Dear ${name},\nThank you for choosing Beulah Traders Private Limited!\n\n` +
