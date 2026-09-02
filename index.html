@@ -803,7 +803,6 @@ function calculateVoucher() {
   let tc = document.getElementById("totalCoupon"); if (tc) tc.value = totalWithDeduction.toFixed(2);
 }
 
-// Fixed Renewal Calculations - Exactly Matched with Voucher Calculations
 function calculateRenewal() {
   let kits = parseFloat(document.getElementById("renewalKits")?.value) || 0;
   let totalPoints = kits * 6000;
@@ -1141,6 +1140,7 @@ async function generateVoucher() {
   let perMonthRedeem = rewardPoints / 12;
   let perMonthDeducted = perMonthRedeem * 0.98;
   let total12MonthDeducted = perMonthDeducted * 12;
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
 
   let payload = {
     type: "voucher",
@@ -1157,17 +1157,24 @@ async function generateVoucher() {
     pincode: document.getElementById("voucherPincode")?.value || "",
     email: document.getElementById("voucherEmail")?.value || "",
     paymentMode: document.getElementById("voucherPaymentMode")?.value || "",
+    aadhaar: document.getElementById("voucherAadhaar")?.value || "",
+    pan: document.getElementById("voucherPAN")?.value || "",
+    bankName: document.getElementById("voucherBankName")?.value || "",
+    branch: document.getElementById("voucherBranch")?.value || "",
+    accountNo: document.getElementById("voucherAccountNo")?.value || "",
+    ifsc: document.getElementById("voucherIFSC")?.value || "",
     salesRepId: document.getElementById("salesRepId")?.value || "",
     salesRepName: document.getElementById("salesRepNameInput")?.value || "",
-    monthlyRedeem: perMonthRedeem.toFixed(2),
+    monthlyRedeem: perMonthDeducted.toFixed(2),
     totalCoupon: total12MonthDeducted.toFixed(2),
     wordsPerMonth: convertNumberToWords(perMonthDeducted),
-    wordsTotal: convertNumberToWords(total12MonthDeducted)
+    wordsTotal: convertNumberToWords(total12MonthDeducted),
+    createdBy: user.username || "System"
   };
 
   let result = await saveData(payload);
   if (result.status) {
-    alert("Voucher Populated in Sheet & PDF Generated Successfully!");
+    alert("Voucher Populated in Sheet, PDF Generated & SR Targets Updated Successfully!");
     if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if (result.nextInvoiceNo) {
       let vEl = document.getElementById("voucherNo");
@@ -1213,7 +1220,7 @@ async function generateRenewal() {
 
   let result = await saveData(payload);
   if (result.status) {
-    alert("Renewal Voucher Populated in Sheet & PDF Generated Successfully!");
+    alert("Renewal Voucher Populated in Sheet, PDF Generated & SR Targets Updated Successfully!");
     if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if (result.nextInvoiceNo) {
       let rEl = document.getElementById("renewalVoucherNo");
