@@ -15,9 +15,45 @@
 
   <style>
     body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7fb; }
-    .profile { width: 145px; height: 145px; border-radius: 50%; object-fit: contain; background-color: #ffffff; margin: 15px auto; border: 5px solid rgba(255,255,255,0.85); box-shadow: 0 10px 30px rgba(255,182,193,0.35), 0 0 15px rgba(255,255,255,0.6); transition: 0.4s; animation: profileFloat 4s ease-in-out infinite; display: block; }
-    @keyframes profileFloat { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
+    
+    /* Perfect Circle & Glowing Animation for Login CMD Profile */
+    .profile { 
+      width: 145px; 
+      height: 145px; 
+      border-radius: 50%; 
+      object-fit: cover; 
+      background-color: #ffffff; 
+      margin: 15px auto; 
+      border: 4px solid #ffffff; 
+      box-shadow: 0 0 15px rgba(255, 117, 140, 0.6), 0 0 30px rgba(255, 117, 140, 0.4); 
+      transition: all 0.4s ease-in-out; 
+      animation: profileGlowFloat 4s ease-in-out infinite; 
+      display: block; 
+    }
+    @keyframes profileGlowFloat { 
+      0% { transform: translateY(0px); box-shadow: 0 0 15px rgba(255, 117, 140, 0.6), 0 0 25px rgba(255, 117, 140, 0.4); } 
+      50% { transform: translateY(-8px); box-shadow: 0 0 25px rgba(255, 77, 109, 0.8), 0 0 40px rgba(255, 77, 109, 0.6); } 
+      100% { transform: translateY(0px); box-shadow: 0 0 15px rgba(255, 117, 140, 0.6), 0 0 25px rgba(255, 117, 140, 0.4); } 
+    }
     .profile:hover { transform: scale(1.05); }
+
+    /* Top-Right Profile Circle & Glow */
+    .profile-box { 
+      width: 42px; 
+      height: 42px; 
+      border-radius: 50%; 
+      overflow: hidden; 
+      border: 2px solid #ff758c; 
+      background: #fff; 
+      box-shadow: 0 0 10px rgba(255, 117, 140, 0.5); 
+      transition: 0.3s; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .profile-box:hover { box-shadow: 0 0 18px rgba(255, 77, 109, 0.8); }
+    .profile-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
     .login { display: flex; width: 100%; height: 100vh; overflow: hidden; position: relative; background: #fff; }
     .left { width: 50%; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; background: linear-gradient(135deg, #fff7f8 0%, #ffeef1 35%, #fff1eb 100%); }
     .left::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(15, 2, 102, 0.85), rgba(106,90,205,0.5), rgba(106,90,205,0.85)); z-index: 1; }
@@ -57,8 +93,6 @@
     .payment-modes-wrapper { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; background: #fff0f3; padding: 10px 15px; border-radius: 8px; border: 1px dashed #ff758c; }
     .payment-modes-wrapper label { font-size: 12px; font-weight: 600; color: #333; cursor: pointer; display: flex; align-items: center; gap: 5px; }
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .profile-box { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid #ff758c; background:#fff; }
-    .profile-box img { width: 100%; height: 100%; object-fit: contain; }
     .dropdown { position: absolute; top: 55px; right: 0; width: 250px; background: white; border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); overflow: hidden; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.35s; z-index: 9999; }
     .dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
     .dropdown-top { display: flex; align-items: center; gap: 12px; padding: 15px; background: linear-gradient(45deg,#ff758c,#ff7eb3); color: #fff; }
@@ -147,7 +181,7 @@
 
         <div class="dropdown" id="dropdownMenu">
           <div class="dropdown-top">
-            <img id="dropProfile" src="https://i.imgur.com/t9HFQvX.png" style="width:42px; height:42px; border-radius:50%; object-fit:contain; background:#fff;" alt="Profile">
+            <img id="dropProfile" src="https://i.imgur.com/t9HFQvX.png" style="width:42px; height:42px; border-radius:50%; object-fit:cover; background:#fff; border:2px solid #fff;" alt="Profile">
             <div>
               <h4 id="dropName" style="margin:0; font-size:14px;">User</h4>
               <p style="font-size:11px; margin:0; opacity:0.8;">BEULAH TRADERS</p>
@@ -369,13 +403,13 @@
         <div><label>Redeem Release Date</label><input id="renewalRedeemDate" style="width:100%;" placeholder="DD-MMM-YYYY" readonly></div>
         <div><label>Renewal Kits</label><input id="renewalKits" type="number" style="width:100%;" oninput="calculateRenewal()"></div>
         <div>
-          <label>Renewal Type (Tick Mark Checkbox Option)</label>
+          <label>Renewal Type (Template Checkbox Sync Option)</label>
           <select id="renewalOptionSelect" style="width:100%; font-weight:bold;" onchange="calculateRenewal()">
             <option value="Renewal">Renewal</option>
             <option value="Purchase">Purchase</option>
-            <option value="Upgrade">Upgrade</option>
-            <option value="New Joining">New Joining</option>
-            <option value="Reactivation">Reactivation</option>
+            <option value="Upgrade">Upgrade </option>
+            <option value="New Joining">New Joining </option>
+            <option value="Reactivation">Reactivation </option>
           </select>
         </div>
         <div>
@@ -400,6 +434,7 @@
         <div><label>Account Number</label><input id="renewalAccountNo" style="width:100%;"></div>
         <div><label>IFSC Code</label><input id="renewalIfsc" style="text-transform:uppercase; width:100%;"></div>
         <div><label>Reward Points</label><input id="renewalRewardPoints" style="width:100%;" readonly></div>
+        <div><label>Monthly Redeem</label><input id="renewalMonthlyRedeem" style="width:100%;" readonly></div>
         <div><label>Monthly Coupon Net</label><input id="renewalMonthlyCouponNet" style="width:100%;" readonly></div>
         <div><label>Total 12M Coupon</label><input id="renewalTotalCoupon" style="width:100%;" readonly></div>
       </div>
@@ -471,7 +506,7 @@
     <span class="close-btn" onclick="closeProfile()">&times;</span>
     <h3 style="text-align:center; color:#ff4f81; margin-top:0;">BEULAH TRADERS PRIVATE LIMITED</h3>
     <div style="text-align:center; margin-bottom:15px;">
-      <img id="profilePopupImg" src="https://i.imgur.com/t9HFQvX.png" style="width:80px; height:80px; border-radius:50%; object-fit:contain; background:#fff; border:3px solid #ff758c;" alt="User Image">
+      <img id="profilePopupImg" src="https://i.imgur.com/t9HFQvX.png" style="width:80px; height:80px; border-radius:50%; object-fit:cover; background:#fff; border:3px solid #ff758c; box-shadow: 0 0 12px rgba(255,117,140,0.6);" alt="User Image">
       <h3 id="profilePopupName" style="margin:8px 0 0 0;"></h3>
     </div>
     <div><label style="font-size:12px;">Username</label><input id="profileUsername" readonly style="width:100%;"></div>
@@ -493,11 +528,10 @@
 
 <script src="script.js"></script>
  
- 
- 
 <script>
- 
- 
+// ============================================================================
+// BTP BILLING & REPURCHASE SYSTEM - FRONTEND LOGIC (script.js)
+// ============================================================================
 
 const WEBAPP = "https://script.google.com/macros/s/AKfycbzGUdM9seHIF__cwByVEZIyoVFhPOf9eHFOa2tfOlsM87tJNlNLYx96l7Ky3UsvHp0J/exec";
 let currentOTPUsername = "";
@@ -769,7 +803,7 @@ function calculateVoucher() {
   let tc = document.getElementById("totalCoupon"); if (tc) tc.value = totalWithDeduction.toFixed(2);
 }
 
-// Fixed Renewal Calculation - Match Voucher Logic & Fill Monthly Coupon Net
+// Fixed Renewal Calculations - Exactly Matched with Voucher Calculations
 function calculateRenewal() {
   let kits = parseFloat(document.getElementById("renewalKits")?.value) || 0;
   let totalPoints = kits * 6000;
@@ -779,6 +813,9 @@ function calculateRenewal() {
 
   let rp = document.getElementById("renewalRewardPoints"); 
   if (rp) rp.value = totalPoints;
+
+  let mr = document.getElementById("renewalMonthlyRedeem"); 
+  if (mr) mr.value = monthlyRedeem.toFixed(2);
 
   let mc = document.getElementById("renewalMonthlyCouponNet"); 
   if (mc) mc.value = monthlyWithDeduction.toFixed(2);
@@ -960,6 +997,13 @@ function showApp() {
     if (profileEmail) profileEmail.value = user.email || "";
     if (profilePhone) profilePhone.value = user.phone || "";
     if (profilePopupName) profilePopupName.innerText = user.name || "User";
+
+    if (user.photo) {
+      ["topProfile", "dropProfile", "profilePopupImg"].forEach(id => {
+        let el = document.getElementById(id);
+        if (el) el.src = user.photo;
+      });
+    }
   }
   showGST();
 }
@@ -1409,7 +1453,6 @@ function logout() {
   sessionStorage.clear();
   window.location.reload();
 }
-
 </script>
 </body>
 </html>
