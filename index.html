@@ -529,6 +529,8 @@
 <script src="script.js"></script>
  
 <script>
+ 
+
 // ============================================================================
 // BTP BILLING & REPURCHASE SYSTEM - FRONTEND LOGIC (script.js)
 // ============================================================================
@@ -1063,7 +1065,11 @@ async function loadDashboardMetrics(moduleType) {
 
 async function saveData(payload) {
   try {
-    let res = await fetch(WEBAPP, { method: "POST", body: JSON.stringify(payload) });
+    let res = await fetch(WEBAPP, { 
+      method: "POST", 
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload) 
+    });
     return await res.json();
   } catch (e) { return { status: false, message: e.toString() }; }
 }
