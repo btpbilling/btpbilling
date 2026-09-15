@@ -585,7 +585,7 @@ function setRenewalRedeemDate() {
 }
 
 window.onload = function () {
-  // SESSION CONTROL: Closing tab or browser clears session and forces re-login
+  // SESSION CONTROL: Closing tab/browser logs out user; page refresh retains session
   const sessionToken = sessionStorage.getItem("active_session");
   const sessionUser = sessionStorage.getItem("session_user");
 
