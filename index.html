@@ -104,8 +104,6 @@
     @media print { body * { visibility: hidden !important; } .printable-area, .printable-area * { visibility: visible !important; } .printable-area { position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; margin: 0 !important; padding: 10px !important; background: #ffffff !important; box-shadow: none !important; border: none !important; } .workflow-actions, button, .action-btn { display: none !important; } }
   </style>
 </head>
-
- 
 <body>
 
 <datalist id="masterProductList"></datalist>
@@ -528,9 +526,7 @@
 
 <script src="script.js"></script>
  
- 
 <script>
- 
 // ============================================================================
 // BTP BILLING & REPURCHASE SYSTEM - FRONTEND LOGIC (script.js)
 // ============================================================================
@@ -805,6 +801,7 @@ function calculateVoucher() {
   let tc = document.getElementById("totalCoupon"); if (tc) tc.value = totalWithDeduction.toFixed(2);
 }
 
+// Fixed Renewal Calculation - Match Voucher Logic & Fill Monthly Coupon Net
 function calculateRenewal() {
   let kits = parseFloat(document.getElementById("renewalKits")?.value) || 0;
   let totalPoints = kits * 6000;
