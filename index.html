@@ -105,6 +105,7 @@
   </style>
 </head>
 
+ 
 <body>
 
 <datalist id="masterProductList"></datalist>
@@ -181,7 +182,7 @@
 
         <div class="dropdown" id="dropdownMenu">
           <div class="dropdown-top">
-            <img id="dropProfile" src="https://i.imgur.com/t9HFQvX.png" style="width:42px; height:42px; border-radius:50%; object-fit:cover; background:#fff; border:2px solid #fff;" alt="Profile">
+            <img id="dropProfile" src="https://i.imgur.com/t9HFQvX.png" style="width:42px; height:42px; border-radius:50%; object-fit:contain; background:#fff;" alt="Profile">
             <div>
               <h4 id="dropName" style="margin:0; font-size:14px;">User</h4>
               <p style="font-size:11px; margin:0; opacity:0.8;">BEULAH TRADERS</p>
@@ -403,13 +404,13 @@
         <div><label>Redeem Release Date</label><input id="renewalRedeemDate" style="width:100%;" placeholder="DD-MMM-YYYY" readonly></div>
         <div><label>Renewal Kits</label><input id="renewalKits" type="number" style="width:100%;" oninput="calculateRenewal()"></div>
         <div>
-          <label>Renewal Type (Template Checkbox Sync Option)</label>
+          <label>Renewal Type (Tick Mark Checkbox Option)</label>
           <select id="renewalOptionSelect" style="width:100%; font-weight:bold;" onchange="calculateRenewal()">
-            <option value="Renewal">Renewal</option>
-            <option value="Purchase">Purchase</option>
-            <option value="Upgrade">Upgrade </option>
-            <option value="New Joining">New Joining </option>
-            <option value="Reactivation">Reactivation </option>
+            <option value="Renewal">Renewal (G10)</option>
+            <option value="Purchase">Purchase (G11)</option>
+            <option value="Upgrade">Upgrade (I10)</option>
+            <option value="New Joining">New Joining (I11)</option>
+            <option value="Reactivation">Reactivation (I12)</option>
           </select>
         </div>
         <div>
@@ -434,7 +435,6 @@
         <div><label>Account Number</label><input id="renewalAccountNo" style="width:100%;"></div>
         <div><label>IFSC Code</label><input id="renewalIfsc" style="text-transform:uppercase; width:100%;"></div>
         <div><label>Reward Points</label><input id="renewalRewardPoints" style="width:100%;" readonly></div>
-        <div><label>Monthly Redeem</label><input id="renewalMonthlyRedeem" style="width:100%;" readonly></div>
         <div><label>Monthly Coupon Net</label><input id="renewalMonthlyCouponNet" style="width:100%;" readonly></div>
         <div><label>Total 12M Coupon</label><input id="renewalTotalCoupon" style="width:100%;" readonly></div>
       </div>
@@ -506,7 +506,7 @@
     <span class="close-btn" onclick="closeProfile()">&times;</span>
     <h3 style="text-align:center; color:#ff4f81; margin-top:0;">BEULAH TRADERS PRIVATE LIMITED</h3>
     <div style="text-align:center; margin-bottom:15px;">
-      <img id="profilePopupImg" src="https://i.imgur.com/t9HFQvX.png" style="width:80px; height:80px; border-radius:50%; object-fit:cover; background:#fff; border:3px solid #ff758c; box-shadow: 0 0 12px rgba(255,117,140,0.6);" alt="User Image">
+      <img id="profilePopupImg" src="https://i.imgur.com/t9HFQvX.png" style="width:80px; height:80px; border-radius:50%; object-fit:contain; background:#fff; border:3px solid #ff758c;" alt="User Image">
       <h3 id="profilePopupName" style="margin:8px 0 0 0;"></h3>
     </div>
     <div><label style="font-size:12px;">Username</label><input id="profileUsername" readonly style="width:100%;"></div>
@@ -527,6 +527,7 @@
 </div>
 
 <script src="script.js"></script>
+ 
  
 <script>
  
@@ -814,9 +815,6 @@ function calculateRenewal() {
   let rp = document.getElementById("renewalRewardPoints"); 
   if (rp) rp.value = totalPoints;
 
-  let mr = document.getElementById("renewalMonthlyRedeem"); 
-  if (mr) mr.value = monthlyRedeem.toFixed(2);
-
   let mc = document.getElementById("renewalMonthlyCouponNet"); 
   if (mc) mc.value = monthlyWithDeduction.toFixed(2);
 
@@ -997,13 +995,6 @@ function showApp() {
     if (profileEmail) profileEmail.value = user.email || "";
     if (profilePhone) profilePhone.value = user.phone || "";
     if (profilePopupName) profilePopupName.innerText = user.name || "User";
-
-    if (user.photo) {
-      ["topProfile", "dropProfile", "profilePopupImg"].forEach(id => {
-        let el = document.getElementById(id);
-        if (el) el.src = user.photo;
-      });
-    }
   }
   showGST();
 }
@@ -1141,7 +1132,6 @@ async function generateVoucher() {
   let perMonthRedeem = rewardPoints / 12;
   let perMonthDeducted = perMonthRedeem * 0.98;
   let total12MonthDeducted = perMonthDeducted * 12;
-  let user = JSON.parse(localStorage.getItem("user") || "{}");
 
   let payload = {
     type: "voucher",
@@ -1158,24 +1148,17 @@ async function generateVoucher() {
     pincode: document.getElementById("voucherPincode")?.value || "",
     email: document.getElementById("voucherEmail")?.value || "",
     paymentMode: document.getElementById("voucherPaymentMode")?.value || "",
-    aadhaar: document.getElementById("voucherAadhaar")?.value || "",
-    pan: document.getElementById("voucherPAN")?.value || "",
-    bankName: document.getElementById("voucherBankName")?.value || "",
-    branch: document.getElementById("voucherBranch")?.value || "",
-    accountNo: document.getElementById("voucherAccountNo")?.value || "",
-    ifsc: document.getElementById("voucherIFSC")?.value || "",
     salesRepId: document.getElementById("salesRepId")?.value || "",
     salesRepName: document.getElementById("salesRepNameInput")?.value || "",
-    monthlyRedeem: perMonthDeducted.toFixed(2),
+    monthlyRedeem: perMonthRedeem.toFixed(2),
     totalCoupon: total12MonthDeducted.toFixed(2),
     wordsPerMonth: convertNumberToWords(perMonthDeducted),
-    wordsTotal: convertNumberToWords(total12MonthDeducted),
-    createdBy: user.username || "System"
+    wordsTotal: convertNumberToWords(total12MonthDeducted)
   };
 
   let result = await saveData(payload);
   if (result.status) {
-    alert("Voucher Populated in Sheet, PDF Generated & SR Targets Updated Successfully!");
+    alert("Voucher Populated in Sheet & PDF Generated Successfully!");
     if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if (result.nextInvoiceNo) {
       let vEl = document.getElementById("voucherNo");
@@ -1221,7 +1204,7 @@ async function generateRenewal() {
 
   let result = await saveData(payload);
   if (result.status) {
-    alert("Renewal Voucher Populated in Sheet, PDF Generated & SR Targets Updated Successfully!");
+    alert("Renewal Voucher Populated in Sheet & PDF Generated Successfully!");
     if (result.pdfUrl) window.open(result.pdfUrl, "_blank");
     if (result.nextInvoiceNo) {
       let rEl = document.getElementById("renewalVoucherNo");
