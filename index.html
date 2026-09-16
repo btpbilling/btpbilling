@@ -530,7 +530,6 @@
  
 <script>
  
-
 // ============================================================================
 // BTP BILLING & REPURCHASE SYSTEM - FRONTEND LOGIC (script.js)
 // ============================================================================
@@ -587,12 +586,10 @@ function setRenewalRedeemDate() {
 }
 
 window.onload = function () {
-  // SESSION CONTROL: Closing tab/browser logs out user; page refresh retains session
   const sessionToken = sessionStorage.getItem("active_session");
-  const sessionUser = sessionStorage.getItem("session_user");
+  const user = localStorage.getItem("user");
 
-  if (!sessionToken || !sessionUser) {
-    sessionStorage.clear();
+  if (!sessionToken || !user) {
     let loginPage = document.getElementById("loginPage");
     let app = document.getElementById("app");
     if (loginPage) loginPage.style.display = "flex";
@@ -972,7 +969,7 @@ async function verifyOTPAndLogin() {
     const res = await fetch(`${WEBAPP}?api=1&verifyOTP=1&username=${encodeURIComponent(currentOTPUsername)}&otp=${encodeURIComponent(otp)}`);
     const data = await res.json();
     if (data.status) {
-      sessionStorage.setItem("session_user", JSON.stringify(data.user || { name: currentOTPUsername, username: currentOTPUsername }));
+      localStorage.setItem("user", JSON.stringify(data.user || { name: currentOTPUsername, username: currentOTPUsername }));
       sessionStorage.setItem("active_session", "true");
       showApp();
     } else { alert(data.message || "Invalid OTP!"); }
@@ -985,7 +982,7 @@ function showApp() {
   if (loginPage) loginPage.style.display = "none";
   if (app) app.style.display = "block";
 
-  let user = JSON.parse(sessionStorage.getItem("session_user") || "{}");
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
   if (user) {
     let usernameDisp = document.getElementById("usernameDisplay");
     let dropName = document.getElementById("dropName");
@@ -1047,29 +1044,13 @@ async function loadDashboardMetrics(moduleType) {
     if (moduleType === "gst") {
       let gBills = document.getElementById("gstBills"); if (gBills) gBills.innerText = data.gstBills || 0;
       let gAmt = document.getElementById("gstAmount"); if (gAmt) gAmt.innerText = "₹" + (data.gstAmount || 0);
-    } else if (moduleType === "repurchase") {
-      let rBills = document.getElementById("repBills"); if (rBills) rBills.innerText = data.repurchaseBills || 0;
-      let rAmt = document.getElementById("repAmount"); if (rAmt) rAmt.innerText = "₹" + (data.repurchaseAmount || 0);
-    } else if (moduleType === "voucher") {
-      let vBills = document.getElementById("vouchBills"); if (vBills) vBills.innerText = data.voucherCount || 0;
-      let vAmt = document.getElementById("vouchAmount"); if (vAmt) vAmt.innerText = "₹" + (data.voucherAmount || 0);
-    } else if (moduleType === "renewal") {
-      let renBills = document.getElementById("renBills"); if (renBills) renBills.innerText = data.renewalCount || 0;
-      let renAmt = document.getElementById("renAmount"); if (renAmt) renAmt.innerText = "₹" + (data.renewalAmount || 0);
-    } else if (moduleType === "withoutGST") {
-      let wgBills = document.getElementById("wgBills"); if (wgBills) wgBills.innerText = data.withoutGSTBills || 0;
-      let wgAmt = document.getElementById("wgAmount"); if (wgAmt) wgAmt.innerText = "₹" + (data.withoutGSTAmount || 0);
     }
   } catch (e) { console.error("Error loading dashboard metrics:", e); }
 }
 
 async function saveData(payload) {
   try {
-    let res = await fetch(WEBAPP, { 
-      method: "POST", 
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(payload) 
-    });
+    let res = await fetch(WEBAPP, { method: "POST", body: JSON.stringify(payload) });
     return await res.json();
   } catch (e) { return { status: false, message: e.toString() }; }
 }
@@ -1160,7 +1141,7 @@ async function generateVoucher() {
   let perMonthRedeem = rewardPoints / 12;
   let perMonthDeducted = perMonthRedeem * 0.98;
   let total12MonthDeducted = perMonthDeducted * 12;
-  let user = JSON.parse(sessionStorage.getItem("session_user") || "{}");
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
 
   let payload = {
     type: "voucher",
@@ -1325,7 +1306,7 @@ async function generateGST() {
     }
   });
 
-  let user = JSON.parse(sessionStorage.getItem("session_user") || "{}");
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
   let payload = {
     type: "gstInvoice",
     customerName: document.getElementById("c_name")?.value || "",
@@ -1381,7 +1362,7 @@ async function generate() {
     if (weight || desc) items.push({ desc, weight, rate, amount });
   });
 
-  let user = JSON.parse(sessionStorage.getItem("session_user") || "{}");
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
   let payload = {
     type: "repurchase",
     date: document.getElementById("date")?.value || "",
@@ -1459,7 +1440,7 @@ async function changePassword() {
   let oldPass = document.getElementById("oldPass")?.value.trim() || "";
   let newPass = document.getElementById("newPass")?.value.trim() || "";
   let confirmPass = document.getElementById("confirmPass")?.value.trim() || "";
-  let user = JSON.parse(sessionStorage.getItem("session_user") || "{}");
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
 
   if (!newPass || newPass !== confirmPass) {
     alert("New Passwords do not match!");
@@ -1476,6 +1457,7 @@ async function changePassword() {
 }
 
 function logout() {
+  localStorage.clear();
   sessionStorage.clear();
   window.location.reload();
 }
